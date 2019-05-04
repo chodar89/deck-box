@@ -4,9 +4,16 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
+
+app.config['MONGO_DBNAME'] = 'cardBox'
+app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
+
+mongo = PyMongo(app)
+
 @app.route('/')
-def hello():
-    return "MTG CardBox project v1.0"
+@app.route('/user_decks')
+def user_decks():
+    return render_template('decks.html', decks=mongo.db.decks.find())
     
 if __name__ == '__main__':
     app.run(host=os.getenv("IP", "0.0.0.0"),

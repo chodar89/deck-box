@@ -1,0 +1,34 @@
+/*-------------------------- General ---*/
+/* Color Theme Swatches in Hex */
+.Magic:-The-Gathering-1-hex { color: #BF789A; }
+.Magic:-The-Gathering-2-hex { color: #102540; }
+.Magic:-The-Gathering-3-hex { color: #244673; }
+.Magic:-The-Gathering-4-hex { color: #8FB6D9; }
+.Magic:-The-Gathering-5-hex { color: #3B6D8C; }
+
+
+main {
+    min-height: 100vh;
+}
+
+
+/*-------------------------- Navigation Bar ---*/
+
+.logo {
+    margin-top: 7px;
+    height: 50px;
+}
+
+.nav-wrapper {
+    background-color: #102540;
+}
+
+/*-------------------------- Footer ---*/
+
+.page-footer {
+    background-color: #244673;
+}
+
+.footer-copyright {
+    background-color: #244673;
+}
