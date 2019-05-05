@@ -2,14 +2,13 @@
 
 /* Color Theme Swatches in Hex */
 
-
 main {
-    min-height: 100vh;
+    min-height: 40vh;
 }
 
 .parallax-container {
-      height: 450px;
-    }
+    height: 38vh;
+}
 
 
 /*-------------------------- Navigation Bar ---*/
@@ -27,6 +26,25 @@ main {
 
 nav .sidenav-trigger {
     margin: 0;
+}
+
+/*-------------------------- Reg Form ---*/
+
+
+/*-------------------------- Buttons ---*/
+
+.btn-blue {
+    background-color: #5c7fa5;;
+}
+
+.btn-blue:hover {
+  background-color: #102540;
+}
+.btn-blue:active{
+  background-color: #102540;
+}
+.btn-blue:focus{
+  background-color: #102540;
 }
 
 /*-------------------------- Footer ---*/
