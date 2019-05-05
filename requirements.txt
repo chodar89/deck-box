@@ -4,6 +4,9 @@ Flask-PyMongo==2.3.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
 Werkzeug==0.15.2
+bcrypt==3.1.6
+cffi==1.12.3
 dnspython==1.16.0
 itsdangerous==1.1.0
+pycparser==2.19
 pymongo==3.8.0
