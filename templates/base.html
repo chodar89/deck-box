@@ -26,11 +26,11 @@
             <nav>
                 <div class="nav-wrapper">
 
-                    <a href="#!" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a>
+                    <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a>
                     <ul class="left">
-                    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     </ul>
-                    
+
                     <ul class="right hide-on-med-and-down">
                         <li><a href="sass.html">Sass</a></li>
                         <li><a href="badges.html">Components</a></li>
@@ -59,6 +59,11 @@
             <li><a class="subheader">Subheader</a></li>
             <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
         </ul>
+        <div class="parallax-container">
+            <div class="parallax">
+                <img src="../static/img/theme45.jpg">
+            </div>
+        </div>
 
     </header>
 
@@ -98,6 +103,7 @@
         $(document).ready(function() {
             $('.sidenav').sidenav();
             $(".dropdown-trigger").dropdown();
+            $('.parallax').parallax();
         });
     </script>
 </body>

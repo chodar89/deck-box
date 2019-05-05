@@ -8,12 +8,14 @@ app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'cardBox'
 app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
-mongo = PyMongo(app)
+
 
 @app.route('/')
-@app.route('/user_decks')
-def user_decks():
-    return render_template('decks.html', decks=mongo.db.decks.find())
+def index():
+     return render_template('index.html')
+
+    
+
     
 if __name__ == '__main__':
     app.run(host=os.getenv("IP", "0.0.0.0"),
