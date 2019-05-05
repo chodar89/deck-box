@@ -1,6 +1,33 @@
-{% extends 'base.html' %} 
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
-    <h1> Welcome  </h1>
+<div class="row center">
+    <div>
+        <p class="paragraph-big">deck box is a place where you can create your own mtg collection</p>
+    </div>
+    <div class="cards">
+        <img class="col s3" src="../static/img/cards/card1.png">
+        <i class="fas fa-plus"></i>
+        <img class="col s3" src="../static/img/cards/card2.png">
+        <i class="fas fa-plus"></i>
+        <img class="col s3" src="../static/img/cards/card3.png">
+    </div>
+    <div>
+        <p class="paragraph">Just add all your cards. One by one with our Cards Add menu.</p>
+    </div>
 
+</div>
+<div class="parallax-container">
+    <div class="parallax">
+        <img src="../static/img/theme6.jpg">
+    </div>
+</div>
+<div class="row center">
+    <div>
+        <p class="paragraph">add, edit and search your cards or decks in quick and easy way</p>
+    </div>
+    <div>
+        <img src="../static/img/cards/cards.png">
+    </div>
+
+</div>
 {% endblock %}

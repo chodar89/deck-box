@@ -1,6 +1,5 @@
 /*-------------------------- General ---*/
-
-/* Color Theme Swatches in Hex */
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans');
 
 main {
     min-height: 40vh;
@@ -10,6 +9,17 @@ main {
     height: 38vh;
 }
 
+.parallax img {
+    width: 100%;
+}
+
+.paragraph {
+    font-family: 'Merriweather Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: 2em;
+    text-align: center;
+    font-weight: 800;
+}
 
 /*-------------------------- Navigation Bar ---*/
 
@@ -26,6 +36,19 @@ main {
 
 nav .sidenav-trigger {
     margin: 0;
+}
+
+/*-------------------------- Index ---*/
+
+.cards {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 30px;
+}
+.cards>i {
+    font-size: 300%;
+    margin: 5px;
 }
 
 /*-------------------------- Reg Form ---*/
