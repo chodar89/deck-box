@@ -8,8 +8,8 @@
     <title>CARD-BOX</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/materialize.css" type="text/css" />
-    <link rel="stylesheet" href="../static/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}" type="text/css" />
 
 </head>
 
@@ -17,10 +17,12 @@
     <header>
         <!-- Dropdown Structure -->
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!">one</a></li>
-            <li><a href="#!">two</a></li>
-            <li class="divider"></li>
-            <li><a href="#!">three</a></li>
+            <li><a href="#!">Add Card</a></li>
+            <li><a href="#!">Browse Cards</a></li>
+        </ul>
+        <ul id="dropdown2" class="dropdown-content">
+            <li><a href="#!">Add Deck</a></li>
+            <li><a href="#!">Browse Decks</a></li>
         </ul>
         <div class="navbar-fixed">
             <nav>
@@ -28,14 +30,11 @@
 
                     <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a>
                     <ul class="left">
-                        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                        <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
                     </ul>
 
-                    <ul class="right hide-on-med-and-down">
-                        <li><a href="sass.html">Sass</a></li>
-                        <li><a href="badges.html">Components</a></li>
-                        <!-- Dropdown Trigger -->
-                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                    <ul class="right">
+                        <li><a href="{{url_for ('register')}}">Sign In</a></li>
                     </ul>
                 </div>
             </nav>
@@ -61,7 +60,7 @@
         </ul>
         <div class="parallax-container">
             <div class="parallax">
-                <img src="../static/img/theme45.jpg">
+                <img src="../static/img/theme4.jpg">
             </div>
         </div>
 
@@ -100,6 +99,8 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../static/js/materialize.js"></script>
     <script>
+    
+        
         $(document).ready(function() {
             $('.sidenav').sidenav();
             $(".dropdown-trigger").dropdown();
