@@ -40,17 +40,21 @@ nav .sidenav-trigger {
 
 /*-------------------------- Index ---*/
 
-.cards {
+.index-cards {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     margin: 30px;
 }
-.cards>i {
+
+.index-cards>i {
     font-size: 300%;
     margin: 5px;
 }
 
+.five-cards {
+    width: 80%;
+}
 /*-------------------------- Reg Form ---*/
 
 

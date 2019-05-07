@@ -1,7 +1,30 @@
 {% extends 'base.html' %} {% block content %}
+<p> log in </p>
+<div class="row container">
+    <form class="col s12" method=POST action="{{ url_for('login')}}">
+        <div class="row ">
+            <div class="input-field col s8 offset-s2">
+                <input id="username" name="username" type="text" class="validate">
+                <label for="username">Username</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s8 offset-s2">
+                <input id="password" name="password" type="password" class="validate">
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <div class="row center-align">
+            <button class="btn waves-effect waves-light btn-blue" type="submit" name="action">LOGIN
+                <i class="material-icons right">play_arrow</i>
+            </button>
+        </div>
+    </form>
+</div>
+<p> OR Register if you don't have account yet!</p>
 
 <div class="row container">
-    <form class="col s12" method=POST action="{{ url_for('register')}}">
+    <form class="col s12" method=POST action="{{ url_for('login')}}">
         <div class="row ">
             <div class="input-field col s8 offset-s2">
                 <input id="username" name="username" type="text" class="validate">
@@ -22,7 +45,7 @@
         </div>
         <div class="row center-align">
             <button class="btn waves-effect waves-light btn-blue" type="submit" name="action">Register
-                <i class="material-icons right">send</i>
+                <i class="material-icons right">add</i>
             </button>
         </div>
     </form>

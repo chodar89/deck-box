@@ -17,9 +17,17 @@ def index():
         return 'Welcome back ' + session['username']
     return render_template('index.html')
     
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 def login():
-    return ''
+    users = mongo.db.users
+    login = users.find_one({'name': request.form['username']})
+    
+    if login:
+        if bcrypt.hashpw(request.form['password'].encode('utf-8'), login['password']) == login['password']:
+            session['username'] = request.form['username']
+            return redirect( url_for('index'))
+            
+    return 'Invalid username or password'
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
