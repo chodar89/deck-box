@@ -33,7 +33,9 @@
                     <ul class="left">
                         <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
                     </ul>
-
+                    <ul class="right">
+                        <li><a href="{{url_for ('logout')}}">{{ sign_out }}</a></li>
+                    </ul>
                     <ul class="right">
                         <li><a href="{{url_for ('register')}}">Sign In</a></li>
                     </ul>
@@ -71,7 +73,6 @@
                 <img src="../static/img/theme4.jpg">
             </div>
         </div>
-
     </header>
 
     <main>
@@ -113,6 +114,7 @@
             $('.sidenav').sidenav();
             $(".dropdown-trigger").dropdown();
             $('.parallax').parallax();
+            $('select').formSelect();
         });
     </script>
 </body>

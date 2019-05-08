@@ -11,13 +11,28 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 mongo = PyMongo(app)
 
+# render index page and checkes if user is in the session
+
 @app.route('/')
 def index():
     if 'username' in session:
         flash('Welcome back ' + session['username'], 'welcome')
-    return render_template('index.html')
+        return render_template('index.html', sign_out='Sign Out')
+    else:
+        return render_template('index.html')
+        
+    
+@app.route('/addcard')
+def addcard():
+    colors=mongo.db.colors.find()
+    rarity=mongo.db.rarity.find()
+    expansion=mongo.db.expansion_set.find()
+    card_types=mongo.db.card_types.find()
+    rating=mongo.db.rating.find()
+    return render_template('addcard.html', **locals())
     
 
+# render register page and post registration form to mongo database
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -25,6 +40,7 @@ def register():
         users = mongo.db.users
         existing_user = users.find_one({'name' : request.form['username']})
         
+        # first it checks if user name exists in database if not post form if yes flash allert
         if existing_user is None: 
             hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
             users.insert({'name':  request.form['username'], 'password' : hash_password})
@@ -35,7 +51,9 @@ def register():
         else: flash('Username already exists', 'exists')
 
     return render_template('register.html')
+    
 
+# login form, encode and checks data in form with database that exists if not flash allert
 @app.route('/login', methods=['POST'])
 def login():
     users = mongo.db.users
@@ -49,7 +67,12 @@ def login():
     flash("Incorrect password or username", 'error')
     return render_template('register.html')  
 
-    
+# simply logout session function
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.secret_key = 'deckB0X'
     app.run(host=os.getenv("IP", "0.0.0.0"),

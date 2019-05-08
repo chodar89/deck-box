@@ -8,7 +8,7 @@
     {% endif %}
 {% endwith %}
 
-<div class="row container">
+<div class="login-form row container">
     <form class="col s12" method=POST action="{{url_for('login')}}">
         <div class="row ">
             <div class="input-field col s8 offset-s2">
@@ -29,7 +29,7 @@
         </div>
     </form>
 </div>
-<p> OR Register if you don't have account yet!</p>
+<p class="reg-paragraph"> OR Register <br /> if you don't have an account yet <br /><i class="fas fa-user-plus"></i></p>
 {% with exists = get_flashed_messages(category_filter=['exists']) %}
     {% if exists %}
         {% for message in exists %}
