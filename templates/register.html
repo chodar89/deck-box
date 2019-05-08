@@ -1,5 +1,13 @@
 {% extends 'base.html' %} {% block content %}
-<p> log in </p>
+
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+        {% for message in errors %}
+            <p class="{{category}} bad-login">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <div class="row container">
     <form class="col s12" method=POST action="{{ url_for('login')}}">
         <div class="row ">
@@ -22,7 +30,13 @@
     </form>
 </div>
 <p> OR Register if you don't have account yet!</p>
-
+{% with exists = get_flashed_messages(category_filter=['exists']) %}
+    {% if exists %}
+        {% for message in exists %}
+            <p class=" {{category}} bad-login">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="row container">
     <form class="col s12" method=POST action="{{ url_for('login')}}">
         <div class="row ">

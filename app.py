@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session
+from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import bcrypt
@@ -25,9 +25,12 @@ def login():
     if login:
         if bcrypt.hashpw(request.form['password'].encode('utf-8'), login['password']) == login['password']:
             session['username'] = request.form['username']
-            return redirect( url_for('index'))
-            
-    return 'Invalid username or password'
+            return redirect(url_for('index'))
+
+    
+        else: flash("Incorrect password or username", 'error')
+             
+    return redirect(url_for('register'))
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -41,8 +44,8 @@ def register():
             session['username'] =  request.form['username']
             return redirect(url_for('index'))
             
-        return 'Username already exists.'
-        
+    
+    flash ('Username already exists', 'exists')
     return render_template('register.html')
 
     

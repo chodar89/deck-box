@@ -57,6 +57,14 @@ nav .sidenav-trigger {
 }
 /*-------------------------- Reg Form ---*/
 
+.bad-login {
+    font-family: 'Merriweather Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: medium;
+    text-align: center;
+    background-color: #5c7fa5;
+    color: #fff;
+}
 
 /*-------------------------- Buttons ---*/
 
