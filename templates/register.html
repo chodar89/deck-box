@@ -9,17 +9,17 @@
 {% endwith %}
 
 <div class="row container">
-    <form class="col s12" method=POST action="{{ url_for('login')}}">
+    <form class="col s12" method=POST action="{{url_for('login')}}">
         <div class="row ">
             <div class="input-field col s8 offset-s2">
-                <input id="username" name="username" type="text" class="validate">
-                <label for="username">Username</label>
+                <input id="log_username" name="log_username" type="text" class="validate">
+                <label for="log_username">Username</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s8 offset-s2">
-                <input id="password" name="password" type="password" class="validate">
-                <label for="password">Password</label>
+                <input id="log_password" name="log_password" type="password" class="validate">
+                <label for="log_password">Password</label>
             </div>
         </div>
         <div class="row center-align">
@@ -38,7 +38,7 @@
     {% endif %}
 {% endwith %}
 <div class="row container">
-    <form class="col s12" method=POST action="{{ url_for('login')}}">
+    <form class="col s12" method=POST action="{{ url_for('register')}}">
         <div class="row ">
             <div class="input-field col s8 offset-s2">
                 <input id="username" name="username" type="text" class="validate">

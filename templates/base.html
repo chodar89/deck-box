@@ -59,6 +59,13 @@
             <li><a class="subheader">Subheader</a></li>
             <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
         </ul>
+        {% with welcomes = get_flashed_messages(category_filter=["welcome"]) %}
+            {% if welcomes %}
+                {% for message in welcomes %}
+                    <p class="{{category}} welcome">{{message}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div class="parallax-container">
             <div class="parallax">
                 <img src="../static/img/theme4.jpg">

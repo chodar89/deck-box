@@ -14,23 +14,10 @@ mongo = PyMongo(app)
 @app.route('/')
 def index():
     if 'username' in session:
-        return 'Welcome back ' + session['username']
+        flash('Welcome back ' + session['username'], 'welcome')
     return render_template('index.html')
     
-@app.route('/login', methods=['POST'])
-def login():
-    users = mongo.db.users
-    login = users.find_one({'name': request.form['username']})
-    
-    if login:
-        if bcrypt.hashpw(request.form['password'].encode('utf-8'), login['password']) == login['password']:
-            session['username'] = request.form['username']
-            return redirect(url_for('index'))
 
-    
-        else: flash("Incorrect password or username", 'error')
-             
-    return redirect(url_for('register'))
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -45,10 +32,22 @@ def register():
             return redirect(url_for('index'))
             
     
-    flash ('Username already exists', 'exists')
+        else: flash('Username already exists', 'exists')
+
     return render_template('register.html')
 
+@app.route('/login', methods=['POST'])
+def login():
+    users = mongo.db.users
+    login = users.find_one({'name': request.form['log_username']})
     
+    if login:
+        if bcrypt.hashpw(request.form['log_password'].encode('utf-8'), login['password']) == login['password']:
+            session['username'] = request.form['log_username']
+            return redirect(url_for('index'))
+        
+    flash("Incorrect password or username", 'error')
+    return render_template('register.html')  
 
     
 if __name__ == '__main__':

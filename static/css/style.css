@@ -39,6 +39,15 @@ nav .sidenav-trigger {
 }
 
 /*-------------------------- Index ---*/
+.welcome {
+    background-color: #be7499;
+    font-family: 'Merriweather Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: medium;
+    text-align: center;
+    color: #fff;
+    margin: 0px;
+}
 
 .index-cards {
     display: flex;
