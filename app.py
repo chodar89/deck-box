@@ -22,15 +22,21 @@ def index():
         return render_template('index.html')
         
     
-@app.route('/addcard')
-def addcard():
+@app.route('/add_card')
+def add_card():
     colors=mongo.db.colors.find()
     rarity=mongo.db.rarity.find()
     expansion=mongo.db.expansion_set.find()
     card_types=mongo.db.card_types.find()
     rating=mongo.db.rating.find()
     return render_template('addcard.html', **locals())
-    
+
+@app.route('/insert_card', methods=['POST', 'GET'])
+def insert_card():
+    cards=mongo.db.cards
+    one_card = request.form.to_dict()
+    cards.insert_one(one_card)
+    return redirect(url_for('add_card'))
 
 # render register page and post registration form to mongo database
 

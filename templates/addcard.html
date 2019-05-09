@@ -1,19 +1,18 @@
 {% extends 'base.html' %} {% block content %}
 
 <div class="row card-form">
-  <form class="col s12 container" action=m ethod='POST'>
+  <form class="col s12" action="{{url_for('insert_card')}}" method="POST">
     <div class="row">
       <div class="input-field col s10 offset-s1">
-        <input id="card_name" type="text" class="validate">
+        <input id="card_name" type="text" class="validate" required="" aria-required="true">
         <label for="card_name">Card Name</label>
       </div>
     </div>
-
     <div class="row">
       <div class="input-field col s5 offset-s1">
         <select multiple>
             {% for color in colors %}
-                <option value="{{color.color}}">{{color.color}}</option>
+                <option id="color" value="{{color.color}}">{{color.color}}</option>
             {% endfor %}
           </select>
         <label>Multiply color select</label>
@@ -28,7 +27,6 @@
         <label>Select rarity</label>
       </div>
     </div>
-
     <div class="row">
       <div class="input-field col s5 offset-s1">
         <select>
@@ -56,7 +54,7 @@
       </p>
       <p class="range-field col s5">
         <label>Toughness</label>
-        <input type="range" id="toughness" name"toughness" min="0" max="25" />
+        <input type="range" id="toughness" name "toughness" min="0" max="25" />
       </p>
     </div>
     <div class="row">
@@ -95,6 +93,9 @@
         <input id="card_url" type="text" class="validate">
         <label for="card_url">Paste card img url</label>
       </div>
+    </div>
+    <div class="row">
+      <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
     </div>
   </form>
 </div>
