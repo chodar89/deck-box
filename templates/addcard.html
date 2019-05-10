@@ -1,47 +1,51 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block sidenav %}
+<ul class="left">
+    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+</ul>
+{% endblock %} {% block content %}
 
 <div class="row card-form">
-  <form class="col s12" action="{{url_for('insert_card')}}" method="POST">
+  <form class="col s12 center" action="{{url_for('insert_card')}}" method="POST">
     <div class="row">
       <div class="input-field col s10 offset-s1">
-        <input id="card_name" type="text" class="validate" required="" aria-required="true">
+        <input id="card_name" name="card_name" type="text" class="validate" required="" aria-required="true">
         <label for="card_name">Card Name</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s5 offset-s1">
+      <div class="input-field col s10 offset-s1 m5 offset-m1">
         <select multiple>
             {% for color in colors %}
-                <option id="color" value="{{color.color}}">{{color.color}}</option>
+                <option id="color" name="color" value="{{color.color}}">{{color.color}}</option>
             {% endfor %}
           </select>
         <label>Multiply color select</label>
       </div>
-      <div class="input-field col s5">
+      <div class="input-field col s10 offset-s1 m5">
         <select>
             <option value="" disabled selected></option>
             {% for rar in rarity %}
-                <option value="{{rar.rarity}}">{{rar.rarity}}</option>
+                <option name="rarity" value="{{rar.rarity}}">{{rar.rarity}}</option>
             {% endfor %}
           </select>
         <label>Select rarity</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s5 offset-s1">
+      <div class="input-field col s10 offset-s1 m5 offset-m1">
         <select>
            <option value="" disabled selected></option>
             {% for type in card_types %}
-                <option value="{{type.type}}">{{type.type}}</option>
+                <option name="type" value="{{type.type}}">{{type.type}}</option>
             {% endfor %}
           </select>
         <label>Select card type</label>
       </div>
-      <div class="input-field col s5">
+      <div class="input-field col s10 offset-s1 m5">
         <select>
             <option value="" disabled selected></option>
             {% for set in expansion %}
-                <option value="{{set.set}}">{{set.set}}</option>
+                <option name="set" value="{{set.set}}">{{set.set}}</option>
             {% endfor %}
           </select>
         <label>Select expansion</label>
@@ -54,13 +58,13 @@
       </p>
       <p class="range-field col s5">
         <label>Toughness</label>
-        <input type="range" id="toughness" name "toughness" min="0" max="25" />
+        <input type="range" id="toughness" name="toughness" min="0" max="25" />
       </p>
     </div>
     <div class="row">
       <div class="row">
         <div class="input-field col s10 offset-s1">
-          <textarea id="ruling" class="materialize-textarea"></textarea>
+          <textarea id="ruling" name="ruling" class="materialize-textarea"></textarea>
           <label for="ruling">Ruling</label>
         </div>
       </div>
@@ -68,34 +72,34 @@
     <div class="row">
       <div class="row">
         <div class="input-field col s10 offset-s1">
-          <textarea id="flavor_text" class="materialize-textarea"></textarea>
+          <textarea id="flavor_text" name="flavor_text" class="materialize-textarea"></textarea>
           <label for="flavor_text">Flavor Text</label>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s5 offset-s1">
-        <input id="artist" type="text" class="validate">
+      <div class="input-field col s10 offset-s1 m5 offset-m1">
+        <input id="artist" name="artist" type="text" class="validate">
         <label for="artist">Artist Name</label>
       </div>
-      <div class="input-field col s5">
+      <div class="input-field col s10 offset-s1 m5">
         <select>
           <option value="" disabled selected></option>
             {% for rate in rating %}
-                <option value="{{rate.rating}}">{{rate.rating}}</option>
+                <option name="rating" value="{{rate.rating}}">{{rate.rating}}</option>
             {% endfor %}
           </select>
-        <label>Select expansion</label>
+        <label>Card rating</label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1">
-        <input id="card_url" type="text" class="validate">
+        <input id="card_url" name="card_url" type="text" class="validate">
         <label for="card_url">Paste card img url</label>
       </div>
     </div>
     <div class="row">
-      <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+      <button class="btn waves-effect waves-light" type="submit">Submit</button>
     </div>
   </form>
 </div>

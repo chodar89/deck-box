@@ -63,8 +63,14 @@ nav .sidenav-trigger {
     margin: 5px;
 }
 
+.index-cards>img {
+    max-width: 300px;
+    margin: auto;
+}
+
 .five-cards {
     width: 80%;
+    max-width: 500px;
 }
 
 /*-------------------------- Add Card Form ---*/
@@ -131,5 +137,11 @@ nav .sidenav-trigger {
 }
 
 .footer-copyright {
-    background-color: #244673;
+    background-color: #fafafa!important;
+    text-align: center;
+}
+
+.logo-footer {
+    width: 30%;
+    max-width: 300px;
 }

@@ -29,19 +29,20 @@
             <nav>
                 <div class="nav-wrapper">
 
-                    <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a>
-                    <ul class="left">
-                        <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
-                    </ul>
+                    <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a> 
+                    {% block sidenav %}
+                        
+                    {% endblock %}
                     <ul class="right">
                         <li><a href="{{url_for ('logout')}}">{{ sign_out }}</a></li>
                     </ul>
                     <ul class="right">
-                        <li><a href="{{url_for ('register')}}">Sign In</a></li>
+                        <li><a href="{{url_for ('register')}}">{{ sign_in }}</a></li>
                     </ul>
                 </div>
             </nav>
         </div>
+
         <ul id="slide-out" class="sidenav">
             <li>
                 <div class="user-view">
@@ -61,13 +62,12 @@
             <li><a class="subheader">Subheader</a></li>
             <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
         </ul>
-        {% with welcomes = get_flashed_messages(category_filter=["welcome"]) %}
-            {% if welcomes %}
+
+        {% with welcomes = get_flashed_messages(category_filter=["welcome"]) %} 
+            {% if welcomes %} 
                 {% for message in welcomes %}
                     <p class="{{category}} welcome">{{message}}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {% endfor %} {% endif %} {% endwith %}
         <div class="parallax-container">
             <div class="parallax">
                 <img src="../static/img/theme4.jpg">
@@ -87,20 +87,19 @@
                     <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
                 </div>
                 <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Links</h5>
+                    <h5 class="white-text">Site Map</h5>
                     <ul>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                        <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                        <li><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></li>
+                        <li><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></li>
+                        <li><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">Decks</a></li>
+                        <li><a class="grey-text text-lighten-3" href="{{ url_for('add_card')}}">Add Card</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="footer-copyright">
             <div class="container">
-                <img src="https://i.ibb.co/Qf4dm2c/logowhite.png">
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+                <img class="logo-footer" src="../static/img/logoblack.png">
             </div>
         </div>
     </footer>
@@ -108,8 +107,6 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../static/js/materialize.js"></script>
     <script>
-    
-        
         $(document).ready(function() {
             $('.sidenav').sidenav();
             $(".dropdown-trigger").dropdown();

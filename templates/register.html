@@ -41,13 +41,13 @@
     <form class="col s12" method=POST action="{{ url_for('register')}}">
         <div class="row ">
             <div class="input-field col s8 offset-s2">
-                <input id="username" name="username" type="text" class="validate">
+                <input placeholder="Must contain more than 3 characters" id="username" name="username" type="text" class="validate">
                 <label for="username">Username</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s8 offset-s2">
-                <input id="password" name="password" type="password" class="validate">
+                <input placeholder="Must contain more than 5 characters" id="password" name="password" type="password" class="validate">
                 <label for="password">Password</label>
             </div>
         </div>

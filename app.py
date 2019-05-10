@@ -17,11 +17,12 @@ mongo = PyMongo(app)
 def index():
     if 'username' in session:
         flash('Welcome back ' + session['username'], 'welcome')
-        return render_template('index.html', sign_out='Sign Out')
+        return render_template('decks.html', sign_out='Sign Out')
     else:
-        return render_template('index.html')
+        return render_template('index.html', sign_in='Sign In')
         
-    
+
+# render addcard page and take values from collection and pass them to html form
 @app.route('/add_card')
 def add_card():
     colors=mongo.db.colors.find()
@@ -31,7 +32,9 @@ def add_card():
     rating=mongo.db.rating.find()
     return render_template('addcard.html', **locals())
 
-@app.route('/insert_card', methods=['POST', 'GET'])
+# function that change form data to dictionary and send it to MongoDB card collection
+
+@app.route('/insert_card', methods=['POST'])
 def insert_card():
     cards=mongo.db.cards
     one_card = request.form.to_dict()
@@ -40,18 +43,32 @@ def insert_card():
 
 # render register page and post registration form to mongo database
 
+@app.route('/decks')
+def decks():
+    if 'username' in session:
+        return render_template('decks.html')
+    else: 
+        return redirect(url_for('register'))
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         users = mongo.db.users
         existing_user = users.find_one({'name' : request.form['username']})
-        
+        new_username = request.form['username']
+        new_password = request.form['password']
         # first it checks if user name exists in database if not post form if yes flash allert
-        if existing_user is None: 
-            hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({'name':  request.form['username'], 'password' : hash_password})
-            session['username'] =  request.form['username']
-            return redirect(url_for('index'))
+        if existing_user is None:
+            if len(new_username) < 4:
+               flash('Username to short', 'exists')
+            elif len(new_password) < 6:
+               flash('password to short', 'exists')
+            else:
+                hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
+                users.insert({'name':  request.form['username'], 'password' : hash_password})
+                session['username'] =  request.form['username']
+                flash('Thank you for creating an account', 'exists')
+            return redirect(url_for('register'))
             
     
         else: flash('Username already exists', 'exists')
