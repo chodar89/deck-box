@@ -12,7 +12,6 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
 mongo = PyMongo(app)
 
 # render index page and checkes if user is in the session
-
 @app.route('/')
 def index():
     if 'username' in session:
@@ -25,12 +24,15 @@ def index():
 # render addcard page and take values from collection and pass them to html form
 @app.route('/add_card')
 def add_card():
-    colors=mongo.db.colors.find()
-    rarity=mongo.db.rarity.find()
-    expansion=mongo.db.expansion_set.find()
-    card_types=mongo.db.card_types.find()
-    rating=mongo.db.rating.find()
-    return render_template('addcard.html', **locals())
+    if 'username' in session:
+        colors=mongo.db.colors.find()
+        rarity=mongo.db.rarity.find()
+        expansion=mongo.db.expansion_set.find()
+        card_types=mongo.db.card_types.find()
+        rating=mongo.db.rating.find()
+        return render_template('addcard.html', **locals())
+    else: 
+        return redirect(url_for('register'))
 
 # function that change form data to dictionary and send it to MongoDB card collection
 
@@ -40,6 +42,13 @@ def insert_card():
     one_card = request.form.to_dict()
     cards.insert_one(one_card)
     return redirect(url_for('add_card'))
+    
+@app.route('/add_deck')
+def add_deck():
+    if 'username' in session:
+        return render_template('adddeck.html', cards=mongo.db.cards.find())
+    else: 
+        return redirect(url_for('register'))
 
 # render register page and post registration form to mongo database
 

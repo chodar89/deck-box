@@ -1,6 +1,6 @@
 /*-------------------------- General ---*/
 
-@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans');
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans|Fjalla+One');
 
 main {
     min-height: 40vh;
@@ -81,6 +81,41 @@ nav .sidenav-trigger {
     margin-top: 40px;
     margin-bottom: 30px;
 }
+
+/*-------------------------- Decks / Cards ---*/
+
+.card-name {
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1.1em;
+    text-transform: capitalize;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.cards-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.add-deck {
+    width: 200px;
+    height: 300px;
+    background-color: #abcfec;
+    border-radius: 5%;
+    margin-top: 25px;
+}
+
+.add-deck>i {
+    font-size: 4em;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    margin-left: -15%;
+    margin-top: -25%;
+    color: #fafafa;
+}
+
 
 /*-------------------------- Reg Form ---*/
 

@@ -17,14 +17,6 @@
 <body>
     <header>
         <!-- Dropdown Structure -->
-        <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!">Add Card</a></li>
-            <li><a href="#!">Browse Cards</a></li>
-        </ul>
-        <ul id="dropdown2" class="dropdown-content">
-            <li><a href="#!">Add Deck</a></li>
-            <li><a href="#!">Browse Decks</a></li>
-        </ul>
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper">
@@ -50,17 +42,22 @@
                         <img src="images/office.jpg">
                     </div>
                     <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
-                    <a href="#name"><span class="white-text name">John Doe</span></a>
+                    <a href="#name">
+                        <span class="white-text name">John Doe</span>
+                    </a>
                     <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
                 </div>
             </li>
-            <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
-            <li><a href="{{url_for ('add_card')}}">Add Card</a></li>
+            <li><a href="{{url_for('decks')}}"><i class="material-icons">home</i>Home</a></li>
+            <li><a href="{{url_for ('add_card')}}"><i class="material-icons">add_circle</i>Add Card</a></li>
+            <li><a href="{{url_for ('add_deck')}}"><i class="material-icons">add_circle</i>Add Deck</a></li>
             <li>
                 <div class="divider"></div>
             </li>
-            <li><a class="subheader">Subheader</a></li>
-            <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+            <li><a class="subheader">Usefull Links</a></li>
+            <li><a class="waves-effect" href="https://magic.wizards.com/en">Wizards</a></li>
+            <li><a class="waves-effect" href="https://www.magicmadhouse.co.uk">Magic Madhouse</a></li>
+            <li><a class="waves-effect" href="https://pl.imgbb.com">IMGBB free image host</a></li>
         </ul>
 
         {% with welcomes = get_flashed_messages(category_filter=["welcome"]) %} 
