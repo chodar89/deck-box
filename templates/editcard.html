@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block sidenav %}
+<ul class="left">
+    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+</ul>
+{% endblock %} 
+{% block content %} 
+    <div class="cards-layout">
+        {% for card in cards %}
+        <div class="center col s10 offset-s1 m5 offset-m1">
+            <p class="card-name">{{ card.card_name }}</p>
+            <div class="row">
+                <img src="{{card.card_url}}"></img>
+            </div>
+            <div class="row">
+                <a class="waves-effect waves-light btn btn-blue"><i class="material-icons left">add_circle</i>ADD</a>
+                <a class="waves-effect waves-light btn btn-blue"><i class="material-icons right">edit</i>EDIT</a>
+            </div>
+        </div>
+        {% endfor %} 
+    </div>
+{% endblock %}

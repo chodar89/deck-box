@@ -33,6 +33,19 @@ def add_card():
         return render_template('addcard.html', **locals())
     else: 
         return redirect(url_for('register'))
+        
+@app.route('/edit_card/<card_id>')
+def edit_card(card_id):
+    if 'username' in session:
+        the_card = mongo.db.cards({"_id": ObjectId(card_id)})
+        colors=mongo.db.colors.find()
+        rarity=mongo.db.rarity.find()
+        expansion=mongo.db.expansion_set.find()
+        card_types=mongo.db.card_types.find()
+        rating=mongo.db.rating.find()
+        return render_template('editcard.html', **locals())
+    else: 
+        return redirect(url_for('register'))
 
 # function that change form data to dictionary and send it to MongoDB card collection
 
