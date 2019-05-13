@@ -1,21 +1,131 @@
-{% extends 'base.html' %} {% block sidenav %}
+{% extends 'base.html' %} 
+{% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %} 
-{% block content %} 
-    <div class="cards-layout">
-        {% for card in cards %}
-        <div class="center col s10 offset-s1 m5 offset-m1">
-            <p class="card-name">{{ card.card_name }}</p>
-            <div class="row">
+{% endblock %} {% block content %}
+<h3>Edit Card</h3>
+            <div class="row card-size">
                 <img src="{{card.card_url}}"></img>
             </div>
-            <div class="row">
-                <a class="waves-effect waves-light btn btn-blue"><i class="material-icons left">add_circle</i>ADD</a>
-                <a class="waves-effect waves-light btn btn-blue"><i class="material-icons right">edit</i>EDIT</a>
-            </div>
-        </div>
-        {% endfor %} 
+<div class="row card-form">
+  <form class="col s12 center" action="{{url_for('update_card', card_id=card._id)}}" method="POST">
+    <div class="row">
+      <div class="input-field col s10 offset-s1">
+        <input id="card_name" name="card_name" type="text" value="{{card.card_name}}" class="validate" required="" aria-required="true">
+        <label for="card_name">Card Name</label>
+      </div>
     </div>
+    <div class="row">
+      <div class="input-field col s10 offset-s1 m5 offset-m1">
+        <select id="color" name="color" multiple>
+            {% for color in colors %}
+                {% if color.color == card.color %}
+                    <option value="{{card.color}}" selected >{{card.color}}</option>
+                {% else %}
+                    <option value="{{color.color}}">{{color.color}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        <label>Multiply color select</label>
+      </div>
+      <div class="input-field col s10 offset-s1 m5">
+        <select id="rarity" name="rarity">
+            <option value="" disabled selected></option>
+            {% for rar in rarity %}
+                {% if rar.rarity == card.rarity %}
+                    <option value="{{card.rarity}}" selected >{{card.rarity}}</option>
+                {% else %}
+                    <option value="{{rar.rarity}}">{{rar.rarity}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        <label>Select rarity</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s10 offset-s1 m5 offset-m1">
+        <select id="type" name="type">
+           <option value="" disabled selected></option>
+            {% for type in card_types %}
+                {% if type.type == card.type %}
+                    <option value="{{card.type}}" selected>{{card.type}}</option>
+                {% else %}
+                    <option value="{{type.type}}">{{type.type}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        <label>Select card type</label>
+      </div>
+      <div class="input-field col s10 offset-s1 m5">
+        <select id="set" name="set">
+            <option value="" disabled selected></option>
+            {% for set in expansion %}
+                {% if set.set == card.set %}
+                <option value="{{card.set}}" selected >{{card.set}}</option>
+                {% else %}
+                <option value="{{set.set}}">{{set.set}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        <label>Select expansion</label>
+      </div>
+    </div>
+    <div class="row">
+      <p class="range-field col s5 offset-s1">
+        <label>Strength</label>
+        <input type="range" id="strength" name="strength" min="0" max="25" />
+      </p>
+      <p class="range-field col s5">
+        <label>Toughness</label>
+        <input type="range" id="toughness" name="toughness" min="0" max="25" />
+      </p>
+    </div>
+    <div class="row">
+      <div class="row">
+        <div class="input-field col s10 offset-s1">
+          <textarea id="ruling" name="ruling"  class="materialize-textarea">{{card.ruling}}</textarea>
+          <label for="ruling">Ruling</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row">
+        <div class="input-field col s10 offset-s1">
+          <textarea id="flavor_text" name="flavor_text" class="materialize-textarea">{{card.flavor_text}}</textarea>
+          <label for="flavor_text">Flavor Text</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s10 offset-s1 m5 offset-m1">
+        <input id="artist" name="artist" type="text" value="{{card.artist}}" class="validate">
+        <label for="artist">Artist Name</label>
+      </div>
+      <div class="input-field col s10 offset-s1 m5">
+        <select id="rating" name="rating">
+          <option value="" disabled selected></option>
+            {% for rate in rating %}
+                {% if rate.rating == card.rating %}
+                <option  value="{{card.rating}}" selected >{{card.rating}}</option>
+                {% else %}
+                <option  value="{{rate.rating}}">{{rate.rating}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        <label>Card rating</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s10 offset-s1">
+        <input id="card_url" name="card_url" type="text" value="{{card.card_url}}" class="validate">
+        <label for="card_url">Paste card img url</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn waves-effect waves-light btn-blue" type="submit">Save Card<i class="material-icons right">check</i></button>
+    </div>
+  </form>
+</div>
+
 {% endblock %}

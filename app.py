@@ -33,19 +33,47 @@ def add_card():
         return render_template('addcard.html', **locals())
     else: 
         return redirect(url_for('register'))
-        
+
+# edit_card route with function that takes card id and its values
 @app.route('/edit_card/<card_id>')
 def edit_card(card_id):
     if 'username' in session:
-        the_card = mongo.db.cards({"_id": ObjectId(card_id)})
+        the_card = mongo.db.cards.find_one({"_id": ObjectId(card_id)})
         colors=mongo.db.colors.find()
         rarity=mongo.db.rarity.find()
         expansion=mongo.db.expansion_set.find()
         card_types=mongo.db.card_types.find()
         rating=mongo.db.rating.find()
-        return render_template('editcard.html', **locals())
+        return render_template('editcard.html', card=the_card, **locals())
     else: 
         return redirect(url_for('register'))
+        
+# function that takes values from form in editcard.html and update them in database
+@app.route('/update_card/<card_id>', methods=["POST"])
+def update_card(card_id):
+    card=mongo.db.cards
+    card.update( {"_id": ObjectId(card_id)} ,
+        {
+        'card_name': request.form['card_name'],
+        'color': request.form['color'],
+        'rarity': request.form['rarity'],
+        'type': request.form['type'],
+        'set': request.form['set'],
+        'strength': request.form['strength'],
+        'toughness': request.form['toughness'],
+        'ruling': request.form['ruling'],
+        'flavor_text': request.form['flavor_text'],
+        'artist': request.form['artist'],
+        'rating': request.form['rating'],
+        'card_url': request.form['card_url']
+        })
+    return redirect(url_for('add_deck'))
+    
+# function that removes document, card that user picked
+@app.route('/remove_card/<card_id>')
+def remove_card(card_id):
+    mongo.db.cards.remove({'_id:': ObjectId(card_id)})
+    return redirect(url_for('add_deck'))
 
 # function that change form data to dictionary and send it to MongoDB card collection
 

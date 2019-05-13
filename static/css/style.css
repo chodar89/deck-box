@@ -88,6 +88,17 @@ nav .sidenav-trigger {
 
 /*-------------------------- Decks / Cards ---*/
 
+.card-size {
+    width: 265px;
+    height: 370px;
+    margin-left: 10px!important;
+    margin-right: 10px!important;
+}
+.card-size>img {
+    width: 100%;
+    height: 100%;
+}
+
 .card-name {
     font-family: 'Fjalla One', sans-serif;
     font-size: 1.1em;
