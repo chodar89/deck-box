@@ -72,7 +72,7 @@ def update_card(card_id):
 # function that removes document, card that user picked
 @app.route('/remove_card/<card_id>')
 def remove_card(card_id):
-    mongo.db.cards.remove({'_id:': ObjectId(card_id)})
+    mongo.db.cards.remove({'_id': ObjectId(card_id)})
     return redirect(url_for('add_deck'))
 
 # function that change form data to dictionary and send it to MongoDB card collection

@@ -4,10 +4,10 @@
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
 {% endblock %} {% block content %}
-<h3>Edit Card</h3>
-            <div class="row card-size">
-                <img src="{{card.card_url}}"></img>
-            </div>
+<h3 class="title">Edit Card</h3>
+  <div class="row edit-card">
+    <img src="{{card.card_url}}"></img>
+  </div>
 <div class="row card-form">
   <form class="col s12 center" action="{{url_for('update_card', card_id=card._id)}}" method="POST">
     <div class="row">
@@ -18,7 +18,7 @@
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1 m5 offset-m1">
-        <select id="color" name="color" multiple>
+        <select required  id="color" name="color" multiple>
             {% for color in colors %}
                 {% if color.color == card.color %}
                     <option value="{{card.color}}" selected >{{card.color}}</option>
@@ -124,6 +124,7 @@
     </div>
     <div class="row">
       <button class="btn waves-effect waves-light btn-blue" type="submit">Save Card<i class="material-icons right">check</i></button>
+      <a href="{{url_for('remove_card', card_id=card._id)}}" class="btn waves-effect waves-light red">Delete Card<i class="material-icons left">clear</i></a>
     </div>
   </form>
 </div>

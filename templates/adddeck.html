@@ -14,9 +14,41 @@
             <div class="row">
                 <a class="waves-effect waves-light btn btn-blue"><i class="material-icons left">add_circle</i>ADD</a>
                 <a href="{{url_for('edit_card', card_id=card._id)}}" class="waves-effect waves-light btn btn-blue"><i class="material-icons right">edit</i>EDIT</a>
-            <a href="{{url_for('remove_card', card_id=card._id)}}" class="btn waves-effect waves-light red">Delete Card<i class="material-icons left">clear</i></a>
+            </div>
+            <div class="row">
+                {% if card.rating == "1" %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                {% elif card.rating == "2" %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                {% elif card.rating == "3" %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                {% elif card.rating == "4" %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                {% elif card.rating == "5" %}
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                {% endif %}
             </div>
         </div>
-        {% endfor %} 
+        {% endfor %}
     </div>
 {% endblock %}

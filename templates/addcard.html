@@ -4,7 +4,7 @@
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
 {% endblock %} {% block content %}
-<h3>Add Card</h3>
+<h3 class="title">Add Card</h3>
 <div class="row card-form">
   <form class="col s12 center" action="{{url_for('insert_card')}}" method="POST">
     <div class="row">
@@ -15,7 +15,7 @@
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1 m5 offset-m1">
-        <select id="color" name="color" multiple>
+        <select required id="color" name="color" multiple>
             {% for color in colors %}
                 <option value="{{color.color}}">{{color.color}}</option>
             {% endfor %}
@@ -23,7 +23,7 @@
         <label>Multiply color select</label>
       </div>
       <div class="input-field col s10 offset-s1 m5">
-        <select id="rarity" name="rarity">
+        <select required="asda" aria-required="true" id="rarity" name="rarity">
             <option value="" disabled selected></option>
             {% for rar in rarity %}
                 <option value="{{rar.rarity}}">{{rar.rarity}}</option>
