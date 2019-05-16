@@ -37,6 +37,15 @@ def add_card():
         return render_template('addcard.html', **locals())
     else: 
         return redirect(url_for('register'))
+        
+# shows collection of all user cards
+@app.route('/my_cards')
+def my_cards():
+    if 'username' in session:
+        cards=mongo.db.cards.find()
+        return render_template('mycards.html', cards=cards)
+    else: 
+        return redirect(url_for('register'))
 
 # edit_card route with function that takes card id and its values
 @app.route('/edit_card/<card_id>')
@@ -73,13 +82,13 @@ def update_card(card_id):
         'rating': request.form['rating'],
         'card_url': request.form['card_url']
         })
-    return redirect(url_for('add_deck'))
+    return redirect(url_for('decks'))
     
 # function that removes document, card that user picked
 @app.route('/remove_card/<card_id>')
 def remove_card(card_id):
     mongo.db.cards.remove({'_id': ObjectId(card_id)})
-    return redirect(url_for('add_deck'))
+    return redirect(url_for('my_cards'))
 
 # function that change form data to dictionary and send it to MongoDB card collection
 @app.route('/insert_card', methods=['POST'])
@@ -87,7 +96,7 @@ def insert_card():
     cards=mongo.db.cards
     one_card = request.form.to_dict()
     cards.insert_one(one_card)
-    return redirect(url_for('add_card'))
+    return redirect(url_for('decks'))
 
 
 """         DECKS          """
@@ -97,11 +106,12 @@ def insert_card():
 @app.route('/decks')
 def decks():
     if 'username' in session:
+        
         return render_template('decks.html', sign_out='Sign Out', decks=mongo.db.decks.find())
     else: 
         return redirect(url_for('register'))
         
-# creates deck name and id, than redirect ot page where user can add cards
+#  page with form to create decks
 @app.route('/deck_name')
 def deck_name():
     if 'username' in session:
@@ -117,11 +127,15 @@ def insert_deck():
     deck = request.form.to_dict()
     decks.insert_one(deck)
     return redirect(url_for('decks'))
-        
-@app.route('/add_deck')
-def add_deck():
+
+# redirect page where user can add cards to specific deck
+@app.route('/deck_build/<deck_id>')
+def deck_build(deck_id):
     if 'username' in session:
-        return render_template('adddeck.html', cards=mongo.db.cards.find(), sign_out='Sign Out')
+        deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+        sign_out='Sign Out'
+        cards=mongo.db.cards.find()
+        return render_template('deckbuild.html', **locals())
     else: 
         return redirect(url_for('register'))
 
