@@ -16,10 +16,13 @@ mongo = PyMongo(app)
 def index():
     if 'username' in session:
         flash('Welcome back ' + session['username'], 'welcome')
-        return render_template('decks.html', sign_out='Sign Out')
+        return redirect(url_for('decks'))
     else:
         return render_template('index.html', sign_in='Sign In')
         
+        
+"""         CARDS          """
+
 
 # render addcard page and take values from collection and pass them to html form
 @app.route('/add_card')
@@ -30,6 +33,7 @@ def add_card():
         expansion=mongo.db.expansion_set.find()
         card_types=mongo.db.card_types.find()
         rating=mongo.db.rating.find()
+        sign_out='Sign Out'
         return render_template('addcard.html', **locals())
     else: 
         return redirect(url_for('register'))
@@ -44,10 +48,12 @@ def edit_card(card_id):
         expansion=mongo.db.expansion_set.find()
         card_types=mongo.db.card_types.find()
         rating=mongo.db.rating.find()
-        return render_template('editcard.html', card=the_card, **locals())
+        sign_out='Sign Out'
+        card=the_card
+        return render_template('editcard.html', **locals())
     else: 
         return redirect(url_for('register'))
-        
+
 # function that takes values from form in editcard.html and update them in database
 @app.route('/update_card/<card_id>', methods=["POST"])
 def update_card(card_id):
@@ -76,30 +82,54 @@ def remove_card(card_id):
     return redirect(url_for('add_deck'))
 
 # function that change form data to dictionary and send it to MongoDB card collection
-
 @app.route('/insert_card', methods=['POST'])
 def insert_card():
     cards=mongo.db.cards
     one_card = request.form.to_dict()
     cards.insert_one(one_card)
     return redirect(url_for('add_card'))
-    
-@app.route('/add_deck')
-def add_deck():
-    if 'username' in session:
-        return render_template('adddeck.html', cards=mongo.db.cards.find())
-    else: 
-        return redirect(url_for('register'))
 
-# render register page and post registration form to mongo database
 
+"""         DECKS          """
+
+
+# this is the home page after login, dispays all users decks
 @app.route('/decks')
 def decks():
     if 'username' in session:
-        return render_template('decks.html')
+        return render_template('decks.html', sign_out='Sign Out', decks=mongo.db.decks.find())
+    else: 
+        return redirect(url_for('register'))
+        
+# creates deck name and id, than redirect ot page where user can add cards
+@app.route('/deck_name')
+def deck_name():
+    if 'username' in session:
+        colors=mongo.db.colors.find()
+        return render_template('deckname.html', colors=colors, sign_out='Sign Out')
+    else: 
+        return redirect(url_for('register'))
+        
+# insert deck name to database
+@app.route('/insert_deck', methods=['POST'])
+def insert_deck():
+    decks=mongo.db.decks
+    deck = request.form.to_dict()
+    decks.insert_one(deck)
+    return redirect(url_for('decks'))
+        
+@app.route('/add_deck')
+def add_deck():
+    if 'username' in session:
+        return render_template('adddeck.html', cards=mongo.db.cards.find(), sign_out='Sign Out')
     else: 
         return redirect(url_for('register'))
 
+
+"""         REGISTRATION & LOGIN          """
+
+
+# render register page and post registration form to mongo database
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block sidenav %}
+<ul class="left">
+    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+</ul>
+{% endblock %} 
+{% block content %}
+<h3 class="title">New Deck</h3>
+<div class="row card-form">
+  <form class="col s12 center" action="{{url_for('insert_deck')}}" method="POST">
+    <div class="row">
+      <div class="input-field col s10 offset-s1">
+        <input id="deck_name" name="deck_name" type="text" class="validate" required="" aria-required="true">
+        <label for="deck_name">Deck Name</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s10 offset-s1">
+        <select required id="color" name="color" multiple>
+            {% for color in colors %}
+                <option value="{{color.color}}">{{color.color}}</option>
+            {% endfor %}
+          </select>
+        <label>Multiply color select</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn waves-effect waves-light btn-blue" type="submit">Save</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+  

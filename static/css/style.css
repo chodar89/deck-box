@@ -104,7 +104,8 @@ nav .sidenav-trigger {
 
 /*-------------------------- Decks / Cards ---*/
 
-.card-size {
+.card-size,
+.deck-size {
     width: 265px;
     height: 370px;
     margin-left: 10px!important;
@@ -116,17 +117,34 @@ nav .sidenav-trigger {
     height: 100%;
 }
 
-.card-name {
+.deck-size>img {
+    width: 100%;
+    height: 100%;
+}
+
+.blank-deck {
+    margin-top: 30px;
+}
+
+.card-name,
+.deck-name {
     font-family: 'Fjalla One', sans-serif;
     font-size: 1.1em;
     text-transform: capitalize;
     font-weight: bold;
     letter-spacing: 0.5px;
+    text-align: center;
 }
 
 .cards-layout {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.deck-layout {
+    display: flex;
+    flex-flow: wrap;
     justify-content: space-around;
 }
 
@@ -140,8 +158,8 @@ nav .sidenav-trigger {
 }
 
 .add-deck {
-    width: 200px;
-    height: 300px;
+    width: 265px;
+    height: 370px;
     background-color: #abcfec;
     border-radius: 5%;
     margin-top: 25px;
@@ -158,7 +176,7 @@ nav .sidenav-trigger {
     position: relative;
     left: 50%;
     top: 50%;
-    margin-left: -15%;
+    margin-left: -10%;
     margin-top: -25%;
     color: #fafafa;
 }
