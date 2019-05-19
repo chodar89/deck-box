@@ -11,6 +11,14 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 mongo = PyMongo(app)
 
+@app.context_processor
+def user():
+    if 'username' in session:
+         user_name=session['username']
+         return dict(user_name=user_name)
+    else:
+        return dict(user_name=None)
+
 # render index page and checkes if user is in the session
 @app.route('/')
 def index():

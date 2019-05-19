@@ -142,6 +142,10 @@ nav .sidenav-trigger {
 
 /*-------------------------- Decks / Cards ---*/
 
+.decks {
+    margin: 30px;
+}
+
 .card-size,
 .deck-size {
     width: 265px;
@@ -161,7 +165,9 @@ nav .sidenav-trigger {
 }
 
 .blank-deck {
-    margin-top: 30px;
+    margin-top: 60px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .card-name,
