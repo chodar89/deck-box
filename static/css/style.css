@@ -15,11 +15,11 @@ main {
 }
 
 .paragraph {
-    font-family: 'Merriweather Sans', sans-serif;
+    font-family: 'Fjalla One', sans-serif;
     text-transform: uppercase;
-    font-size: 2em;
+    font-size: 1.5em;
     text-align: center;
-    font-weight: 800;
+    letter-spacing: 2px;
 }
 
 .title {
@@ -49,6 +49,34 @@ nav .sidenav-trigger {
 
 /*-------------------------- Index ---*/
 
+.paragraph>i {
+    color: #5f9ea0;
+}
+
+.paragraph-on-parallax {
+    position: absolute;
+    top: 18%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.paragraph-on-parallax>p {
+    color: #fafafa;
+    font-family: 'Merriweather Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: 200%;
+    text-shadow: 2px 1px 4px #102540;
+    letter-spacing: 3px;
+}
+
+.fa-user-check,
+.fa-laugh-beam {
+    font-size: 5em;
+    color: #5f9ea0;
+}
+
 .welcome {
     background-color: #be7499;
     font-family: 'Merriweather Sans', sans-serif;
@@ -59,11 +87,21 @@ nav .sidenav-trigger {
     margin: 0px;
 }
 
+.card-panel{
+    width: 95%;
+    margin: auto;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+
 .index-cards {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin: 30px;
+    margin: 80px;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .index-cards>i {

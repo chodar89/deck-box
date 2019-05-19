@@ -1,20 +1,37 @@
 {% extends 'base.html' %} {% block content %}
 
 <div class="row center">
-    <div>
-        <p class="paragraph-big">deck box is a place where you can create your own mtg collection</p>
-    </div>
-    <div class="index-cards">
-        <img class="col s3" src="../static/img/cards/card1.png">
-        <i class="fas fa-plus"></i>
-        <img class="col s3" src="../static/img/cards/card2.png">
-        <i class="fas fa-plus"></i>
-        <img class="col s3" src="../static/img/cards/card3.png">
+    <div class="paragraph-on-parallax">
+        <p>deck box is a place where you can hold <br /> your own mtg collection</p>
     </div>
     <div>
-        <p class="paragraph">Just add all your cards. One by one with our Cards Add menu.</p>
+        <p class="paragraph">Follow few simple steps:</p>
     </div>
-
+    <div class="index-cards card-panel hoverable">
+        <div>
+            <i class="fas fa-user-check"></i>
+            <p class="paragraph"><i class="fas fa-check"></i> First create an account</p>
+            <a href="{{url_for('register')}}" class="btn waves-effect waves-light btn-blue">Register<i class="material-icons left">account_circle</i></a>
+        </div>
+    </div>
+<div class="parallax-container">
+    <div class="parallax">
+        <img src="../static/img/theme2.jpg">
+    </div>
+</div>
+    <div class="card-panel hoverable">
+        <div>
+            <p class="paragraph"><i class="fas fa-check"></i> Add all your cards</p>
+        </div>
+        <div class="index-cards"> 
+            <img class="col s3" src="../static/img/cards/card1.png">
+            <i class="fas fa-plus"></i>
+            <img class="col s3" src="../static/img/cards/card2.png">
+            <i class="fas fa-plus"></i>
+            <img class="col s3" src="../static/img/cards/card3.png">
+        </div>
+    </div>
+    
 </div>
 <div class="parallax-container">
     <div class="parallax">
@@ -22,12 +39,17 @@
     </div>
 </div>
 <div class="row center">
-    <div>
-        <p class="paragraph">add, edit and search your cards or decks in quick and easy way</p>
+    <div class="card-panel hoverable">
+        <div>
+            <p class="paragraph"> That is it !!!</p>
+            <i class="fas fa-laugh-beam"></i>
+            <p class="paragraph">Now You can add, edit and search your cards or decks in quick and easy way</p>
+        </div>
+        <div class="container">
+            <img class='five-cards' src="../static/img/cards/cards.png">
+        </div>
     </div>
-    <div class="container">
-        <img class='five-cards' src="../static/img/cards/cards.png">
-    </div>
+    
 
 </div>
 {% endblock %}

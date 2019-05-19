@@ -106,8 +106,11 @@ def insert_card():
 @app.route('/decks')
 def decks():
     if 'username' in session:
-        
-        return render_template('decks.html', sign_out='Sign Out', decks=mongo.db.decks.find())
+        user_name=session['username']
+        user_email=mongo.db.users.find()
+        sign_out='Sign Out'
+        decks=mongo.db.decks.find()
+        return render_template('decks.html', **locals())
     else: 
         return redirect(url_for('register'))
         
