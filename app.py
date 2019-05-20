@@ -11,6 +11,8 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 mongo = PyMongo(app)
 
+
+# launched username before render templates
 @app.context_processor
 def user():
     if 'username' in session:
@@ -21,6 +23,7 @@ def user():
 
 # render index page and checkes if user is in the session
 @app.route('/')
+@app.route('/index')
 def index():
     if 'username' in session:
         flash('Welcome back ' + session['username'], 'welcome')
@@ -77,18 +80,18 @@ def update_card(card_id):
     card=mongo.db.cards
     card.update( {"_id": ObjectId(card_id)} ,
         {
-        'card_name': request.form['card_name'],
-        'color': request.form['color'],
-        'rarity': request.form['rarity'],
-        'type': request.form['type'],
-        'set': request.form['set'],
-        'strength': request.form['strength'],
-        'toughness': request.form['toughness'],
-        'ruling': request.form['ruling'],
-        'flavor_text': request.form['flavor_text'],
-        'artist': request.form['artist'],
-        'rating': request.form['rating'],
-        'card_url': request.form['card_url']
+        'card_name': request.form.get('card_name'),
+        'color': request.form.getlist('color'),
+        'rarity': request.form.get('rarity'),
+        'type': request.form.get('type'),
+        'set': request.form.get('set'),
+        'strength': request.form.get('strength'),
+        'toughness': request.form.get('toughness'),
+        'ruling': request.form.get('ruling'),
+        'flavor_text': request.form.get('flavor_text'),
+        'artist': request.form.get('artist'),
+        'rating': request.form.get('rating'),
+        'card_url': request.form.get('card_url')
         })
     return redirect(url_for('decks'))
     
@@ -102,8 +105,20 @@ def remove_card(card_id):
 @app.route('/insert_card', methods=['POST'])
 def insert_card():
     cards=mongo.db.cards
-    one_card = request.form.to_dict()
-    cards.insert_one(one_card)
+    cards.insert_one(   {
+        'card_name': request.form.get('card_name'),
+        'color': request.form.getlist('color'),
+        'rarity': request.form.get('rarity'),
+        'type': request.form.get('type'),
+        'set': request.form.get('set'),
+        'strength': request.form.get('strength'),
+        'toughness': request.form.get('toughness'),
+        'ruling': request.form.get('ruling'),
+        'flavor_text': request.form.get('flavor_text'),
+        'artist': request.form.get('artist'),
+        'rating': request.form.get('rating'),
+        'card_url': request.form.get('card_url')
+    })
     return redirect(url_for('decks'))
 
 
@@ -149,7 +164,19 @@ def deck_build(deck_id):
         return render_template('deckbuild.html', **locals())
     else: 
         return redirect(url_for('register'))
-
+        
+@app.route('/add_card_to_deck/<deck_id>/<card_id>')
+def add_card_to_deck(deck_id, card_id):
+    if 'username' in session:
+        # deck_cards=[]
+        card=mongo.db.cards.find_one({'_id': ObjectId(card_id)})
+        deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
+        { '$push': {'cards':card_id}})
+        # deck_cards.append
+        sign_out='Sign Out'
+        return redirect(url_for('deck_build'))
+    else: 
+        return redirect(url_for('register'))
 
 """         REGISTRATION & LOGIN          """
 
@@ -193,7 +220,7 @@ def login():
             return redirect(url_for('index'))
         
     flash("Incorrect password or username", 'error')
-    return render_template('register.html')  
+    return redirect(url_for('register'))
 
 # simply logout session function
 @app.route('/logout')

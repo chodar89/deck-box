@@ -275,6 +275,12 @@ nav .sidenav-trigger {
 
 /*-------------------------- Footer ---*/
 
+.wizard-logo {
+    position: relative;
+    top: 20px;
+    width: 25%;
+}
+
 .page-footer {
     background-color: #244673;
 }
