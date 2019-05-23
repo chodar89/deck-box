@@ -14,12 +14,20 @@ mongo = PyMongo(app)
 
 # launched username before render templates
 @app.context_processor
-def user():
+def user_context():
     if 'username' in session:
          user_name=session['username']
          return dict(user_name=user_name)
     else:
         return dict(user_name=None)
+# @app.before_request
+# def check_username():
+#     if 'username' in session:
+#         # google it
+#     else:
+#         return redirect(url_for('register'))
+        
+
 
 # render index page and checkes if user is in the session
 @app.route('/')
@@ -164,20 +172,39 @@ def deck_build(deck_id):
         return render_template('deckbuild.html', **locals())
     else: 
         return redirect(url_for('register'))
-        
+
 @app.route('/add_card_to_deck/<deck_id>/<card_id>')
 def add_card_to_deck(deck_id, card_id):
     if 'username' in session:
         # deck_cards=[]
         card=mongo.db.cards.find_one({'_id': ObjectId(card_id)})
+        # append card id's to specific deck
         deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
         { '$push': {'cards':card_id}})
         # deck_cards.append
         sign_out='Sign Out'
-        return redirect(url_for('deck_build'))
+        return redirect(url_for('decks'))
     else: 
         return redirect(url_for('register'))
 
+
+@app.route('/deck_browse/<deck_id>')
+def deck_browse(deck_id):
+    if 'username' in session:
+        cards_id=[]
+        deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+        # import pdb;
+        # pdb.set_trace()
+        deck_cards=deck["cards"]
+        for card in deck_cards:
+            cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
+            cards_id.append(cardinformation)
+        sign_out='Sign Out'
+        return render_template('deckbrowse.html', **locals())
+    else: 
+        return redirect(url_for('register'))
+        
+        
 """         REGISTRATION & LOGIN          """
 
 
@@ -186,7 +213,7 @@ def add_card_to_deck(deck_id, card_id):
 def register():
     if request.method == 'POST':
         users = mongo.db.users
-        existing_user = users.find_one({'name' : request.form['username']})
+        existing_user = users.find_one({'username' : request.form['username']})
         new_username = request.form['username']
         new_password = request.form['password']
         # first it checks if user name exists in database if not post form if yes flash allert
@@ -197,7 +224,7 @@ def register():
                flash('password to short', 'exists')
             else:
                 hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-                users.insert({'name':  request.form['username'], 'password' : hash_password})
+                users.insert({'username':  request.form['username'], 'password' : hash_password})
                 session['username'] =  request.form['username']
                 flash('Thank you for creating an account', 'exists')
             return redirect(url_for('register'))

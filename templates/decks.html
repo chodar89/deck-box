@@ -15,7 +15,7 @@
         <div class="center col s10 offset-s1 m5 offset-m1 decks">
             <p class="deck-name">{{ deck.deck_name }}</p>
             <div class="row deck-size">
-                <a href="{{url_for('deck_build', deck_id=deck._id)}}"><img src="../static/img/cards/card_back.jpg"></img></a>
+                <a href="{{url_for('deck_browse', deck_id=deck._id)}}"><img src="../static/img/cards/card_back.jpg"></img></a>
             </div>
         </div>
     {% endfor %}
