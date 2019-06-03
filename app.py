@@ -2,12 +2,15 @@ import os
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from dotenv import load_dotenv
 import bcrypt
+
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config['MONGO_DBNAME'] = 'deckBox'
-app.config['MONGO_URI'] = os.getenv('MONGO_URI', 'mongodb://localhost')
+app.config['MONGO_DBNAME'] = os.getenv('MONGO_DBNAME')
+app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 
@@ -20,12 +23,15 @@ def user_context():
          return dict(user_name=user_name)
     else:
         return dict(user_name=None)
+        
 # @app.before_request
 # def check_username():
-#     if 'username' in session:
-#         # google it
-#     else:
-#         return redirect(url_for('register'))
+#     if 'username' not in session and request.endpoint != 'index':
+#         return redirect(url_for('index'))
+#     else 'username' not in session and request.endpoint != 'register':
+#         return redirect(url_for('index'))
+        
+        
         
 
 
@@ -193,14 +199,12 @@ def deck_browse(deck_id):
     if 'username' in session:
         cards_id=[]
         deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
-        # import pdb;
-        # pdb.set_trace()
         deck_cards=deck["cards"]
         for card in deck_cards:
             cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
             cards_id.append(cardinformation)
         sign_out='Sign Out'
-        return render_template('deckbrowse.html', **locals())
+        return render_template('deckbrowse.html', cards_id=cards_id, sign_out=sign_out)
     else: 
         return redirect(url_for('register'))
         
@@ -213,24 +217,28 @@ def deck_browse(deck_id):
 def register():
     if request.method == 'POST':
         users = mongo.db.users
+        # import pdb;
+        # pdb.set_trace()
+        email = request.form.get('email')
         existing_user = users.find_one({'username' : request.form['username']})
+        existing_email = users.find_one({'email': email})
         new_username = request.form['username']
         new_password = request.form['password']
-        # first it checks if user name exists in database if not post form if yes flash allert
-        if existing_user is None:
+        # first it checks if username and emial exists in database if not post form if yes flash allert
+        if existing_user and existing_email is None:
             if len(new_username) < 4:
                flash('Username to short', 'exists')
             elif len(new_password) < 6:
                flash('password to short', 'exists')
             else:
                 hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-                users.insert({'username':  request.form['username'], 'password' : hash_password})
+                users.insert({'username':  request.form['username'], 'password' : hash_password, 'email': request.form['email']})
                 session['username'] =  request.form['username']
                 flash('Thank you for creating an account', 'exists')
             return redirect(url_for('register'))
             
     
-        else: flash('Username already exists', 'exists')
+        else: flash('Username or email already exists', 'exists')
 
     return render_template('register.html')
     
@@ -239,7 +247,7 @@ def register():
 @app.route('/login', methods=['POST'])
 def login():
     users = mongo.db.users
-    login = users.find_one({'name': request.form['log_username']})
+    login = users.find_one({'username': request.form['log_username']})
     
     if login:
         if bcrypt.hashpw(request.form['log_password'].encode('utf-8'), login['password']) == login['password']:
@@ -256,7 +264,7 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.secret_key = 'deckB0X'
+    app.secret_key = os.getenv('key')
     app.run(host=os.getenv("IP", "0.0.0.0"),
             port=int(os.getenv("PORT", "5000")),
-            debug=True)
+            debug=os.getenv('debug'))
