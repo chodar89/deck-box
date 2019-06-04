@@ -23,17 +23,12 @@
         <label>Multiply color select</label>
       </div>
       <div class="input-field col s10 offset-s1 m5">
-        <select required="" aria-required="" id="rarity" name="rarity">
-            <option value="" disabled selected></option>
-            {% for rar in rarity %}
-                <option value="{{rar.rarity}}">{{rar.rarity}}</option>
-            {% endfor %}
-          </select>
-        <label>Select rarity</label>
+        <label for="mana_cost">Converted Mana Cost</label>
+        <input type="number" name="mana_cost" value="0" class="validate"  />
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s10 offset-s1 m5 offset-m1">
+      <div class="input-field col s10 offset-s1 m3 offset-m1">
         <select id="type" name="type">
            <option value="" disabled selected></option>
             {% for type in card_types %}
@@ -42,7 +37,16 @@
           </select>
         <label>Select card type</label>
       </div>
-      <div class="input-field col s10 offset-s1 m5">
+      <div class="input-field col s10 offset-s1 m4">
+        <select required="" aria-required="" id="rarity" name="rarity">
+            <option value="" disabled selected></option>
+            {% for rar in rarity %}
+                <option value="{{rar.rarity}}">{{rar.rarity}}</option>
+            {% endfor %}
+          </select>
+        <label>Select rarity</label>
+      </div>
+      <div class="input-field col s10 offset-s1 m3">
         <select id="set" name="set">
             <option value="" disabled selected></option>
             {% for set in expansion %}

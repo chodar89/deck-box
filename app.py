@@ -20,7 +20,9 @@ mongo = PyMongo(app)
 def user_context():
     if 'username' in session:
          user_name=session['username']
-         return dict(user_name=user_name)
+         user=mongo.db.users.find_one({"username": user_name})
+         user_email=user['email']
+         return dict(user_name=user_name, user_email=user_email)
     else:
         return dict(user_name=None)
         
@@ -118,13 +120,25 @@ def remove_card(card_id):
 # function that change form data to dictionary and send it to MongoDB card collection
 @app.route('/insert_card', methods=['POST'])
 def insert_card():
+    colors_id=[]
     cards=mongo.db.cards
+    colors_form=request.form.getlist('color')
+    for colors in colors_form:
+        color=mongo.db.colors.find_one({'color': colors})
+        color_id=color.get('_id')
+        colors_id.append(color_id)
+    rarity_form=mongo.db.rarity.find_one({'rarity': request.form.get('rarity')})
+    rarity_id=rarity_form.get('_id')
+    expansion_form=mongo.db.expansion_set.find_one({'set': request.form.get('set')})
+    expansion_id=expansion_form.get('_id')
+    type_form=mongo.db.card_types.find_one({'type': request.form.get('type')})
+    type_id=type_form.get('_id')
     cards.insert_one(   {
         'card_name': request.form.get('card_name'),
-        'color': request.form.getlist('color'),
-        'rarity': request.form.get('rarity'),
-        'type': request.form.get('type'),
-        'set': request.form.get('set'),
+        'color': colors_id,
+        'rarity': rarity_id,
+        'type': type_id,
+        'set': expansion_id,
         'strength': request.form.get('strength'),
         'toughness': request.form.get('toughness'),
         'ruling': request.form.get('ruling'),
@@ -143,8 +157,10 @@ def insert_card():
 @app.route('/decks')
 def decks():
     if 'username' in session:
-        user_name=session['username']
-        user_email=mongo.db.users.find()
+        # user_name=session['username']
+        # user=mongo.db.users.find_one({"username": user_name})
+        # user_id=user['_id']
+        # user_name=session['username']
         sign_out='Sign Out'
         decks=mongo.db.decks.find()
         return render_template('decks.html', **locals())
@@ -208,6 +224,8 @@ def deck_browse(deck_id):
     else: 
         return redirect(url_for('register'))
         
+# @app.route('/deck_browse/<deck_id>/<card_id>')
+        
         
 """         REGISTRATION & LOGIN          """
 
@@ -219,6 +237,7 @@ def register():
         users = mongo.db.users
         # import pdb;
         # pdb.set_trace()
+        
         email = request.form.get('email')
         existing_user = users.find_one({'username' : request.form['username']})
         existing_email = users.find_one({'email': email})
@@ -248,7 +267,6 @@ def register():
 def login():
     users = mongo.db.users
     login = users.find_one({'username': request.form['log_username']})
-    
     if login:
         if bcrypt.hashpw(request.form['log_password'].encode('utf-8'), login['password']) == login['password']:
             session['username'] = request.form['log_username']
