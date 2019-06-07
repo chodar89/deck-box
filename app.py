@@ -172,10 +172,14 @@ def deck_browse(deck_id):
     if 'username' in session:
         cards_id=[]
         deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
-        deck_cards=deck["cards"]
-        for card in deck_cards:
-            cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
-            cards_id.append(cardinformation)
+        try:
+            deck_cards=deck["cards"]
+        except: 
+            deck_cards=None
+        if deck_cards != None:
+            for card in deck_cards:
+                cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
+                cards_id.append(cardinformation)
         if cards_id == None:
             return redirect(url_for('deck_build'))
         else:
@@ -208,7 +212,6 @@ def insert_deck():
         'deck_name': request.form.get('deck_name'),
         'color': colors_id,
         'user_id': user_id,
-        'cards': ''
     })
     return redirect(url_for('decks'))
 
@@ -231,7 +234,7 @@ def add_card_to_deck(deck_id, card_id):
         card=mongo.db.cards.find_one({'_id': ObjectId(card_id)})
         # append card id's to specific deck
         deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
-        { '$push': {'cards':card_id}})
+        {'$push': {'cards':card_id}})
         # deck_cards.append
         return redirect(url_for('decks'))
     else: 
