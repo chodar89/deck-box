@@ -173,9 +173,9 @@ def deck_browse(deck_id):
         cards_id=[]
         deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
         try:
-            deck_cards=deck["cards"]
+            deck_cards = deck["cards"]
         except: 
-            deck_cards=None
+            deck_cards = None
         if deck_cards != None:
             for card in deck_cards:
                 cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
@@ -228,15 +228,20 @@ def deck_build(deck_id):
     else: 
         return redirect(url_for('register'))
 
-@app.route('/add_card_to_deck/<deck_id>/<card_id>')
+@app.route('/add_card_to_deck/<deck_id>/<card_id>', methods=['POST'])
 def add_card_to_deck(deck_id, card_id):
     if 'username' in session:
+        current_deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+        deck_id=current_deck.get('_id')
+        deck_name=current_deck.get('deck_name')
         card=mongo.db.cards.find_one({'_id': ObjectId(card_id)})
-        # append card id's to specific deck
-        deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
-        {'$push': {'cards':card_id}})
-        # deck_cards.append
-        return redirect(url_for('decks'))
+        card_name=card.get('card_name')
+        cards_amount=request.form.get('one_four_cards')
+        for i in range(0, int(cards_amount)):
+            deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
+            {'$push': {'cards':card_id}})
+        flash(' Card '+ card_name +' added to ' + deck_name + ' deck', 'card_append')
+        return redirect(url_for('deck_build', deck_id=deck_id))
     else: 
         return redirect(url_for('register'))
         

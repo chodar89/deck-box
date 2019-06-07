@@ -227,6 +227,11 @@ nav .sidenav-trigger {
     margin: 20px 40px;
 }
 
+.one-four-cards {
+    width: 50px;
+    margin: auto;
+}
+
 /*-------------------------- Reg Form ---*/
 
 .login-form {

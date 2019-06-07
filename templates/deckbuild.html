@@ -4,6 +4,13 @@
 </ul>
 {% endblock %} 
 {% block content %} 
+{% with cards_append = get_flashed_messages(category_filter=["card_append"]) %}
+    {% if cards_append %}
+        {% for message in cards_append %}
+            <p class="{{category}} bad-login">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
     <div class="cards-layout">
         {% for card in cards %}
         <div class="center col s10 offset-s1 m5 offset-m1">
@@ -11,41 +18,46 @@
             <div class="row card-size">
                 <img src="{{card.card_url}}"></img>
             </div>
-            <div class="row">
-                <a href="{{url_for('add_card_to_deck', deck_id=deck._id, card_id=card._id)}}"class="waves-effect waves-light btn btn-blue"><i class="material-icons left">add_circle</i>ADD</a>
-            </div>
+            <form action="{{url_for('add_card_to_deck', deck_id=deck._id, card_id=card._id)}}" method="POST">
+                <div class="input-field one-four-cards col s2">
+                    <select id="one_four_cards" name="one_four_cards">
+                        <option value="1" selected >1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <button class="waves-effect waves-light btn btn-blue" type="submit"><i class="material-icons left">add_circle</i>ADD</button>
+                </div>
+            </form>
             <div class="row">
                 {% if card.rating == "1" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "2" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "3" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "4" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "5" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                {% endif %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span> {% elif card.rating == "2" %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span> {% elif card.rating == "3" %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span> {% elif card.rating == "4" %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span> {% elif card.rating == "5" %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span> {% endif %}
             </div>
         </div>
         {% endfor %}
