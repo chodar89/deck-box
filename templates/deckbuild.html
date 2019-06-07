@@ -13,7 +13,6 @@
             </div>
             <div class="row">
                 <a href="{{url_for('add_card_to_deck', deck_id=deck._id, card_id=card._id)}}"class="waves-effect waves-light btn btn-blue"><i class="material-icons left">add_circle</i>ADD</a>
-                <a href="{{url_for('edit_card', card_id=card._id)}}" class="waves-effect waves-light btn btn-blue"><i class="material-icons right">edit</i>EDIT</a>
             </div>
             <div class="row">
                 {% if card.rating == "1" %}

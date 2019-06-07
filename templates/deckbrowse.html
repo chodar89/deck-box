@@ -7,7 +7,10 @@
 {% block content %}
 
 <!--loop cards-->
-
+<div class="row center deck-browse-btn">
+    <a href="{{url_for('deck_build', deck_id=deck._id)}}" class="waves-effect waves-light btn btn-blue"><i class="material-icons left">edit</i>ADD CARDS</a>
+    <a href="{{url_for('deck_build', deck_id=deck._id)}}" class="waves-effect waves-light btn red"><i class="material-icons left">remove_circle</i>DELETE DECK</a>
+</div>
 <div class="cards-layout">
         {% for card in cards_id %}
         <div class="center col s10 offset-s1 m5 offset-m1">

@@ -148,8 +148,8 @@ nav .sidenav-trigger {
 
 .card-size,
 .deck-size {
-    width: 265px;
-    height: 370px;
+    width: 221px;
+    height: 311px;
     margin-left: 10px!important;
     margin-right: 10px!important;
 }
@@ -165,9 +165,7 @@ nav .sidenav-trigger {
 }
 
 .blank-deck {
-    margin-top: 60px;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin: 60px 30px 30px;
 }
 
 .card-name,
@@ -202,8 +200,8 @@ nav .sidenav-trigger {
 }
 
 .add-deck {
-    width: 265px;
-    height: 370px;
+    width: 221px;
+    height: 311px;
     background-color: #abcfec;
     border-radius: 5%;
     margin-top: 25px;
@@ -225,6 +223,9 @@ nav .sidenav-trigger {
     color: #fafafa;
 }
 
+.deck-browse-btn>a {
+    margin: 20px 40px;
+}
 
 /*-------------------------- Reg Form ---*/
 
