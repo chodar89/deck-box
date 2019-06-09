@@ -9,28 +9,43 @@
       <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
 <!--loop cards-->
-
-<div class="row">
-    <p class="deck-title-name">{{ deck.deck_name }}</p>
-</div>
-<div class="row count-cards">
-    <p class="count-cards-paragraph">{{ count_cards }}</p>
-    <i class="material-icons left">view_module</i>
-</div>
-<div class="row count-card-types">
-    <p class="count-cards-paragaph"> {{ planeswalkers }}<span> Planeswalker |</span></p>
-    <p class="count-cards-paragaph">&nbsp; {{ creatures }}<span> Creature |</span></p>
-    <p class="count-cards-pararaph">&nbsp; {{ artifacts }}<span> Artifact |</span></p>
-    <p class="count-cards-pararaph">&nbsp; {{ sorceries }}<span> Sorcery |</span></p>
-    <p class="count-cards-paragaph">&nbsp; {{ enchantments }}<span> Enchantment |</span></p>
-    <p class="count-cards-pararaph">&nbsp; {{ instants }}<span> Instant |</span></p>
-    <p class="count-cards-paragaph">&nbsp; {{ lands }}<span> Land</span></p>
-</div>
-
-<div class="row center deck-browse-btn">
-    <a href="{{url_for('deck_build', deck_id=deck._id)}}" class="waves-effect waves-light btn btn-blue"><i class="material-icons left">edit</i>ADD CARDS</a>
-    <a href="{{url_for('remove_deck', deck_id=deck._id)}}" class="waves-effect waves-light btn red"><i class="material-icons left">remove_circle</i>DELETE DECK</a>
-</div>
+<div class="card-panel hoverable">
+    <div class="row">
+        <p class="deck-title-name">{{ deck.deck_name }}</p>
+    </div>
+    <div class="row deck-colors">
+        {% for color in color_name %}
+            {% if color == 'white' %}
+            <img src="../static/img/colors/plains.png"></img>
+            {% elif color == 'blue' %}
+            <img src="../static/img/colors/islands.png"></img>
+            {% elif color == 'black' %}
+            <img src="../static/img/colors/swamp.png"></img>
+            {% elif color == 'red' %}
+            <img src="../static/img/colors/mountain.png"></img>
+            {% elif color == 'green' %}
+            <img src="../static/img/colors/forest.png"></img>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="row count-cards">
+        <p class="count-cards-paragraph">{{ count_cards }}</p>
+        <i class="material-icons left">view_module</i>
+    </div>
+    <div class="row count-card-types">
+        <p class="count-cards-paragaph"> {{ planeswalkers }}<span> Planeswalker |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ creatures }}<span> Creature |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ artifacts }}<span> Artifact |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ sorceries }}<span> Sorcery |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ enchantments }}<span> Enchantment |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ instants }}<span> Instant |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ lands }}<span> Land</span></p>
+    </div>
+    <div class="row center deck-browse-btn">
+        <a href="{{url_for('deck_build', deck_id=deck._id)}}"><i class="far fa-edit fa-3x"></i></a>
+        <a href="{{url_for('remove_deck', deck_id=deck._id)}}"><i class="far fa-trash-alt fa-3x"></i></a>
+    </div>
+</div> 
 <div class="cards-layout">
     {% if cards_id != None %} 
         {% for card in cards_id %}
@@ -40,7 +55,7 @@
                 <img src="{{card.card_url}}"></img>
             </div>
             <div class="row">
-                    <a href="{{url_for('remove_card_from_deck', deck_id=deck._id, card_id=card._id)}}" class="waves-effect waves-light btn red"><i class="material-icons left">remove_circle</i>REMOVE</a>
+                <a href="{{url_for('remove_card_from_deck', deck_id=deck._id, card_id=card._id)}}"><i class="far fa-trash-alt fa-2x"></i></a>
             </div>
             <div class="row">
                 {% if card.rating == "1" %}
@@ -48,27 +63,32 @@
                 <span class="fa fa-star"></span>
                 <span class="fa fa-star"></span>
                 <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span> {% elif card.rating == "2" %}
+                <span class="fa fa-star"></span> 
+                {% elif card.rating == "2" %}
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star"></span>
                 <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span> {% elif card.rating == "3" %}
+                <span class="fa fa-star"></span> 
+                {% elif card.rating == "3" %}
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span> {% elif card.rating == "4" %}
+                <span class="fa fa-star"></span> 
+                {% elif card.rating == "4" %}
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span> {% elif card.rating == "5" %}
+                <span class="fa fa-star"></span> 
+                {% elif card.rating == "5" %}
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span> {% endif %}
+                <span class="fa fa-star checked"></span> 
+                {% endif %}
             </div>
         </div>
         {% endfor %} 

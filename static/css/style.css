@@ -26,6 +26,10 @@ main {
     text-align: center;
 }
 
+#add_button[type="submit"] {
+    border: none;
+    background: transparent;
+}
 /*-------------------------- Navigation Bar ---*/
 
 .logo {
@@ -150,8 +154,19 @@ nav .sidenav-trigger {
 .deck-size {
     width: 221px;
     height: 311px;
-    margin-left: 10px!important;
-    margin-right: 10px!important;
+}
+
+.deck-colors {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.deck-colors>img {
+    width: 35px;
+    height: 35px;
+    margin: 0px 10px;
 }
 
 .count-cards {
@@ -163,10 +178,11 @@ nav .sidenav-trigger {
 .count-card-types {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     font-family: 'Merriweather Sans';
     font-weight: 700;
     font-style: italic;
-    margin-bottom: 0px;
+    margin-bottom: 30px;
 }
 
 .count-cards-paragraph {
@@ -180,6 +196,16 @@ nav .sidenav-trigger {
 
 .count-cards-paragraph+i {
     font-size: 3em;
+}
+
+.deck-title-name {
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 2.1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 12px;
 }
 
 .card-size>img {
@@ -204,15 +230,7 @@ nav .sidenav-trigger {
     font-weight: bold;
     letter-spacing: 0.5px;
     text-align: center;
-}
-
-.deck-title-name {
-    font-family: 'Fjalla One', sans-serif;
-    font-size: 2.1em;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-align: center;
+    margin-bottom: 2px;
 }
 
 .cards-layout {
@@ -228,8 +246,7 @@ nav .sidenav-trigger {
 }
 
 .cards-layout>div {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 30px;
 }
 
 .checked {
@@ -241,7 +258,7 @@ nav .sidenav-trigger {
     height: 311px;
     background-color: #abcfec;
     border-radius: 5%;
-    margin-top: 25px;
+    margin-top: 11px;
     display: inline-block;
     transition: background-color 0.5s ease-in-out;
 }
@@ -260,13 +277,38 @@ nav .sidenav-trigger {
     color: #fafafa;
 }
 
-.deck-browse-btn>a {
-    margin: 20px 40px;
+.one-four-cards {
+    margin: auto;
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }
 
-.one-four-cards {
+.one-four-cards>div {
     width: 50px;
-    margin: auto;
+    margin-left: 8px;
+    margin-right: 10px;
+}
+
+.fa-plus,
+.fa-trash-alt,
+.fa-edit {
+    color: #444;
+    margin: 0px 15px;
+    transition: color 0.3s ease-in-out;
+}
+
+.fa-edit:hover {
+    color: #426696;
+}
+
+.fa-plus:hover {
+    color: #426696;
+    cursor: pointer;
+}
+
+.fa-trash-alt:hover {
+    color: #da1a1a;
 }
 
 /*-------------------------- Reg Form ---*/

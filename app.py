@@ -108,7 +108,7 @@ def update_card(card_id):
         })
     return redirect(url_for('decks'))
 
-    
+
 """ Function that removes document, card that user picked """
 @app.route('/remove_card/<card_id>')
 def remove_card(card_id):
@@ -116,7 +116,7 @@ def remove_card(card_id):
     return redirect(url_for('my_cards'))
 
 
-""" Function that change form data to dictionary and send it to MongoDB card collection """
+""" Take data from form and send it to database """
 @app.route('/insert_card', methods=['POST'])
 def insert_card():
     colors_id=[]
@@ -182,6 +182,7 @@ def deck_browse(deck_id):
         count_planeswalkers=[]
         count_instants=[]
         count_sourceries=[]
+        color_name=[]
         types=mongo.db.card_types
         # get all types from card_types collection
         land_type=types.find_one({'type': 'land'})
@@ -192,6 +193,12 @@ def deck_browse(deck_id):
         instant_type=types.find_one({'type': 'instant'})
         sorcery_type=types.find_one({'type': 'sorcery'})
         deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+        colors=mongo.db.colors
+        # takes colors id and find color names in mongodb
+        deck_color_id=deck.get('color')
+        for color in deck_color_id:
+            color_inf=colors.find_one({'_id': ObjectId(color)})
+            color_name.append(color_inf.get('color'))
         # takes cards id from deck if empty throws None
         try:
             deck_cards = deck["cards"]
@@ -221,7 +228,8 @@ def deck_browse(deck_id):
                     count_sourceries.append(card_type)
         return render_template('deckbrowse.html',  cards_id=cards_id, deck=deck, count_cards=count_cards, lands=len(count_lands),
                                creatures=len(count_creatures), artifacts=len(count_artifacts), enchantments=len(count_enchantments),
-                               planeswalkers=len(count_planeswalkers), instants=len(count_instants), sorceries=len(count_sourceries))
+                               planeswalkers=len(count_planeswalkers), instants=len(count_instants), sorceries=len(count_sourceries),
+                               color_name=color_name)
     else: 
         return redirect(url_for('register'))
         
