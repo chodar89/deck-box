@@ -7,7 +7,7 @@
 {% with cards_append = get_flashed_messages(category_filter=["card_append"]) %}
     {% if cards_append %}
         {% for message in cards_append %}
-            <p class="{{category}} bad-login">{{message}}</p>
+            <p class="{{category}} purple-alert">{{message}}</p>
         {% endfor %}
     {% endif %}
 {% endwith %}

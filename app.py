@@ -26,6 +26,7 @@ def user_context():
         return dict(user_name=user_name.upper(), user_email=user_email, sign_out=sign_out)
     else:
         return dict(user_name=None)
+        
 # @app.before_request
 # def check_username():
 #     if 'username' not in session and request.endpoint != 'index':
@@ -106,12 +107,14 @@ def update_card(card_id):
         'card_url': request.form.get('card_url')
         })
     return redirect(url_for('decks'))
+
     
 """ Function that removes document, card that user picked """
-@app.route('/remove_deck/<deck_id>')
-def remove_deck(deck_id):
-    mongo.db.decks.remove({'_id': ObjectId(deck_id)})
-    return redirect(url_for('decks'))
+@app.route('/remove_card/<card_id>')
+def remove_card(card_id):
+    mongo.db.cards.remove({'_id': ObjectId(card_id)})
+    return redirect(url_for('my_cards'))
+
 
 """ Function that change form data to dictionary and send it to MongoDB card collection """
 @app.route('/insert_card', methods=['POST'])
@@ -146,7 +149,8 @@ def insert_card():
         'card_url': request.form.get('card_url'),
         'user_id': user_id
     })
-    return redirect(url_for('decks'))
+    flash('Card '+ request.form.get('card_name') + ' added to your collection', 'add_card')
+    return redirect(url_for('add_card'))
 
 
 """ DECKS """
@@ -192,11 +196,9 @@ def deck_browse(deck_id):
         try:
             deck_cards = deck["cards"]
         except: 
-            deck_cards = None
+            deck_cards=[]
         # count cards in deck for later dispay
         count_cards=len(deck_cards)
-        if count_cards == None:
-            count_cards = 0
         # find each card by id and check what type card it is and append it to array
         if deck_cards != None:
             for card in deck_cards:
@@ -252,7 +254,10 @@ def insert_deck():
     return redirect(url_for('decks'))
     
 """ Delete deck """
-
+@app.route('/remove_deck/<deck_id>')
+def remove_deck(deck_id):
+    mongo.db.decks.remove({'_id': ObjectId(deck_id)})
+    return redirect(url_for('decks'))
 
 """ Redirect page where user can add cards to specific deck """
 @app.route('/deck_build/<deck_id>')
@@ -267,6 +272,7 @@ def deck_build(deck_id):
     else: 
         return redirect(url_for('register'))
 
+""" Add card to deck """
 @app.route('/add_card_to_deck/<deck_id>/<card_id>', methods=['POST'])
 def add_card_to_deck(deck_id, card_id):
     if 'username' in session:
@@ -276,6 +282,7 @@ def add_card_to_deck(deck_id, card_id):
         card=mongo.db.cards.find_one({'_id': ObjectId(card_id)})
         card_name=card.get('card_name')
         cards_amount=request.form.get('one_four_cards')
+        # loop takes card amount from form and push cards to deck
         for i in range(0, int(cards_amount)):
             deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
             {'$push': {'cards':card_id}})
@@ -284,8 +291,18 @@ def add_card_to_deck(deck_id, card_id):
     else: 
         return redirect(url_for('register'))
         
-# @app.route('/deck_browse/<deck_id>/<card_id>')
-        
+""" Remove card from deck """
+@app.route('/remove_card_from_deck/<deck_id>/<card_id>')
+def remove_card_from_deck(deck_id, card_id):
+        current_deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+        deck_id=current_deck.get('_id')
+        deck_name=current_deck.get('deck_name')
+        card=mongo.db.cards.find_one({'_id': ObjectId(card_id)})
+        card_name=card.get('card_name')
+        deck=mongo.db.decks.update({'_id': ObjectId(deck_id)},
+            {'$pull': {'cards':card_id}})
+        flash(' Card '+ card_name +' removed from ' + deck_name + ' deck', 'card_removed')
+        return redirect(url_for('deck_browse', deck_id=deck_id, card_id=card_id))
         
 """ REGISTRATION & LOGIN """
 

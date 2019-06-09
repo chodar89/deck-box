@@ -64,7 +64,7 @@
         {% with welcomes = get_flashed_messages(category_filter=["welcome"]) %} 
             {% if welcomes %} 
                 {% for message in welcomes %}
-                    <p class="{{category}} welcome">{{message}}</p>
+                    <p class="{{category}} purple-alert">{{message}}</p>
         {% endfor %} {% endif %} {% endwith %}
         <div class="parallax-container">
             <div class="parallax">

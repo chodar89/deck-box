@@ -4,6 +4,11 @@
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
 {% endblock %} {% block content %}
+{% with add_card = get_flashed_messages(category_filter=["add_card"]) %} 
+  {% if add_card %} 
+    {% for message in add_card%}
+      <p class="{{category}} purple-alert">{{message}}</p>
+{% endfor %} {% endif %} {% endwith %}
 <h3 class="title">Add Card</h3>
 <div class="row card-form">
   <form class="col s12 center" action="{{url_for('insert_card')}}" method="POST">
