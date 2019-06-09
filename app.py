@@ -108,10 +108,10 @@ def update_card(card_id):
     return redirect(url_for('decks'))
     
 """ Function that removes document, card that user picked """
-@app.route('/remove_card/<card_id>')
-def remove_card(card_id):
-    mongo.db.cards.remove({'_id': ObjectId(card_id)})
-    return redirect(url_for('my_cards'))
+@app.route('/remove_deck/<deck_id>')
+def remove_deck(deck_id):
+    mongo.db.decks.remove({'_id': ObjectId(deck_id)})
+    return redirect(url_for('decks'))
 
 """ Function that change form data to dictionary and send it to MongoDB card collection """
 @app.route('/insert_card', methods=['POST'])
@@ -171,19 +171,55 @@ def decks():
 def deck_browse(deck_id):
     if 'username' in session:
         cards_id=[]
+        count_lands=[]
+        count_creatures=[]
+        count_artifacts=[]
+        count_enchantments=[]
+        count_planeswalkers=[]
+        count_instants=[]
+        count_sourceries=[]
+        types=mongo.db.card_types
+        # get all types from card_types collection
+        land_type=types.find_one({'type': 'land'})
+        creature_type=types.find_one({'type': 'creature'})
+        artifact_type=types.find_one({'type': 'artifact'})
+        enchantment_type=types.find_one({'type': 'enchantment'})
+        planeswalker_type=types.find_one({'type': 'planeswalker'})
+        instant_type=types.find_one({'type': 'instant'})
+        sorcery_type=types.find_one({'type': 'sorcery'})
         deck=mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+        # takes cards id from deck if empty throws None
         try:
             deck_cards = deck["cards"]
         except: 
             deck_cards = None
+        # count cards in deck for later dispay
+        count_cards=len(deck_cards)
+        if count_cards == None:
+            count_cards = 0
+        # find each card by id and check what type card it is and append it to array
         if deck_cards != None:
             for card in deck_cards:
                 cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
                 cards_id.append(cardinformation)
-        if cards_id == None:
-            return redirect(url_for('deck_build'))
-        else:
-            return render_template('deckbrowse.html', cards_id=cards_id, deck=deck)
+                card_type = cardinformation["type"]
+                if card_type == land_type.get('_id'):
+                    count_lands.append(card_type)
+                elif card_type == creature_type.get('_id'):
+                    count_creatures.append(card_type)
+                elif card_type == artifact_type.get('_id'):
+                    count_artifacts.append(card_type)
+                elif card_type == enchantment_type.get('_id'):
+                    count_enchantments.append(card_type)
+                elif card_type == planeswalker_type.get('_id'):
+                    count_planeswalkers.append(card_type)
+                elif card_type == instant_type.get('_id'):
+                    count_instants.append(card_type)
+                elif card_type == sorcery_type.get('_id'):
+                    count_sourceries.append(card_type)
+        return render_template('deckbrowse.html',  cards_id=cards_id, deck=deck, count_cards=count_cards, lands=len(count_lands),
+                               creatures=len(count_creatures), artifacts=len(count_artifacts), enchantments=len(count_enchantments),
+                               planeswalkers=len(count_planeswalkers), instants=len(count_instants), sorceries=len(count_sourceries))
     else: 
         return redirect(url_for('register'))
         
@@ -214,6 +250,9 @@ def insert_deck():
         'user_id': user_id,
     })
     return redirect(url_for('decks'))
+    
+""" Delete deck """
+
 
 """ Redirect page where user can add cards to specific deck """
 @app.route('/deck_build/<deck_id>')

@@ -1,6 +1,6 @@
 /*-------------------------- General ---*/
 
-@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans|Fjalla+One');
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans|Fjalla+One|Merriweather+Sans:700i,800i');
 
 main {
     min-height: 40vh;
@@ -154,6 +154,34 @@ nav .sidenav-trigger {
     margin-right: 10px!important;
 }
 
+.count-cards {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -30px;
+}
+
+.count-card-types {
+    display: flex;
+    justify-content: center;
+    font-family: 'Merriweather Sans';
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 0px;
+}
+
+.count-cards-paragraph {
+    font-family: 'Merriweather Sans';
+    font-weight: 700;
+    font-size: 2em;
+    font-style: italic;
+    text-align: center;
+    margin-top: 0px;
+}
+
+.count-cards-paragraph+i {
+    font-size: 3em;
+}
+
 .card-size>img {
     width: 100%;
     height: 100%;
@@ -175,6 +203,15 @@ nav .sidenav-trigger {
     text-transform: capitalize;
     font-weight: bold;
     letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.deck-title-name {
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 2.1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
     text-align: center;
 }
 
@@ -218,7 +255,7 @@ nav .sidenav-trigger {
     position: relative;
     left: 50%;
     top: 50%;
-    margin-left: -10%;
+    margin-left: -13%;
     margin-top: -25%;
     color: #fafafa;
 }

@@ -5,9 +5,27 @@
 {% endblock %} {% block content %}
 
 <!--loop cards-->
+
+<div class="row">
+    <p class="deck-title-name">{{ deck.deck_name }}</p>
+</div>
+<div class="row count-cards">
+    <p class="count-cards-paragraph">{{ count_cards }}</p>
+    <i class="material-icons left">view_module</i>
+</div>
+<div class="row count-card-types">
+    <p class="count-cards-paragaph"> {{ planeswalkers }}<span> Planeswalker |</span></p>
+    <p class="count-cards-paragaph">&nbsp; {{ creatures }}<span> Creature |</span></p>
+    <p class="count-cards-pararaph">&nbsp; {{ artifacts }}<span> Artifact |</span></p>
+    <p class="count-cards-pararaph">&nbsp; {{ sorceries }}<span> Sorcery |</span></p>
+    <p class="count-cards-paragaph">&nbsp; {{ enchantments }}<span> Enchantment |</span></p>
+    <p class="count-cards-pararaph">&nbsp; {{ instants }}<span> Instant |</span></p>
+    <p class="count-cards-paragaph">&nbsp; {{ lands }}<span> Land</span></p>
+</div>
+
 <div class="row center deck-browse-btn">
     <a href="{{url_for('deck_build', deck_id=deck._id)}}" class="waves-effect waves-light btn btn-blue"><i class="material-icons left">edit</i>ADD CARDS</a>
-    <a href="{{url_for('deck_build', deck_id=deck._id)}}" class="waves-effect waves-light btn red"><i class="material-icons left">remove_circle</i>DELETE DECK</a>
+    <a href="{{url_for('remove_deck', deck_id=deck._id)}}" class="waves-effect waves-light btn red"><i class="material-icons left">remove_circle</i>DELETE DECK</a>
 </div>
 <div class="cards-layout">
     {% if cards_id != None %} 
