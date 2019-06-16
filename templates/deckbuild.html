@@ -11,6 +11,9 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
+    <div class="row">
+        <p class="deck-title-name">{{ deck.deck_name }}</p>
+    </div>
     <div class="cards-layout">
         {% for card in cards %}
         <div class="center col s10 offset-s1 m5 offset-m1">

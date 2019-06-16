@@ -49,7 +49,7 @@
                 </div>
             </li>
             <li><a href="{{url_for('decks')}}"><i class="material-icons">home</i>My Decks</a></li>
-            <li><a href="{{url_for ('my_cards')}}"><i class="material-icons">collections</i>My Cards</a></li>
+            <li><a href="{{url_for ('my_cards', limit=10, offset=0)}}"><i class="material-icons">collections</i>My Cards</a></li>
             <li><a href="{{url_for ('add_card')}}"><i class="material-icons">add_circle</i>Add Card</a></li>
             <li><a href="{{url_for ('deck_name')}}"><i class="material-icons">add_circle</i>Add Deck</a></li>
             <li>
@@ -81,7 +81,9 @@
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
-                    <img class="wizard-logo" src="../static/img/wizard_logo.png">
+                    <img class="wizard-logo" src="../static/img/partnerweb/wizard_logo.png">
+                    <img class="wizard-logo" src="../static/img/partnerweb/magicmadhouse.png">
+                    <img class="wizard-logo" src="../static/img/partnerweb/imgbb.png">
                 </div>
                 <div class="col l4 offset-l2 s12">
                     <h5 class="white-text">Site Map</h5>

@@ -4,8 +4,9 @@
 </ul>
 {% endblock %} 
 {% block content %} 
+<p>{{ pages_num }}</p>
     <div class="cards-layout">
-        {% for card in cards %}
+        {% for card in card_output %}
         <div class="center col s10 offset-s1 m5 offset-m1">
             <p class="card-name">{{ card.card_name }}</p>
             <div class="row card-size">
@@ -51,4 +52,24 @@
         </div>
         {% endfor %}
     </div>
+   
+    {% if args.count_user_cards > args.limit %}
+    <ul class="pagination center">
+        {% if args.offset > 0 %}
+            <li class="waves-effect"><a href="{{args.prev_url}}"><i class="material-icons">chevron_left</i></a></li>
+        {% else %}
+            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+        {% endif %}
+        {% set page_count = [1] %}
+        {% for i in range(0, pages_num) %}
+            <li class="active"><a href="{{args.curr_url}}">{{ page_count }}</a></li>
+            {% if page_count.append(page_count.pop() + 1) %}{% endif %}
+        {% endfor %}
+        {% if args.offset + args.limit < args.count_user_cards  %}
+        	<li class="waves-effect"><a href="{{args.next_url}}"><i class="material-icons">chevron_right</i></a></li>
+        {% else %}
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
 {% endblock %}
