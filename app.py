@@ -57,15 +57,18 @@ def add_card():
     else: 
         return redirect(url_for('register'))
         
-""" Shows collection of all user cards """
+""" Shows collection of all user cards plus pagination"""
 @app.route('/my_cards')
 def my_cards():
     if 'username' in session:
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
         user_id = user.get('_id')
-        user_cards = mongo.db.cards.find({'user_id': user_id})
-        count_user_cards = user_cards.count()
+        try:
+            user_cards = mongo.db.cards.find({'user_id': user_id})
+            count_user_cards = user_cards.count()
+        except:
+            count_user_cards = 0
         limit = int(request.args['limit'])
         offset = int(request.args['offset'])
         if offset < 0:
@@ -73,12 +76,16 @@ def my_cards():
         if offset > count_user_cards:
             offset = count_user_cards
         card_output = []
-        latest_id = mongo.db.cards.find({'user_id': user_id}).sort('_id', pymongo.DESCENDING)
-        last_id = latest_id[offset]['_id']
-        cards = mongo.db.cards.find({'user_id': user_id,
+        try:
+            latest_id = mongo.db.cards.find({'user_id': user_id}).sort('_id', pymongo.DESCENDING)
+            last_id = latest_id[offset]['_id']
+            cards = mongo.db.cards.find({'user_id': user_id,
                         '_id': {'$lte': last_id}}).sort('_id', pymongo.DESCENDING).limit(limit)
-        for i in cards:
-            card_output.append(i)
+            for i in cards:
+                card_output.append(i)
+        except: 
+            flash('you do not have any cards in your collection yet', 'no_cards')
+        # counts how many pages are needed 
         if count_user_cards % limit == 0:
             pages_num = count_user_cards / limit
         else:
@@ -91,8 +98,7 @@ def my_cards():
     		"prev_url" : f"/my_cards?limit={str(limit)}&offset={str(offset - limit)}",
     		"curr_url" : f"/my_cards?limit={str(limit)}&offset={str(offset)}"
     	}
-        return render_template('mycards.html', cards = cards, card_output = card_output, 
-                                last_id = last_id, args = args, pages_num=pages_num)
+        return render_template('mycards.html', card_output = card_output, args = args, pages_num=pages_num)
     else: 
         return redirect(url_for('register'))
         
@@ -108,6 +114,7 @@ def edit_card(card_id):
         card_types = mongo.db.card_types.find()
         rating = mongo.db.rating.find()
         card = the_card
+        card_color_id = card.get('color')
         return render_template('editcard.html', **locals())
     else: 
         return redirect(url_for('register'))

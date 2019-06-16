@@ -19,13 +19,15 @@
     <div class="row">
       <div class="input-field col s10 offset-s1 m5 offset-m1">
         <select required  id="color" name="color" multiple>
+          {% for card_col in card_color_id %}
             {% for color in colors %}
-                {% if color.color == card.color %}
-                    <option value="{{card.color}}" selected >{{card.color}}</option>
+                {% if color._id == card_col %}
+                    <option value="{{color.color}}" selected >{{color.color}}</option>
                 {% else %}
                     <option value="{{color.color}}">{{color.color}}</option>
                 {% endif %}
             {% endfor %}
+          {% endfor %}
           </select>
         <label>Multiply color select</label>
       </div>
@@ -33,8 +35,8 @@
         <select id="rarity" name="rarity">
             <option value="" disabled selected></option>
             {% for rar in rarity %}
-                {% if rar.rarity == card.rarity %}
-                    <option value="{{card.rarity}}" selected >{{card.rarity}}</option>
+                {% if rar._id == card.rarity %}
+                    <option value="{{rar.rarity}}" selected >{{rar.rarity}}</option>
                 {% else %}
                     <option value="{{rar.rarity}}">{{rar.rarity}}</option>
                 {% endif %}
@@ -48,8 +50,8 @@
         <select id="type" name="type">
            <option value="" disabled selected></option>
             {% for type in card_types %}
-                {% if type.type == card.type %}
-                    <option value="{{card.type}}" selected>{{card.type}}</option>
+                {% if type._id == card.type %}
+                    <option value="{{type.type}}" selected>{{type.type}}</option>
                 {% else %}
                     <option value="{{type.type}}">{{type.type}}</option>
                 {% endif %}
@@ -61,8 +63,8 @@
         <select id="set" name="set">
             <option value="" disabled selected></option>
             {% for set in expansion %}
-                {% if set.set == card.set %}
-                <option value="{{card.set}}" selected >{{card.set}}</option>
+                {% if set._id == card.set %}
+                <option value="{{set.set}}" selected >{{set.set}}</option>
                 {% else %}
                 <option value="{{set.set}}">{{set.set}}</option>
                 {% endif %}
