@@ -4,6 +4,13 @@
 </ul>
 {% endblock %} 
 {% block content %} 
+{% with no_cards = get_flashed_messages(category_filter=["no_cards"]) %}
+    {% if no_cards %}
+        {% for message in no_cards %}
+            <p class="{{category}} purple-alert">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <p>{{ pages_num }}</p>
     <div class="cards-layout">
         {% for card in card_output %}

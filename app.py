@@ -64,6 +64,7 @@ def my_cards():
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
         user_id = user.get('_id')
+        # try to find cards if user dont have any gives 0
         try:
             user_cards = mongo.db.cards.find({'user_id': user_id})
             count_user_cards = user_cards.count()
@@ -71,6 +72,7 @@ def my_cards():
             count_user_cards = 0
         limit = int(request.args['limit'])
         offset = int(request.args['offset'])
+        # prevent error if user would request offset < 0 and bigger than user card collection
         if offset < 0:
             offset = 0
         if offset > count_user_cards:
@@ -107,13 +109,12 @@ def my_cards():
 @app.route('/edit_card/<card_id>')
 def edit_card(card_id):
     if 'username' in session:
-        the_card = mongo.db.cards.find_one({"_id": ObjectId(card_id)})
+        card = mongo.db.cards.find_one({"_id": ObjectId(card_id)})
         colors = mongo.db.colors.find()
         rarity = mongo.db.rarity.find()
         expansion = mongo.db.expansion_set.find()
         card_types = mongo.db.card_types.find()
         rating = mongo.db.rating.find()
-        card = the_card
         card_color_id = card.get('color')
         return render_template('editcard.html', **locals())
     else: 
