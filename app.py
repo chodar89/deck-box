@@ -17,6 +17,10 @@ mongo = PyMongo(app)
 """ Launched username before render templates """
 @app.context_processor
 def user_context():
+    if 'username' not in session:
+        if request.endpoint != ('index'):
+            if request.endpoint != ('register'):
+                return redirect(url_for('index'))
     if 'username' in session:
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
@@ -25,21 +29,12 @@ def user_context():
         return dict(user_name = user_name.upper(), user_email = user_email, sign_out = sign_out)
     else:
         return dict(user_name = None)
-        
-# @app.before_request
-# def check_username():
-#     if (request.endpoint !=  'index' or 'register') and 'username' not in session:
-#         return redirect(url_for('index'))
-        
 
 """ Render index page and checkes if user is in the session """
 @app.route('/')
 @app.route('/index')
 def index():
-    if 'username' in session:
-        return redirect(url_for('decks'))
-    else:
-        return render_template('index.html', sign_in = 'Sign In')
+    return render_template('index.html', sign_in = 'Sign In')
         
         
 """ CARDS """
@@ -47,62 +42,56 @@ def index():
 """ Render addcard page and take values from collection and pass them to html form """
 @app.route('/add_card')
 def add_card():
-    if 'username' in session:
-        colors = mongo.db.colors.find()
-        rarity = mongo.db.rarity.find()
-        expansion = mongo.db.expansion_set.find()
-        card_types = mongo.db.card_types.find()
-        rating = mongo.db.rating.find()
-        return render_template('addcard.html', **locals())
-    else: 
-        return redirect(url_for('register'))
+    colors = mongo.db.colors.find()
+    rarity = mongo.db.rarity.find()
+    expansion = mongo.db.expansion_set.find()
+    card_types = mongo.db.card_types.find()
+    rating = mongo.db.rating.find()
+    return render_template('addcard.html', **locals())
         
 """ Shows collection of all user cards plus pagination"""
 @app.route('/my_cards')
 def my_cards():
-    if 'username' in session:
-        user_name = session['username']
-        user = mongo.db.users.find_one({"username": user_name})
-        user_id = user.get('_id')
-        # try to find cards if user dont have any gives 0
-        try:
-            user_cards = mongo.db.cards.find({'user_id': user_id})
-            count_user_cards = user_cards.count()
-        except:
-            count_user_cards = 0
-        limit = int(request.args['limit'])
-        offset = int(request.args['offset'])
-        # prevent error if user would request offset < 0 and bigger than user card collection
-        if offset < 0:
-            offset = 0
-        if offset > count_user_cards:
-            offset = count_user_cards
-        card_output = []
-        try:
-            latest_id = mongo.db.cards.find({'user_id': user_id}).sort('_id', pymongo.DESCENDING)
-            last_id = latest_id[offset]['_id']
-            cards = mongo.db.cards.find({'user_id': user_id,
-                        '_id': {'$lte': last_id}}).sort('_id', pymongo.DESCENDING).limit(limit)
-            for i in cards:
-                card_output.append(i)
-        except: 
-            flash('you do not have any cards in your collection yet', 'no_cards')
-        # counts how many pages are needed 
-        if count_user_cards % limit == 0:
-            pages_num = count_user_cards / limit
-        else:
-            pages_num = count_user_cards // limit + 1
+    user_name = session['username']
+    user = mongo.db.users.find_one({"username": user_name})
+    user_id = user.get('_id')
+    # try to find cards if user dont have any gives 0
+    try:
+        user_cards = mongo.db.cards.find({'user_id': user_id})
+        count_user_cards = user_cards.count()
+    except:
+        count_user_cards = 0
+    limit = int(request.args['limit'])
+    offset = int(request.args['offset'])
+    # prevent error if user would request offset < 0 and bigger than user card collection
+    if offset < 0:
+        offset = 0
+    if offset > count_user_cards:
+        offset = count_user_cards
+    card_output = []
+    try:
+        latest_id = mongo.db.cards.find({'user_id': user_id}).sort('_id', pymongo.DESCENDING)
+        last_id = latest_id[offset]['_id']
+        cards = mongo.db.cards.find({'user_id': user_id,
+                    '_id': {'$lte': last_id}}).sort('_id', pymongo.DESCENDING).limit(limit)
+        for i in cards:
+            card_output.append(i)
+    except: 
+        flash('you do not have any cards in your collection yet', 'no_cards')
+    # counts how many pages are needed 
+    if count_user_cards % limit == 0:
+        pages_num = count_user_cards / limit
+    else:
+        pages_num = count_user_cards // limit + 1
         args = {
-    		"limit" : limit,
-    		"offset" : offset,
-    		"count_user_cards" : count_user_cards,
-    		"next_url" : f"/my_cards?limit={str(limit)}&offset={str(offset + limit)}",
-    		"prev_url" : f"/my_cards?limit={str(limit)}&offset={str(offset - limit)}",
-    		"curr_url" : f"/my_cards?limit={str(limit)}&offset={str(offset)}"
-    	}
-        return render_template('mycards.html', card_output = card_output, args = args, pages_num=pages_num)
-    else: 
-        return redirect(url_for('register'))
+		"limit" : limit,
+		"offset" : offset,
+		"count_user_cards" : count_user_cards,
+		"next_url" : f"/my_cards?limit={str(limit)}&offset={str(offset + limit)}",
+		"prev_url" : f"/my_cards?limit={str(limit)}&offset={str(offset - limit)}",
+		"curr_url" : f"/my_cards?limit={str(limit)}&offset={str(offset)}"
+	}
+    return render_template('mycards.html', card_output = card_output, args = args, pages_num=pages_num)
         
 
 """ Edit_card route with function that takes card id and its values """
@@ -123,22 +112,38 @@ def edit_card(card_id):
 """ Function that takes values from form in editcard.html and update them in database """
 @app.route('/update_card/<card_id>', methods = ["POST"])
 def update_card(card_id):
-    card = mongo.db.cards
-    card.update( {"_id": ObjectId(card_id)} ,
+    colors_id = []
+    cards = mongo.db.cards
+    colors_form = request.form.getlist('color')
+    for colors in colors_form:
+        color = mongo.db.colors.find_one({'color': colors})
+        color_id = color.get('_id')
+        colors_id.append(color_id)
+    rarity_form = mongo.db.rarity.find_one({'rarity': request.form.get('rarity')})
+    rarity_id = rarity_form.get('_id')
+    expansion_form = mongo.db.expansion_set.find_one({'set': request.form.get('set')})
+    expansion_id = expansion_form.get('_id')
+    type_form = mongo.db.card_types.find_one({'type': request.form.get('type')})
+    type_id = type_form.get('_id')
+    user = mongo.db.users.find_one({"username": session['username']})
+    user_id = user.get('_id')
+    cards.update( {"_id": ObjectId(card_id)} ,
         {
         'card_name': request.form.get('card_name'),
-        'color': request.form.getlist('color'),
-        'rarity': request.form.get('rarity'),
-        'type': request.form.get('type'),
-        'set': request.form.get('set'),
+        'color': colors_id,
+        'rarity': rarity_id,
+        'type': type_id,
+        'set': expansion_id,
+        'mana_cost': request.form.get('mana_cost'),
         'strength': request.form.get('strength'),
         'toughness': request.form.get('toughness'),
         'ruling': request.form.get('ruling'),
         'flavor_text': request.form.get('flavor_text'),
         'artist': request.form.get('artist'),
         'rating': request.form.get('rating'),
-        'card_url': request.form.get('card_url')
-        })
+        'card_url': request.form.get('card_url'),
+        'user_id': user_id
+    })
     return redirect(url_for('decks'))
 
 
@@ -173,6 +178,7 @@ def insert_card():
         'rarity': rarity_id,
         'type': type_id,
         'set': expansion_id,
+        'mana_cost': request.form.get('mana_cost'),
         'strength': request.form.get('strength'),
         'toughness': request.form.get('toughness'),
         'ruling': request.form.get('ruling'),
@@ -191,18 +197,15 @@ def insert_card():
 """ This is the home page after login, dispays all users decks """
 @app.route('/decks')
 def decks():
-    if 'username' in session:
-        user_name = session['username']
-        user = mongo.db.users.find_one({"username": user_name})
-        user_id = user['_id']
-        user_name = session['username']
-        user_name = session['username']
-        user = mongo.db.users.find_one({"username": user_name})
-        user_id = user.get('_id')
-        decks = mongo.db.decks.find({'user_id': user_id})
-        return render_template('decks.html', decks = decks)
-    else: 
-        return redirect(url_for('register'))
+    user_name = session['username']
+    user = mongo.db.users.find_one({"username": user_name})
+    user_id = user['_id']
+    user_name = session['username']
+    user_name = session['username']
+    user = mongo.db.users.find_one({"username": user_name})
+    user_id = user.get('_id')
+    decks = mongo.db.decks.find({'user_id': user_id})
+    return render_template('decks.html', decks = decks)
         
 @app.route('/deck_browse/<deck_id>')
 def deck_browse(deck_id):
@@ -385,7 +388,7 @@ def login():
         if bcrypt.hashpw(request.form['log_password'].encode('utf-8'), login['password']) == login['password']:
             session['username'] = log_username.lower()
             flash('Welcome back ' + session['username'], 'welcome')
-            return redirect(url_for('index'))
+            return redirect(url_for('decks'))
     flash("Incorrect password or username", 'error')
     return redirect(url_for('register'))
 
