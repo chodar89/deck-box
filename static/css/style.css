@@ -26,6 +26,7 @@ main {
     text-align: center;
 }
 
+#arrow-toggle-down,
 #add_button[type="submit"] {
     border: none;
     background: transparent;
@@ -183,6 +184,30 @@ nav .sidenav-trigger {
     font-weight: 700;
     font-style: italic;
     margin-bottom: 30px;
+}
+#arrow-toggle-down>i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    margin-top: -15px;
+    color: #6d6d6d;
+    transition: background-color 0.5s ease-in-out;
+}
+
+#arrow-toggle-down>i:hover {
+    cursor: pointer;
+    color: #000;
+}
+
+#arrow-toggle-down>p {
+    margin: 0px;
+    font-family: 'Merriweather Sans';
+    font-weight: 700;
+    font-style: italic;
+}
+
+#cardType {
+    justify-content: flex-end;
+    display: flex;
 }
 
 .count-cards-paragraph {

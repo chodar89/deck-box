@@ -216,16 +216,23 @@ def decks():
 def deck_browse(deck_id):
     if 'username' in session:
         cards_id = []
-        count_lands = []
-        count_creatures = []
-        count_artifacts = []
-        count_enchantments = []
-        count_planeswalkers = []
-        count_instants = []
-        count_sourceries = []
+        count_lands = 0
+        count_creatures = 0
+        count_artifacts = 0
+        count_enchantments = 0
+        count_planeswalkers = 0
+        count_instants = 0
+        count_sorceries = 0
         color_name = []
-        types = mongo.db.card_types
+        rarity_land = 0
+        rarity_common = 0
+        rarity_uncommon = 0
+        rarity_rare = 0
+        rarity_mythic = 0
+        rarity_timeshifted = 0
+        rarity_masterpiece = 0
         # get all types from card_types collection
+        types = mongo.db.card_types
         land_type = types.find_one({'type': 'land'})
         creature_type = types.find_one({'type': 'creature'})
         artifact_type = types.find_one({'type': 'artifact'})
@@ -233,6 +240,16 @@ def deck_browse(deck_id):
         planeswalker_type = types.find_one({'type': 'planeswalker'})
         instant_type = types.find_one({'type': 'instant'})
         sorcery_type = types.find_one({'type': 'sorcery'})
+        # get all rarities from card_rarity collection
+        rarity = mongo.db.rarity
+        land = rarity.find_one({'rarity': 'land'})
+        common = rarity.find_one({'rarity': 'common'})
+        uncommon = rarity.find_one({'rarity': 'uncommon'})
+        rare = rarity.find_one({'rarity': 'rare'})
+        mythic = rarity.find_one({'rarity': 'mythic rare'})
+        timeshifted = rarity.find_one({'rarity': 'timeshifted'})
+        masterpiece = rarity.find_one({'rarity': 'masterpiece'})
+        # find deck by ObjectId
         deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
         colors = mongo.db.colors
         # takes colors id and find color names in mongodb
@@ -254,23 +271,46 @@ def deck_browse(deck_id):
                 cards_id.append(cardinformation)
                 card_type = cardinformation["type"]
                 if card_type == land_type.get('_id'):
-                    count_lands.append(card_type)
+                    count_lands += 1
                 elif card_type == creature_type.get('_id'):
-                    count_creatures.append(card_type)
+                    count_creatures += 1
                 elif card_type == artifact_type.get('_id'):
-                    count_artifacts.append(card_type)
+                    count_artifacts += 1
                 elif card_type == enchantment_type.get('_id'):
-                    count_enchantments.append(card_type)
+                    count_enchantments += 1
                 elif card_type == planeswalker_type.get('_id'):
-                    count_planeswalkers.append(card_type)
+                    count_planeswalkers += 1
                 elif card_type == instant_type.get('_id'):
-                    count_instants.append(card_type)
+                    count_instants += 1
                 elif card_type == sorcery_type.get('_id'):
-                    count_sourceries.append(card_type)
-        return render_template('deckbrowse.html',  cards_id = cards_id, deck = deck, count_cards = count_cards, lands = len(count_lands),
-                               creatures = len(count_creatures), artifacts = len(count_artifacts), enchantments = len(count_enchantments),
-                               planeswalkers = len(count_planeswalkers), instants = len(count_instants), sorceries = len(count_sourceries),
-                               color_name = color_name)
+                    count_sorceries += 1
+            for card in deck_cards:
+                cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
+                card_rarity = cardinformation["rarity"]
+                if card_rarity == land.get('_id'):
+                    rarity_land += 1
+                elif card_rarity == common.get('_id'):
+                    rarity_common += 1
+                elif card_rarity == uncommon.get('_id'):
+                    rarity_uncommon += 1
+                elif card_rarity == rare.get('_id'):
+                    rarity_rare += 1
+                elif card_rarity == mythic.get('_id'):
+                    rarity_mythic += 1
+                elif card_rarity == timeshifted.get('_id'):
+                    rarity_timeshifted += 1
+                elif card_rarity == masterpiece.get('_id'):
+                    rarity_masterpiece += 1
+        cards_rarity = {
+            "rarity_land": rarity_land,
+            "rarity_common": rarity_common,
+            "rarity_uncommon": rarity_uncommon,
+            "rarity_rare": rarity_rare,
+            "rarity_mythic": rarity_mythic,
+            "rarity_timeshifted": rarity_timeshifted,
+            "rarity_masterpiece": rarity_masterpiece
+        }
+        return render_template('deckbrowse.html',  **locals())
     else: 
         return redirect(url_for('register'))
         

@@ -102,18 +102,83 @@
             </div>
         </div>
     </footer>
-
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" 
     crossorigin="anonymous"></script>
-    <script type="text/javascript" src="../static/js/materialize.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js')}}"></script>
+    
     <script>
-        $(document).ready(function() {
-            $('.sidenav').sidenav();
-            $(".dropdown-trigger").dropdown();
-            $('.parallax').parallax();
-            $('select').formSelect();
-        });
+    
+    let creatures = {{count_creatures}}
+    let planeswalkers = {{count_planeswalkers}}
+    let artifacts = {{count_artifacts}}
+    let sorceries = {{count_sorceries}}
+    let enchantments = {{count_enchantments}}
+    let instants = {{count_instants}}
+    let lands = {{count_lands}}
+    
+    let rarity_land = {{rarity_land}}
+    let rarity_common = {{rarity_common}}
+    let rarity_uncommon = {{rarity_uncommon}}
+    let rarity_rare = {{rarity_rare}}
+    let rarity_mythic = {{rarity_mythic}}
+    let rarity_timeshifted = {{rarity_timeshifted}}
+    let rarity_masterpiece = {{rarity_masterpiece}}
+    
+    google.charts.load('current', {'packages':['corechart']});
+      
+    google.charts.setOnLoadCallback(cardType);
+    google.charts.setOnLoadCallback(cardRarity);
+
+    
+    function cardType() {
+      var data = google.visualization.arrayToDataTable([
+          ['Type', 'Cards'],
+          ['Creature', creatures],
+          ['Planeswalker', planeswalkers],
+          ['Artifact',  artifacts],
+          ['Sorcery', sorceries],
+          ['Enchantment', enchantments],
+          ['Instant', instants],
+          ['Land', lands]
+        ]);
+
+        var options = {title:'Types of Cards',
+                       pieHole:0.4,
+                       width:400,
+                       height:300};
+
+        var chart = new google.visualization.PieChart(document.getElementById('cardType'));
+        chart.draw(data, options);
+      }
+
+
+    function cardRarity() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Type', 'Cards'],
+          ['Land', rarity_land],
+          ['Common', rarity_common],
+          ['Uncommon',  rarity_uncommon],
+          ['Rare', rarity_rare],
+          ['Mythic Rare', rarity_mythic],
+          ['Timeshifted', rarity_timeshifted],
+          ['Masterpiece', rarity_masterpiece]
+        ]);
+
+
+        var options = {title:'Cards Rarity',
+                        pieHole:0.4,
+                        width:400,
+                        height:300};
+
+        var chart = new google.visualization.PieChart(document.getElementById('cardRarity'));
+        chart.draw(data, options);
+      }
+      
     </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js')}}"></script>
 </body>
 
 </html>

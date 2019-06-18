@@ -33,13 +33,23 @@
         <i class="material-icons left">view_module</i>
     </div>
     <div class="row count-card-types">
-        <p class="count-cards-paragaph"> {{ planeswalkers }}<span> Planeswalker |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ creatures }}<span> Creature |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ artifacts }}<span> Artifact |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ sorceries }}<span> Sorcery |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ enchantments }}<span> Enchantment |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ instants }}<span> Instant |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ lands }}<span> Land</span></p>
+        <p class="count-cards-paragaph"> {{ count_planeswalkers }}<span> Planeswalker |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ count_creatures }}<span> Creature |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ count_artifacts }}<span> Artifact |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ count_sorceries }}<span> Sorcery |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ count_enchantments }}<span> Enchantment |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ count_instants }}<span> Instant |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ count_lands }}<span> Land</span></p>
+    </div>
+    <div class="row center">
+        <button id="arrow-toggle-down">
+            <p>Click for charts</p>
+            <i class="fas fa-sort-down"></i>
+        </button>
+    </div>
+    <div id="chart-toggle" class="row">
+        <div class="col s6" id="cardType" style="width: 50%; height: 100%;"></div>
+        <div class="col s6" id="cardRarity" style="width: 50%; height: 100%;"></div>
     </div>
     <div class="row center deck-browse-btn">
         <a href="{{url_for('deck_build', deck_id=deck._id)}}"><i class="far fa-edit fa-3x"></i></a>
