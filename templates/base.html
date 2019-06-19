@@ -49,7 +49,7 @@
                 </div>
             </li>
             <li><a href="{{url_for('decks')}}"><i class="material-icons">home</i>My Decks</a></li>
-            <li><a href="{{url_for ('my_cards', limit=10, offset=0)}}"><i class="material-icons">collections</i>My Cards</a></li>
+            <li><a href="{{url_for ('my_cards', limit=20, offset=0)}}"><i class="material-icons">collections</i>My Cards</a></li>
             <li><a href="{{url_for ('add_card')}}"><i class="material-icons">add_circle</i>Add Card</a></li>
             <li><a href="{{url_for ('deck_name')}}"><i class="material-icons">add_circle</i>Add Deck</a></li>
             <li>
@@ -68,7 +68,7 @@
         {% endfor %} {% endif %} {% endwith %}
         <div class="parallax-container">
             <div class="parallax">
-                <img src="../static/img/theme4.jpg">
+                <img src="{{ url_for ('static', filename='img/theme4.jpg')}}">
             </div>
         </div>
     </header>
@@ -78,28 +78,30 @@
     </main>
 
     <footer class="page-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col l6 s12">
-                    <img class="wizard-logo" src="../static/img/partnerweb/wizard_logo.png">
-                    <img class="wizard-logo" src="../static/img/partnerweb/magicmadhouse.png">
-                    <img class="wizard-logo" src="../static/img/partnerweb/imgbb.png">
-                </div>
-                <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Site Map</h5>
-                    <ul>
-                        <li><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></li>
-                        <li><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></li>
-                        <li><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">Decks</a></li>
-                        <li><a class="grey-text text-lighten-3" href="{{ url_for('add_card')}}">Add Card</a></li>
-                    </ul>
-                </div>
+        <div class="row">
+            <div class="site-map">
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></span>
+                <span>|</span>
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></span>
+                <span>|</span>
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
+                <span>|</span>
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
+                <span>|</span>
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('add_card')}}">Add Card</a></span>
+                <span>|</span>
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('deck_name')}}">Add Deck</a></span>
             </div>
         </div>
-        <div class="footer-copyright">
-            <div class="container">
-                <img class="logo-footer" src="../static/img/logoblack.png">
-            </div>
+        <div class="bottom-logo-box">
+            <img class="magicmadhouse-logo" src="{{ url_for ('static', filename='img/partnerweb/magic-madhouse-uk.png')}}">
+            <img class="partner-web-logo" src="{{ url_for ('static', filename='img/partnerweb/wizard_logo.png')}}">
+            <img class="logo-footer" src="{{ url_for ('static', filename='img/logoblack.png')}}">
+            <img class="partner-web-logo" src="{{ url_for ('static', filename='img/partnerweb/mtg_logo.png')}}">
+            <img class="partner-web-logo" src="{{ url_for ('static', filename='img/partnerweb/imgbb.png')}}">
+        </div>
+        <div class="footer-copyrights center">
+            <p>© 2019 Tobiasz Chodarewicz All Rights Reserved</p>
         </div>
     </footer>
     
@@ -109,6 +111,8 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js')}}"></script>
     
     <script>
+    
+    // Variables from app.py
     
     let creatures = {{count_creatures}}
     let planeswalkers = {{count_planeswalkers}}
@@ -126,12 +130,17 @@
     let rarity_timeshifted = {{rarity_timeshifted}}
     let rarity_masterpiece = {{rarity_masterpiece}}
     
+    // Google charts
+    
     google.charts.load('current', {'packages':['corechart']});
       
+    
     google.charts.setOnLoadCallback(cardType);
     google.charts.setOnLoadCallback(cardRarity);
 
     
+    // Draw 2 charts in deckbrowse.html 
+    // 1st chart count from app.py each type of card
     function cardType() {
       var data = google.visualization.arrayToDataTable([
           ['Type', 'Cards'],
@@ -153,7 +162,7 @@
         chart.draw(data, options);
       }
 
-
+    // 2nd chart count rarity cards
     function cardRarity() {
 
         var data = google.visualization.arrayToDataTable([
