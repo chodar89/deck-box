@@ -10,8 +10,9 @@ main {
     height: 38vh;
 }
 
-.parallax img {
-    width: 100%;
+.parallax>img {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .paragraph {
@@ -411,7 +412,8 @@ nav .sidenav-trigger {
 
 .footer-copyrights {
     height: 2.5rem;
-    background-color: #102540
+    background-color: #102540;
+    padding-top: 5px;
 }
 
 .footer-copyrights>p {
@@ -424,4 +426,44 @@ nav .sidenav-trigger {
     width: 100%;
     padding-left: 20%;
     padding-right: 20%;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+/*-------------------------- Media Queries ---*/
+
+@media only screen and (max-width: 768px) {
+    .parallax-container {
+        height: 28vh;
+    }
+    
+    .parallax>img { 
+        min-height: 200%;
+        min-width: 200%;
+    }    
+    
+    .magicmadhouse-logo,
+    .partner-web-logo,
+    .site-map-divider {
+        display: none;
+    }
+    
+    .site-map {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    .site-map>span {
+        padding: 5px;
+    }
+    
+    .paragraph-on-parallax {
+        top: 12%;
+    }
+
+    .paragraph-on-parallax>p {
+        font-size: 150%;
+    }
+
 }

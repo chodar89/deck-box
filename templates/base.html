@@ -78,18 +78,18 @@
     </main>
 
     <footer class="page-footer">
-        <div class="row">
+        <div class="center">
             <div class="site-map">
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></span>
-                <span>|</span>
+                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></span>
-                <span>|</span>
+                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
-                <span>|</span>
+                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
-                <span>|</span>
+                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('add_card')}}">Add Card</a></span>
-                <span>|</span>
+                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('deck_name')}}">Add Deck</a></span>
             </div>
         </div>
