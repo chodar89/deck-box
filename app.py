@@ -445,7 +445,7 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.secret_key = key
+    app.secret_key = os.getenv('key')
     app.run(host = os.getenv("IP", "0.0.0.0"),
             port = int(os.getenv("PORT", "5000")),
-            debug = debug
+            debug = True)
