@@ -57,6 +57,28 @@
                 <label for="email">Email</label>
             </div>
         </div>
+        <div class="row center avatar-circles">
+            <img class="circle" src="{{ url_for ('static', filename='img/avatars/avatar.jpg')}}">
+            <img class="circle" src="{{ url_for ('static', filename='img/avatars/avatar1.jpg')}}">
+        </div>
+        <div class="row radio-buttons">
+            <p class="radio-button-l">
+              <label>
+                <input name="avatar" value="sorceress-avatar" id="sorceress-avatar" type="radio" checked/>
+                <span>Sorceress</span>
+              </label>
+            </p>
+            <p class="radio-button-r">
+              <label>
+                <input name="avatar" value="wizard-avatar" id="wizard-avatar" type="radio" />
+                <span>Wizard</span>
+              </label>
+            </p>
+        </div>
+        <div class="row">
+            
+        
+        </div>
         <div class="row center-align">
             <button class="btn waves-effect waves-light btn-blue" type="submit" name="action">Register
                 <i class="material-icons right">add</i>

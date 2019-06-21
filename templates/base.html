@@ -37,15 +37,17 @@
 
         <ul id="slide-out" class="sidenav">
             <li>
-                <div class="user-view">
-                    <div class="background">
-                        
+                <div class="user-view" style="height: 200px">
+                    <span class="white-text name">{{user_name}}</span>
+                    <span class="white-text email">{{user_email}}</span>
+                    <div class="background" >
+                         {% if user_avatar == 'sorceress-avatar'%}
+                        <img src="{{ url_for ('static', filename='img/avatars/avatar.jpg')}}">
+                        {% else %}
+                        <img src="{{ url_for ('static', filename='img/avatars/avatar1.jpg')}}">
+                        {% endif %}
                     </div>
-                    <a href="#user"><img class="circle" src="../static/img/avatar.jpg"></a>
-                    <a href="#name">
-                        <span class="white-text name">{{user_name}}</span>
-                    </a>
-                    <a href="#email"><span class="white-text email">{{user_email}}</span></a>
+                    
                 </div>
             </li>
             <li><a href="{{url_for('decks')}}"><i class="material-icons">home</i>My Decks</a></li>
@@ -81,15 +83,10 @@
         <div class="center">
             <div class="site-map">
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></span>
-                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></span>
-                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
-                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
-                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('add_card')}}">Add Card</a></span>
-                <span class="site-map-divider">|</span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('deck_name')}}">Add Deck</a></span>
             </div>
         </div>
@@ -155,7 +152,7 @@
 
         var options = {title:'Types of Cards',
                        pieHole:0.4,
-                       width:400,
+                       width:350,
                        height:300};
 
         var chart = new google.visualization.PieChart(document.getElementById('cardType'));
@@ -179,15 +176,14 @@
 
         var options = {title:'Cards Rarity',
                         pieHole:0.4,
-                        width:400,
+                        width:350,
                         height:300};
 
         var chart = new google.visualization.PieChart(document.getElementById('cardRarity'));
         chart.draw(data, options);
       }
-      
     </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js')}}"></script>
 </body>
 
 </html>

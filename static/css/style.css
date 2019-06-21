@@ -2,6 +2,10 @@
 
 @import url('https://fonts.googleapis.com/css?family=Merriweather+Sans|Fjalla+One|Merriweather+Sans:700i,800i');
 
+body {
+    font-family: 'Merriweather Sans', sans-serif;
+}
+
 main {
     min-height: 40vh;
 }
@@ -53,6 +57,15 @@ nav .sidenav-trigger {
     background-color: #102540;
 }
 
+.user-view {
+    padding: 5px 14px 0!important;
+}
+
+.name,
+.email {
+    text-shadow: 1px 1px #000000;
+}
+
 /*-------------------------- Index ---*/
 
 .paragraph>i {
@@ -70,7 +83,6 @@ nav .sidenav-trigger {
 
 .paragraph-on-parallax>p {
     color: #fafafa;
-    font-family: 'Merriweather Sans', sans-serif;
     text-transform: uppercase;
     font-size: 200%;
     text-shadow: 2px 1px 4px #102540;
@@ -85,7 +97,6 @@ nav .sidenav-trigger {
 
 .purple-alert {
     background-color: #be7499;
-    font-family: 'Merriweather Sans', sans-serif;
     text-transform: uppercase;
     font-size: medium;
     text-align: center;
@@ -181,7 +192,6 @@ nav .sidenav-trigger {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    font-family: 'Merriweather Sans';
     font-weight: 700;
     font-style: italic;
     margin-bottom: 30px;
@@ -201,7 +211,6 @@ nav .sidenav-trigger {
 
 #arrow-toggle-down>p {
     margin: 0px;
-    font-family: 'Merriweather Sans';
     font-weight: 700;
     font-style: italic;
 }
@@ -212,7 +221,6 @@ nav .sidenav-trigger {
 }
 
 .count-cards-paragraph {
-    font-family: 'Merriweather Sans';
     font-weight: 700;
     font-size: 2em;
     font-style: italic;
@@ -344,7 +352,6 @@ nav .sidenav-trigger {
 }
 
 .bad-login {
-    font-family: 'Merriweather Sans', sans-serif;
     text-transform: uppercase;
     font-size: medium;
     text-align: center;
@@ -353,7 +360,6 @@ nav .sidenav-trigger {
 }
 
 .reg-paragraph {
-    font-family: 'Merriweather Sans', sans-serif;
     text-align: center;
     text-transform: uppercase;
     font-weight: 700;
@@ -364,6 +370,26 @@ nav .sidenav-trigger {
 .reg-paragraph>i {
     font-size: 225%;
     margin-top: 10px;
+}
+
+.avatar-circles,
+.radio-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.avatar-circles img {
+    width: 80px;
+    height: 80px;
+    margin: 0px 20px;
+}
+
+.radio-button-l {
+    margin-right: 15px;
+}
+
+.radio-button-r {
+    margin-left: 15px;
 }
 
 /*-------------------------- Buttons ---*/
@@ -407,17 +433,19 @@ nav .sidenav-trigger {
 }
 
 .page-footer {
+    margin-top: 70px;
+    padding-top: 14px;
     background-color: #244673;
 }
 
 .footer-copyrights {
-    height: 2.5rem;
+    height: 1.5rem;
     background-color: #102540;
-    padding-top: 5px;
 }
 
 .footer-copyrights>p {
     margin-top: 0px;
+    font-size: 13px;
 }
 
 .site-map {
@@ -438,13 +466,12 @@ nav .sidenav-trigger {
     }
     
     .parallax>img { 
-        min-height: 200%;
-        min-width: 200%;
+        min-height: 100%;
+        min-width: 100%;
     }    
     
     .magicmadhouse-logo,
-    .partner-web-logo,
-    .site-map-divider {
+    .partner-web-logo {
         display: none;
     }
     
@@ -465,5 +492,14 @@ nav .sidenav-trigger {
     .paragraph-on-parallax>p {
         font-size: 150%;
     }
-
+    
+    .logo {
+        height: 38px;
+        margin-top: 10px;
+    }
+    
+    #arrow-toggle-down,
+    #chart-toggle {
+        display: none;
+    }
 }

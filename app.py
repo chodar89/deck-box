@@ -22,7 +22,8 @@ def user_context():
         user = mongo.db.users.find_one({"username": user_name})
         user_email = user['email']
         sign_out = 'Sign Out'
-        return dict(user_name = user_name.upper(), user_email = user_email, sign_out = sign_out)
+        user_avatar = user['avatar']
+        return dict(user_name = user_name.upper(), user_email = user_email, sign_out = sign_out, user_avatar=user_avatar)
     else:
         return dict(user_name = None)
             
@@ -92,7 +93,7 @@ def my_cards():
     		"next_url" : f"/my_cards?limit={str(limit)}&offset={str(offset + limit)}",
     		"prev_url" : f"/my_cards?limit={str(limit)}&offset={str(offset - limit)}",
     		"curr_url" : f"/my_cards?limit={str(limit)}&offset={str(offset)}"
-    	}
+    	    }
         return render_template('mycards.html', card_output = card_output, args = args, pages_num=pages_num)
     else: 
         return redirect(url_for('register'))
@@ -415,8 +416,8 @@ def register():
                flash('password to short', 'exists')
             else:
                 hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-                users.insert({'username':new_username.lower(), 'password' : hash_password, 'email': request.form['email']})
-                # session['username'] = request.form['username']
+                users.insert({'username':new_username.lower(), 'password' : hash_password, 'email': request.form['email'], 'avatar': request.form['avatar']})
+                session['username'] = request.form['username']
                 flash('Thank you for creating an account', 'exists')
             return redirect(url_for('register'))
         else: flash('Username or email already exists', 'exists')
