@@ -9,8 +9,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
-app.config['MONGO_DBNAME'] = MONGO_DBNAME
-app.config['MONGO_URI'] = MONGO_URI
+app.config['MONGO_DBNAME'] = os.environ.get('MONGO_DBNAME')
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
 mongo = PyMongo(app)
 
@@ -445,7 +445,7 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.secret_key = os.getenv('key')
-    app.run(host = os.getenv("IP", "0.0.0.0"),
-            port = int(os.getenv("PORT", "5000")),
-            debug = True)
+    app.secret_key = os.environ.get('key')
+    app.run(host = os.environ.get("IP", "0.0.0.0"),
+            port = int(os.environ.get("PORT", "5000")),
+            debug = os.environ.get('debug'))
