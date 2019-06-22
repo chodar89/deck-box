@@ -90,8 +90,14 @@ nav .sidenav-trigger {
 }
 
 .fa-user-check,
-.fa-laugh-beam {
+.fa-laugh-beam,
+.fa-shoe-prints {
     font-size: 5em;
+    color: #5f9ea0;
+}
+
+.fa-shoe-prints {
+    font-size: 2em;
     color: #5f9ea0;
 }
 
@@ -115,20 +121,21 @@ nav .sidenav-trigger {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin: 80px;
+    margin: 55px;
     width: 95%;
     margin-left: auto;
     margin-right: auto;
 }
 
 .index-cards>i {
-    font-size: 300%;
+    font-size: 2rem;
     margin: 5px;
 }
 
 .index-cards>img {
     max-width: 300px;
     margin: auto;
+    width: 33%!important
 }
 
 .five-cards {
@@ -466,8 +473,8 @@ nav .sidenav-trigger {
     }
     
     .parallax>img { 
-        min-height: 100%;
-        min-width: 100%;
+        max-height: 220%!important;
+        max-width: 220%!important;
     }    
     
     .magicmadhouse-logo,
@@ -486,11 +493,13 @@ nav .sidenav-trigger {
     }
     
     .paragraph-on-parallax {
-        top: 12%;
+        top: 10%;
     }
 
     .paragraph-on-parallax>p {
-        font-size: 150%;
+        font-size: 120%;
+        margin-left: 20px;
+        margin-right: 20px;
     }
     
     .logo {
@@ -501,5 +510,19 @@ nav .sidenav-trigger {
     #arrow-toggle-down,
     #chart-toggle {
         display: none;
+    }
+    
+    .paragraph {
+        font-size: 1.3em;
+    }
+    
+    .fa-user-check,
+    .fa-laugh-beam,
+    .fa-shoe-prints {
+        font-size: 3em;
+    }
+    
+    .index-cards>i {
+        font-size: 1rem;
     }
 }
