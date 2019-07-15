@@ -1,5 +1,11 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
 
+{% block title %}
+<title>DECK-BOX REGISTER</title>
+{% endblock %}
+
+{% block content %}
+<!--flash message if login or password is incorect-->
 {% with errors = get_flashed_messages(category_filter=["error"]) %}
     {% if errors %}
         {% for message in errors %}
@@ -7,7 +13,7 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
-
+<!--login form-->
 <div class="login-form row container">
     <form class="col s12" method=POST action="{{url_for('login')}}">
         <div class="row ">
@@ -30,6 +36,7 @@
     </form>
 </div>
 <p class="reg-paragraph"> OR Register <br /> if you don't have an account yet <br /><i class="fas fa-user-plus"></i></p>
+<!--flash message if username exists or password or login is too short-->
 {% with exists = get_flashed_messages(category_filter=['exists']) %}
     {% if exists %}
         {% for message in exists %}

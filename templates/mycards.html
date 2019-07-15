@@ -1,9 +1,16 @@
-{% extends 'base.html' %} {% block sidenav %}
+{% extends 'base.html' %} 
+
+{% block title %}
+<title>DECK-BOX {{user_name}}</title>
+{% endblock %}
+
+{% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
 {% endblock %} 
 {% block content %} 
+<!--flash message no cards if user don't have any-->
 {% with no_cards = get_flashed_messages(category_filter=["no_cards"]) %}
     {% if no_cards %}
         {% for message in no_cards %}
@@ -12,71 +19,53 @@
     {% endif %}
 {% endwith %}
 <p>{{ pages_num }}</p>
-    <div class="cards-layout">
-        {% for card in card_output %}
-        <div class="center col s10 offset-s1 m5 offset-m1">
-            <p class="card-name">{{ card.card_name }}</p>
-            <div class="row card-size">
-                <img src="{{card.card_url}}"></img>
-            </div>
-            <div class="row">
-                <a href="{{url_for('edit_card', card_id=card._id)}}"><i class="far fa-edit fa-2x"></i></a>
-                <a href="{{url_for('remove_card', card_id=card._id)}}"><i class="far fa-trash-alt fa-2x"></i></a>
-            </div>
-            <div class="row">
-                {% if card.rating == "1" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "2" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "3" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "4" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                {% elif card.rating == "5" %}
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                {% endif %}
-            </div>
+<!--diplay user cards with pagination-->
+<div class="cards-layout">
+    {% for card in card_output %}
+    <div class="center col s10 offset-s1 m5 offset-m1">
+        <p class="card-name">{{ card.card_name }}</p>
+        <div class="row card-size">
+            <img src="{{card.card_url}}"></img>
         </div>
-        {% endfor %}
+        <div class="row">
+            <a href="{{url_for('edit_card', card_id=card._id)}}"><i class="far fa-edit fa-2x"></i></a>
+            <a href="{{url_for('remove_card', card_id=card._id)}}"><i class="far fa-trash-alt fa-2x"></i></a>
+        </div>
+        <div class="row">
+            {% if card.rating == "1" %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span> 
+            {% elif card.rating == "2" %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span> 
+            {% elif card.rating == "3" %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span> 
+            {% elif card.rating == "4" %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star"></span> 
+            {% elif card.rating == "5" %}
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span>
+            <span class="fa fa-star checked"></span> 
+            {% endif %}
+        </div>
     </div>
-   
-    {% if args.count_user_cards > args.limit %}
-    <ul class="pagination center">
-        {% if args.offset > 0 %}
-            <li class="waves-effect"><a href="{{args.prev_url}}"><i class="material-icons">chevron_left</i></a></li>
-        {% else %}
-            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-        {% endif %}
-        {% set page_count = [1] %}
-        {% for i in range(0, pages_num) %}
-            <li class="active"><a href="{{args.curr_url}}">{{ page_count }}</a></li>
-            {% if page_count.append(page_count.pop() + 1) %}{% endif %}
-        {% endfor %}
-        {% if args.offset + args.limit < args.count_user_cards  %}
-        	<li class="waves-effect"><a href="{{args.next_url}}"><i class="material-icons">chevron_right</i></a></li>
-        {% else %}
-        <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-        {% endif %}
-    </ul>
-    {% endif %}
+    {% endfor %}
+</div>
+<div class="center">{{ pagination.links }}</div>
 {% endblock %}

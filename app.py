@@ -2,7 +2,9 @@ import os
 from flask import Flask, render_template, redirect, request, url_for, session, flash, g, abort
 from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
+from bson.json_util import dumps
 from dotenv import load_dotenv
+from flask_paginate import Pagination, get_page_parameter
 import bcrypt
 
 load_dotenv()
@@ -55,46 +57,32 @@ def add_card():
 @app.route('/my_cards')
 def my_cards():
     if 'username' in session:
+        search = False
+        q = request.args.get('q')
+        if q:
+            search = True
+        page = request.args.get(get_page_parameter(), type=int, default=1)
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
         user_id = user.get('_id')
-        # try to find cards if user dont have any gives 0
+        per_page = 5 
+        # try to find cards and count if user dont have any gives 0
         try:
             user_cards = mongo.db.cards.find({'user_id': user_id})
             count_user_cards = user_cards.count()
         except:
             count_user_cards = 0
-        limit = int(request.args['limit'])
-        offset = int(request.args['offset'])
-        # prevent error if user would request offset < 0 and bigger than user card collection
-        if offset < 0:
-            offset = 0
-        if offset > count_user_cards:
-            offset = count_user_cards
         card_output = []
         try:
-            latest_id = mongo.db.cards.find({'user_id': user_id}).sort('_id', pymongo.DESCENDING)
-            last_id = latest_id[offset]['_id']
-            cards = mongo.db.cards.find({'user_id': user_id,
-                        '_id': {'$lte': last_id}}).sort('_id', pymongo.DESCENDING).limit(limit)
+            cards = mongo.db.cards.find({'user_id': user_id}).skip((page - 1) * per_page).limit(per_page)
             for i in cards:
                 card_output.append(i)
         except: 
             flash('you do not have any cards in your collection yet', 'no_cards')
-        # counts how many pages are needed 
-        if count_user_cards % limit == 0:
-            pages_num = count_user_cards / limit
-        else:
-            pages_num = count_user_cards // limit + 1
-        args = {
-    		"limit" : limit,
-    		"offset" : offset,
-    		"count_user_cards" : count_user_cards,
-    		"next_url" : f"/my_cards?limit={str(limit)}&offset={str(offset + limit)}",
-    		"prev_url" : f"/my_cards?limit={str(limit)}&offset={str(offset - limit)}",
-    		"curr_url" : f"/my_cards?limit={str(limit)}&offset={str(offset)}"
-    	    }
-        return render_template('mycards.html', card_output = card_output, args = args, pages_num=pages_num)
+        pagination = Pagination(page = page,per_page = per_page ,total = user_cards.count(), 
+        search = search, record_name='card_output')
+        return render_template('mycards.html', card_output = card_output, pagination = pagination, 
+        count_user_cards = count_user_cards)
     else: 
         return redirect(url_for('register'))
 
@@ -216,7 +204,7 @@ def decks():
 @app.route('/deck_browse/<deck_id>')
 def deck_browse(deck_id):
     if 'username' in session:
-        cards_id = []
+        cards = []
         count_lands = 0
         count_creatures = 0
         count_artifacts = 0
@@ -267,10 +255,15 @@ def deck_browse(deck_id):
         count_cards = len(deck_cards)
         # find each card by id and check what type card it is and append it to array
         if deck_cards != None:
+            # loop that check if card is in deck, if it is don't append add amount of that card
+            for i in deck_cards:
+                find_card = mongo.db.cards.find({'_id': ObjectId(i)})
+                for each_card in find_card:
+                    if each_card not in cards:
+                        cards.append(each_card)
             for card in deck_cards:
-                cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                cards_id.append(cardinformation)
-                card_type = cardinformation["type"]
+                card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
+                card_type = card_information["type"]
                 if card_type == land_type.get('_id'):
                     count_lands += 1
                 elif card_type == creature_type.get('_id'):
@@ -286,8 +279,8 @@ def deck_browse(deck_id):
                 elif card_type == sorcery_type.get('_id'):
                     count_sorceries += 1
             for card in deck_cards:
-                cardinformation = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                card_rarity = cardinformation["rarity"]
+                card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
+                card_rarity = card_information["rarity"]
                 if card_rarity == land.get('_id'):
                     rarity_land += 1
                 elif card_rarity == common.get('_id'):
@@ -399,29 +392,32 @@ def remove_card_from_deck(deck_id, card_id):
 """ Render register page and post registration form to mongo database """
 @app.route('/register', methods = ['POST', 'GET'])
 def register():
-    if request.method == 'POST':
-        users = mongo.db.users
-        # import pdb;
-        # pdb.set_trace()
-        new_username = request.form['username']
-        new_password = request.form['password']
-        email = request.form.get('email')
-        existing_user = users.find_one({'username' : new_username.lower()})
-        existing_email = users.find_one({'email': email})
-        # first it checks if username and emial exists in database if not post form if yes flash allert
-        if existing_user is None and existing_email is None:
-            if len(new_username) < 4:
-               flash('Username to short', 'exists')
-            elif len(new_password) < 6:
-               flash('password to short', 'exists')
-            else:
-                hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-                users.insert({'username':new_username.lower(), 'password' : hash_password, 'email': request.form['email'], 'avatar': request.form['avatar']})
-                session['username'] = request.form['username']
-                flash('Thank you for creating an account', 'exists')
-            return redirect(url_for('register'))
-        else: flash('Username or email already exists', 'exists')
-    return render_template('register.html')
+    if 'username' in session:
+        return redirect(url_for('decks'))
+    else:
+        if request.method == 'POST':
+            users = mongo.db.users
+            # import pdb;
+            # pdb.set_trace()
+            new_username = request.form['username']
+            new_password = request.form['password']
+            email = request.form.get('email')
+            existing_user = users.find_one({'username' : new_username.lower()})
+            existing_email = users.find_one({'email': email})
+            # first it checks if username and emial exists in database if not post form if yes flash allert
+            if existing_user is None and existing_email is None:
+                if len(new_username) < 4:
+                   flash('Username to short', 'exists')
+                elif len(new_password) < 6:
+                   flash('password to short', 'exists')
+                else:
+                    hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
+                    users.insert({'username':new_username.lower(), 'password' : hash_password, 'email': request.form['email'], 'avatar': request.form['avatar']})
+                    session['username'] = request.form['username']
+                    flash('Thank you for creating an account', 'exists')
+                return redirect(url_for('register'))
+            else: flash('Username or email already exists', 'exists')
+        return render_template('register.html')
 
 
 """ Login form, encode and checks data in form with database that exists if not flash allert """

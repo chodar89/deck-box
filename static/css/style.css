@@ -36,6 +36,11 @@ main {
     border: none;
     background: transparent;
 }
+
+.pagination li.active {
+    background-color: #102540;
+}
+
 /*-------------------------- Navigation Bar ---*/
 
 .logo {

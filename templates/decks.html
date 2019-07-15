@@ -1,9 +1,17 @@
-{% extends 'base.html' %} {% block sidenav %}
+{% extends 'base.html' %} 
+
+{% block title %}
+<title>DECK-BOX {{user_name}}</title>
+{% endblock %}
+
+{% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %} {% block content %}
+{% endblock %} 
+{% block content %}
 <div class="deck-layout">
+        <!--blank card with link to create a new deck-->
         <div class="blank-deck col s10 offset-s1 m5 offset-m1">
                 <a href="{{url_for('deck_name')}}">
                     <div class="add-deck">
@@ -11,11 +19,14 @@
                     </div>
                 </a>
         </div>
+    <!--loop all user decks and display-->
     {% for deck in decks %}
         <div class="center col s10 offset-s1 m5 offset-m1 decks">
             <p class="deck-name">{{ deck.deck_name }}</p>
             <div class="row deck-size">
-                <a href="{{url_for('deck_browse', deck_id=deck._id)}}"><img src="../static/img/cards/card_back.jpg"></img></a>
+                <a href="{{url_for('deck_browse', deck_id=deck._id)}}">
+                    <img src="{{ url_for ('static', filename='/img/cards/card_back.jpg')}}"></img>
+                </a>
             </div>
         </div>
     {% endfor %}

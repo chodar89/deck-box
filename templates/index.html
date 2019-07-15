@@ -1,4 +1,8 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% block title %}
+<title>DECK-BOX</title>
+{% endblock %}
+{% block content %}
 
 <div class="row center">
     <div class="paragraph-on-parallax">
@@ -17,7 +21,7 @@
     </div>
 <div class="parallax-container">
     <div class="parallax">
-        <img src="../static/img/theme2.jpg">
+        <img src="{{ url_for ('static', filename='img/theme2.jpg')}}">
     </div>
 </div>
     <div class="card-panel hoverable">
@@ -25,18 +29,18 @@
             <p class="paragraph"><i class="fas fa-check"></i> Add all your cards</p>
         </div>
         <div class="index-cards"> 
-            <img class="col s3" src="../static/img/cards/card1.png">
+            <img class="col s3" src="{{ url_for ('static', filename='img/cards/card1.png')}}">
             <i class="fas fa-plus"></i>
-            <img class="col s3" src="../static/img/cards/card2.png">
+            <img class="col s3" src="{{ url_for ('static', filename='img/cards/card2.png')}}">
             <i class="fas fa-plus"></i>
-            <img class="col s3" src="../static/img/cards/card3.png">
+            <img class="col s3" src="{{ url_for ('static', filename='img/cards/card3.png')}}">
         </div>
     </div>
     
 </div>
 <div class="parallax-container">
     <div class="parallax">
-        <img src="../static/img/theme6.jpg">
+        <img src="{{ url_for ('static', filename='img/theme6.jpg')}}">
     </div>
 </div>
 <div class="row center">
@@ -44,13 +48,11 @@
         <div>
             <p class="paragraph"> That is it !!!</p>
             <i class="fas fa-laugh-beam"></i>
-            <p class="paragraph">Now You can add, edit and search your cards or decks in quick and easy way</p>
+            <p class="paragraph">Now You can edit, search your cards and build decks in quick and easy way</p>
         </div>
         <div class="container">
-            <img class='five-cards' src="../static/img/cards/cards.png">
+            <img class='five-cards' src="{{ url_for ('static', filename='img/cards/cards.png')}}">
         </div>
     </div>
-    
-
 </div>
 {% endblock %}

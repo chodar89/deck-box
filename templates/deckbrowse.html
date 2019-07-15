@@ -1,14 +1,24 @@
-{% extends 'base.html' %} {% block sidenav %}
+{% extends 'base.html' %}
+
+{% block title %}
+<title>DECK-BOX {{user_name}}</title>
+{% endblock %}
+
+{% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %} {% block content %}
+{% endblock %} 
+
+{% block content %}
+<!--flash message with card name that has been removed by user-->
 {% with card_removed = get_flashed_messages(category_filter=["card_removed"]) %} 
   {% if card_removed %} 
     {% for message in card_removed %}
       <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
-<!--loop cards-->
+{{ cards }}
+<!--panel with deck statistics and charts-->
 <div class="card-panel hoverable">
     <div class="row">
         <p class="deck-title-name">{{ deck.deck_name }}</p>
@@ -56,9 +66,10 @@
         <a href="{{url_for('remove_deck', deck_id=deck._id)}}"><i class="far fa-trash-alt fa-3x"></i></a>
     </div>
 </div> 
+<!--loop and display cards-->
 <div class="cards-layout">
-    {% if cards_id != None %} 
-        {% for card in cards_id %}
+    {% if cards != None %} 
+        {% for card in cards %}
         <div class="center col s10 offset-s1 m5 offset-m1">
             <p class="card-name">{{ card.card_name }}</p>
             <div class="row card-size">

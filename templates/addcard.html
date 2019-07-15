@@ -1,9 +1,16 @@
 {% extends 'base.html' %} 
+
+{% block title %}
+<title>DECK-BOX {{user_name}}</title>
+{% endblock %}
+
 {% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %} {% block content %}
+{% endblock %} 
+{% block content %}
+<!--flash message with card name that was added-->
 {% with add_card = get_flashed_messages(category_filter=["add_card"]) %} 
   {% if add_card %} 
     {% for message in add_card%}
