@@ -136,14 +136,20 @@ def update_card(card_id):
         'card_url': request.form.get('card_url'),
         'user_id': user_id
     })
-    return redirect(url_for('decks'))
+    return redirect(url_for('my_cards'))
 
 
 """ Function that removes document, card that user picked """
 @app.route('/remove_card/<card_id>')
 def remove_card(card_id):
+    user_name = session['username']
+    user = mongo.db.users.find_one({"username": user_name})
+    user_id = user.get('_id')
+    remove_from_deck = mongo.db.decks.update({'user_id': user_id},
+    {'$pull': {'cards':card_id}},
+    multi=True);
     mongo.db.cards.remove({'_id': ObjectId(card_id)})
-    return redirect(url_for('my_cards', limit = 20, offset = 0))
+    return redirect(url_for('my_cards'))
 
 
 """ Take data from form and send it to database """
@@ -190,10 +196,6 @@ def insert_card():
 @app.route('/decks')
 def decks():
     if 'username' in session:
-        user_name = session['username']
-        user = mongo.db.users.find_one({"username": user_name})
-        user_id = user['_id']
-        user_name = session['username']
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
         user_id = user.get('_id')
@@ -258,7 +260,9 @@ def deck_browse(deck_id):
             # loop that check if card is in deck, if it is don't append add amount of that card
             for i in deck_cards:
                 find_card = mongo.db.cards.find({'_id': ObjectId(i)})
+                find_card_len = find_card.count()
                 for each_card in find_card:
+                    each_card["amount"] = find_card_len
                     if each_card not in cards:
                         cards.append(each_card)
             for card in deck_cards:
@@ -295,16 +299,7 @@ def deck_browse(deck_id):
                     rarity_timeshifted += 1
                 elif card_rarity == masterpiece.get('_id'):
                     rarity_masterpiece += 1
-        cards_rarity = {
-            "rarity_land": rarity_land,
-            "rarity_common": rarity_common,
-            "rarity_uncommon": rarity_uncommon,
-            "rarity_rare": rarity_rare,
-            "rarity_mythic": rarity_mythic,
-            "rarity_timeshifted": rarity_timeshifted,
-            "rarity_masterpiece": rarity_masterpiece
-        }
-        return render_template('deckbrowse.html',  **locals())
+        return render_template('deckbrowse.html', **locals())
     else: 
         return redirect(url_for('register'))
         
