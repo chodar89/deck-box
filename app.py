@@ -1,11 +1,12 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session, flash, g, abort
+from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 from dotenv import load_dotenv
 from flask_paginate import Pagination, get_page_parameter
 import bcrypt
+import numpy as np
 
 load_dotenv()
 
@@ -260,9 +261,10 @@ def deck_browse(deck_id):
             # loop that check if card is in deck, if it is don't append add amount of that card
             for i in deck_cards:
                 find_card = mongo.db.cards.find({'_id': ObjectId(i)})
-                find_card_len = find_card.count()
+                y = np.array(deck_cards)
+                same_card_count = (y == i).sum()
                 for each_card in find_card:
-                    each_card["amount"] = find_card_len
+                    each_card["amount"] = same_card_count
                     if each_card not in cards:
                         cards.append(each_card)
             for card in deck_cards:

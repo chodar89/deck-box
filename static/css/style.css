@@ -279,6 +279,14 @@ nav .sidenav-trigger {
     margin-bottom: 2px;
 }
 
+.card-amount {
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1.6em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
 .cards-layout {
     display: flex;
     flex-wrap: wrap;
