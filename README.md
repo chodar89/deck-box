@@ -12,7 +12,8 @@ and build decks, and manage cards. The application allows for easy management
 and building of decks. User does not have to look for cards, after logging in he 
 sees his collections, he can add new cards to see what the deck will look like.
 
-Mockup links
+Mockup
+(/static/img/mokup/mokup.jpg)
 
 
 ## Features

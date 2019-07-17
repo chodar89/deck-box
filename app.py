@@ -73,6 +73,7 @@ def my_cards():
             mongo.db.users.update({'username': user_name},
             {'$set': {'user_per_page':change_per_page}},
             multi=False);
+            return redirect(url_for('my_cards'))
         # prevent error if number is None and sert it to 20
         if user['user_per_page'] == None:
             per_page = 20
