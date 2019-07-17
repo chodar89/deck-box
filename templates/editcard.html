@@ -14,7 +14,7 @@
     <img src="{{card.card_url}}"></img>
   </div>
 <div class="row card-form">
-  <form class="col s12 center" action="{{url_for('update_card', card_id=card._id)}}" method="POST, GET">
+  <form class="col s12 center" action="{{url_for('update_card', card_id=card._id)}}" method="POST">
     <div class="row">
       <div class="input-field col s10 offset-s1">
         <input id="card_name" name="card_name" type="text" value="{{card.card_name}}" class="validate" required="" aria-required="true">
