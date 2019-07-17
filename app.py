@@ -55,7 +55,7 @@ def add_card():
         return redirect(url_for('register'))
         
 """ Shows collection of all user cards plus pagination"""
-@app.route('/my_cards')
+@app.route('/my_cards', methods=["POST", "GET"])
 def my_cards():
     if 'username' in session:
         search = False
@@ -66,8 +66,20 @@ def my_cards():
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
         user_id = user.get('_id')
-        per_page = 5
+        # request number of cards to display per page from form
+        change_per_page = request.form.get('change_per_page')
+        # if user dont pick any, take number from database
+        if change_per_page != None:
+            mongo.db.users.update({'username': user_name},
+            {'$set': {'user_per_page':change_per_page}},
+            multi=False);
+        # prevent error if number is None and sert it to 20
+        if user['user_per_page'] == None:
+            per_page = 20
+        else:
+            per_page = int(user['user_per_page'])
         # try to find cards and count if user dont have any gives 0
+        user_pp = user['user_per_page']
         try:
             user_cards = mongo.db.cards.find({'user_id': user_id})
             count_user_cards = user_cards.count()
@@ -409,7 +421,8 @@ def register():
                    flash('password to short', 'exists')
                 else:
                     hash_password = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-                    users.insert({'username':new_username.lower(), 'password' : hash_password, 'email': request.form['email'], 'avatar': request.form['avatar']})
+                    users.insert({'username':new_username.lower(), 'password' : hash_password, 'email': request.form['email'], 
+                        'avatar': request.form['avatar'], 'user_per_page': 10})
                     session['username'] = request.form['username']
                     flash('Thank you for creating an account', 'exists')
                 return redirect(url_for('register'))

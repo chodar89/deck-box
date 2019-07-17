@@ -200,6 +200,14 @@ nav .sidenav-trigger {
     margin-bottom: -30px;
 }
 
+.card-per-page {
+    margin-top: 30px;
+}
+
+.card-per-page>div>button {
+    margin-top: -20px;
+}
+
 .count-card-types {
     display: flex;
     justify-content: center;

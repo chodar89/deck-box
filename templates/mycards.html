@@ -18,17 +18,24 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
-<div class="row">
-    <div class="input-field col s1">
-    <select>
-      <option value="1">5</option>
-      <option value="2" selected>10</option>
-      <option value="3">20</option>
-      <option value="3">50</option>
-      <option value="3">100</option>
-    </select>
-    <label>Cards per page</label>
-  </div>
+<div class="container">
+    <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
+        <div class="row">
+            <div class="input-field col s10 offset-s1 m4 offset-m4 l2 offset-l5">
+            <select id="change_per_page" name="change_per_page">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <label>Cards per page</label>
+        </div>
+        </div>
+        <div class="row">
+            <button class="btn waves-effect waves-light btn-blue" type="submit">Save</button> 
+        </div>
+    </form>
 </div>
 <!--diplay user cards with pagination-->
 <div class="cards-layout">
