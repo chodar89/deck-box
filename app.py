@@ -66,7 +66,7 @@ def my_cards():
         user_name = session['username']
         user = mongo.db.users.find_one({"username": user_name})
         user_id = user.get('_id')
-        per_page = 5 
+        per_page = 5
         # try to find cards and count if user dont have any gives 0
         try:
             user_cards = mongo.db.cards.find({'user_id': user_id})

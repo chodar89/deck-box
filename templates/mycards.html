@@ -18,7 +18,18 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
-<p>{{ pages_num }}</p>
+<div class="row">
+    <div class="input-field col s1">
+    <select>
+      <option value="1">5</option>
+      <option value="2" selected>10</option>
+      <option value="3">20</option>
+      <option value="3">50</option>
+      <option value="3">100</option>
+    </select>
+    <label>Cards per page</label>
+  </div>
+</div>
 <!--diplay user cards with pagination-->
 <div class="cards-layout">
     {% for card in card_output %}
