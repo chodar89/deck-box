@@ -1,12 +1,13 @@
 import os
+import bcrypt
+import numpy as np
+
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo, pymongo
+from flask_paginate import Pagination, get_page_parameter
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 from dotenv import load_dotenv
-from flask_paginate import Pagination, get_page_parameter
-import bcrypt
-import numpy as np
 
 load_dotenv()
 
@@ -96,7 +97,7 @@ def my_cards():
         pagination = Pagination(page = page,per_page = per_page ,total = user_cards.count(), 
         search = search, record_name='card_output')
         return render_template('mycards.html', card_output = card_output, pagination = pagination, 
-        count_user_cards = count_user_cards)
+        count_user_cards = count_user_cards, per_page = per_page)
     else: 
         return redirect(url_for('register'))
 
