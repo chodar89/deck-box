@@ -39,6 +39,7 @@ Mockup
 - dotenv
 - PyMongo
 - MongoDB
+- Google Charts
 
 ## Testing
 
