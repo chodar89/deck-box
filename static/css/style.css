@@ -29,6 +29,10 @@ main {
 
 .title {
     text-align: center;
+    text-transform: uppercase;
+    color: white;
+    margin-top: 0px;
+    background-color: #102540;
 }
 
 #arrow-toggle-down,

@@ -22,7 +22,6 @@
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper">
-
                     <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a> 
                     {% block sidenav %}
                         
@@ -64,7 +63,6 @@
             <li><a class="waves-effect" href="https://www.magicmadhouse.co.uk">Magic Madhouse</a></li>
             <li><a class="waves-effect" href="https://pl.imgbb.com">IMGBB free image host</a></li>
         </ul>
-
         {% with welcomes = get_flashed_messages(category_filter=["welcome"]) %} 
             {% if welcomes %} 
                 {% for message in welcomes %}
