@@ -18,9 +18,9 @@ app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
 mongo = PyMongo(app)
 
-""" Launched username before render templates """
 @app.context_processor
 def user_context():
+    """ Launched username before render templates """
     if 'userinfo' in session:
         user_name = session['userinfo'].get("username")
         user_email = session['userinfo'].get("email")
@@ -30,20 +30,18 @@ def user_context():
     else:
         return dict(user_name = None)
             
-""" Render index page and checkes if user is in the session """
 @app.route('/')
 @app.route('/index')
 def index():
+    """ Render index page and checkes if user is in the session """
     if 'userinfo' in session:
         return redirect(url_for('decks'))
     else:
         return render_template('index.html', sign_in = 'Sign In')
         
-""" CARDS """
-
-""" Render addcard page and take values from collection and pass them to html form """
 @app.route('/add_card')
 def add_card():
+    """ Render addcard page and take values from collection and pass them to html form """
     if 'userinfo' in session:
         colors = mongo.db.colors.find()
         rarity = mongo.db.rarity.find()
@@ -54,9 +52,10 @@ def add_card():
     else: 
         return redirect(url_for('register'))
         
-""" Shows collection of all user cards plus pagination"""
+
 @app.route('/my_cards', methods=["POST", "GET"])
 def my_cards():
+    """ Shows collection of all user cards plus pagination"""
     if 'userinfo' in session:
         search = False
         q = request.args.get('q')
@@ -66,20 +65,20 @@ def my_cards():
         user_name = session['userinfo'].get("username")
         user = mongo.db.users.find_one({"username": user_name})
         user_id = ObjectId(session['userinfo'].get("id"))
-        # request number of cards to display per page from form
+        """ request number of cards to display per page from form """
         change_per_page = request.form.get('change_per_page')
-        # if user dont pick any, take number from database
+        """ if user dont pick any, take number from database """
         if change_per_page != None:
             mongo.db.users.update({'username': user_name},
             {'$set': {'user_per_page':change_per_page}},
             multi=False);
             return redirect(url_for('my_cards'))
-        # prevent error if number is None and sert it to 20
+        """ prevent error if number is None and sert it to 20 """
         if user['user_per_page'] == None:
             per_page = 20
         else:
             per_page = int(user['user_per_page'])
-        # try to find cards and count if user dont have any gives 0
+        """ try to find cards and count if user dont have any gives 0 """
         user_pp = user['user_per_page']
         try:
             user_cards = mongo.db.cards.find({'user_id': user_id})
@@ -100,9 +99,9 @@ def my_cards():
     else: 
         return redirect(url_for('register'))
 
-""" Edit_card route with function that takes card id and its values """
 @app.route('/edit_card/<card_id>')
 def edit_card(card_id):
+    """ Edit_card route with function that takes card id and its values """
     if 'userinfo' in session:
         card = mongo.db.cards.find_one({"_id": ObjectId(card_id)})
         colors = mongo.db.colors.find()
@@ -115,9 +114,9 @@ def edit_card(card_id):
     else: 
         return redirect(url_for('register'))
 
-""" Function that takes values from form in editcard.html and update them in database """
 @app.route('/update_card/<card_id>', methods = ["POST"])
 def update_card(card_id):
+    """ Function that takes values from form in editcard.html and update them in database """
     colors_id = []
     cards = mongo.db.cards
     colors_form = request.form.getlist('color')
@@ -151,10 +150,9 @@ def update_card(card_id):
     })
     return redirect(url_for('my_cards'))
 
-
-""" Function that removes document, card that user picked """
 @app.route('/remove_card/<card_id>')
 def remove_card(card_id):
+    """ Function that removes document, card that user picked """
     user_id = ObjectId(session['userinfo'].get("id"))
     remove_from_deck = mongo.db.decks.update({'user_id': user_id},
     {'$pull': {'cards':card_id}},
@@ -162,10 +160,9 @@ def remove_card(card_id):
     mongo.db.cards.remove({'_id': ObjectId(card_id)})
     return redirect(url_for('my_cards'))
 
-
-""" Take data from form and send it to database """
 @app.route('/insert_card', methods = ['POST'])
 def insert_card():
+    """ Take data from form and send it to database """
     colors_id = []
     cards = mongo.db.cards
     colors_form = request.form.getlist('color')
@@ -199,12 +196,9 @@ def insert_card():
     flash('Card '+ request.form.get('card_name') + ' added to your collection', 'add_card')
     return redirect(url_for('add_card'))
 
-
-""" DECKS """
-
-""" This is the home page after login, dispays all users decks """
 @app.route('/decks')
 def decks():
+    """ This is the home page after login, dispays all users decks """
     if 'userinfo' in session:
         user_id = ObjectId(session['userinfo'].get("id"))
         decks = mongo.db.decks.find({'user_id': user_id})
@@ -231,7 +225,7 @@ def deck_browse(deck_id):
         rarity_mythic = 0
         rarity_timeshifted = 0
         rarity_masterpiece = 0
-        # get all types from card_types collection
+        """ Get all types from card_types collection """
         types = mongo.db.card_types
         land_type = types.find_one({'type': 'land'})
         creature_type = types.find_one({'type': 'creature'})
@@ -240,7 +234,7 @@ def deck_browse(deck_id):
         planeswalker_type = types.find_one({'type': 'planeswalker'})
         instant_type = types.find_one({'type': 'instant'})
         sorcery_type = types.find_one({'type': 'sorcery'})
-        # get all rarities from card_rarity collection
+        """ Get all rarities from card_rarity collection """
         rarity = mongo.db.rarity
         land = rarity.find_one({'rarity': 'land'})
         common = rarity.find_one({'rarity': 'common'})
@@ -249,24 +243,24 @@ def deck_browse(deck_id):
         mythic = rarity.find_one({'rarity': 'mythic rare'})
         timeshifted = rarity.find_one({'rarity': 'timeshifted'})
         masterpiece = rarity.find_one({'rarity': 'masterpiece'})
-        # find deck by ObjectId
+        """ Find deck by ObjectId """
         deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
         colors = mongo.db.colors
-        # takes colors id and find color names in mongodb
+        """ Takes colors id and find color names in mongodb """
         deck_color_id = deck.get('color')
         for color in deck_color_id:
             color_inf = colors.find_one({'_id': ObjectId(color)})
             color_name.append(color_inf.get('color'))
-        # takes cards id from deck if empty throws None
+        """ Takes cards id from deck if empty throws None """
         try:
             deck_cards = deck["cards"]
         except: 
             deck_cards = []
-        # count cards in deck for later dispay
+        """ Count cards in deck for later dispay """
         count_cards = len(deck_cards)
-        # find each card by id and check what type card it is and append it to array
+        """ Find each card by id and check what type card it is and append it to array """
         if deck_cards != None:
-            # loop that check if card is in deck, if it is don't append add amount of that card
+            """ Loop that check if card is in deck, if it is don't append add amount of that card """
             for i in deck_cards:
                 find_card = mongo.db.cards.find({'_id': ObjectId(i)})
                 y = np.array(deck_cards)
@@ -313,18 +307,18 @@ def deck_browse(deck_id):
     else: 
         return redirect(url_for('register'))
         
-""" Page with form to create decks """
 @app.route('/deck_name')
 def deck_name():
+    """ Page with form to create decks """
     if 'userinfo' in session:
         colors = mongo.db.colors.find()
         return render_template('deckname.html', colors = colors, sign_out = 'Sign Out')
     else: 
         return redirect(url_for('register'))
-        
-""" Insert deck name to database """
+    
 @app.route('/insert_deck', methods = ['POST'])
 def insert_deck():
+    """ Insert deck name to database """
     colors_id = []
     colors_form = request.form.getlist('color')
     for colors in colors_form:
@@ -340,15 +334,15 @@ def insert_deck():
     })
     return redirect(url_for('decks'))
     
-""" Delete deck """
 @app.route('/remove_deck/<deck_id>')
 def remove_deck(deck_id):
+    """ Delete deck """
     mongo.db.decks.remove({'_id': ObjectId(deck_id)})
     return redirect(url_for('decks'))
 
-""" Redirect page where user can add cards to specific deck """
 @app.route('/deck_build/<deck_id>')
 def deck_build(deck_id):
+    """ Redirect page where user can add cards to specific deck """
     if 'userinfo' in session:
         deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
         user_id = ObjectId(session['userinfo'].get("id"))
@@ -357,9 +351,9 @@ def deck_build(deck_id):
     else: 
         return redirect(url_for('register'))
 
-""" Add card to deck """
 @app.route('/add_card_to_deck/<deck_id>/<card_id>', methods = ['POST'])
 def add_card_to_deck(deck_id, card_id):
+    """ Add card to deck """
     if 'userinfo' in session:
         current_deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
         deck_id = current_deck.get('_id')
@@ -376,9 +370,9 @@ def add_card_to_deck(deck_id, card_id):
     else: 
         return redirect(url_for('register'))
         
-""" Remove card from deck """
 @app.route('/remove_card_from_deck/<deck_id>/<card_id>')
 def remove_card_from_deck(deck_id, card_id):
+        """ Remove card from deck """
         current_deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
         deck_id = current_deck.get('_id')
         deck_name = current_deck.get('deck_name')
@@ -388,12 +382,10 @@ def remove_card_from_deck(deck_id, card_id):
             {'$pull': {'cards':card_id}})
         flash(' Card '+ card_name +' removed from ' + deck_name + ' deck', 'card_removed')
         return redirect(url_for('deck_browse', deck_id = deck_id, card_id = card_id))
-        
-""" REGISTRATION & LOGIN """
 
-""" Render register page and post registration form to mongo database """
 @app.route('/register', methods = ['POST', 'GET'])
 def register():
+    """ Render register page and post registration form to mongo database """
     if 'userinfo' in session:
         return redirect(url_for('decks'))
     else:
@@ -421,10 +413,9 @@ def register():
             else: flash('Username or email already exists', 'exists')
         return render_template('register.html')
 
-
-""" Login form, encode and checks data in form with database that exists if not flash allert """
 @app.route('/login', methods = ['POST'])
 def login():
+    """ Login form, encode and checks data in form with database that exists if not flash allert """
     users = mongo.db.users
     log_username = request.form['log_username']
     login = users.find_one({'username': log_username.lower()})
@@ -437,9 +428,9 @@ def login():
     flash("Incorrect password or username", 'error')
     return redirect(url_for('register'))
 
-""" Simply logout session function """
 @app.route('/logout')
 def logout():
+    """ Simply logout session function """
     session.pop('userinfo')
     return redirect(url_for('index'))
 
