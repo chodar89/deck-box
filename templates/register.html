@@ -93,5 +93,8 @@
         </div>
     </form>
 </div>
-
 {% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></span>
+{% endblock%}

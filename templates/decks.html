@@ -10,6 +10,13 @@
 </ul>
 {% endblock %} 
 {% block content %}
+{% with alert = get_flashed_messages(category_filter=["alert"]) %}
+    {% if alert %}
+        {% for message in alert %}
+            <p class="{{category}} purple-alert">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="deck-layout">
         <!--blank card with link to create a new deck-->
         <div class="blank-deck col s10 offset-s1 m5 offset-m1">
@@ -32,3 +39,9 @@
     {% endfor %}
 </div>
 {% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}

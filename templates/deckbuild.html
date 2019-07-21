@@ -11,15 +11,20 @@
 {% endblock %} 
 {% block content %} 
 <!--flash message with card name that was added to deck-->
-{% with cards_append = get_flashed_messages(category_filter=["card_append"]) %}
-    {% if cards_append %}
-        {% for message in cards_append %}
+{% with alert = get_flashed_messages(category_filter=["alert"]) %}
+    {% if alert %}
+        {% for message in alert %}
             <p class="{{category}} purple-alert">{{message}}</p>
         {% endfor %}
     {% endif %}
 {% endwith %}
     <div class="row">
         <p class="deck-title-name">{{ deck.deck_name }}</p>
+    </div>
+    <div class="center">
+        <a href="{{url_for('deck_browse', deck_id=deck._id)}}" class="btn waves-effect waves-light btn-blue">go back
+            <i class="material-icons right">replay</i>
+        </a>
     </div>
     <div class="cards-layout">
         <!--loop all user cards and diplay with option to add 1 to 4 cards-->
@@ -75,3 +80,9 @@
         {% endfor %}
     </div>
 {% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}

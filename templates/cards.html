@@ -11,14 +11,20 @@
 {% endblock %} 
 {% block content %} 
 <!--flash message no cards if user don't have any-->
-{% with no_cards = get_flashed_messages(category_filter=["no_cards"]) %}
-    {% if no_cards %}
-        {% for message in no_cards %}
+{% with error = get_flashed_messages(category_filter=["error"]) %}
+    {% if error %}
+        {% for message in error %}
             <p class="{{category}} purple-alert">{{message}}</p>
         {% endfor %}
     {% endif %}
 {% endwith %}
-{{user_id}}
+{% with alert = get_flashed_messages(category_filter=["alert"]) %}
+    {% if alert %}
+        {% for message in alert %}
+            <p class="{{category}} purple-alert">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 <div class="container">
     <form class="center card-per-page" action="{{url_for('cards')}}" method="POST">
         <div class="row">
@@ -108,3 +114,9 @@
 </div>
 <div class="center">{{ pagination.links }}</div>
 {% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}

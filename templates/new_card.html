@@ -11,9 +11,9 @@
 {% endblock %} 
 {% block content %}
 <!--flash message with card name that was added-->
-{% with new_card = get_flashed_messages(category_filter=["new_card"]) %} 
-  {% if new_card %} 
-    {% for message in new_card%}
+{% with alert = get_flashed_messages(category_filter=["alert"]) %} 
+  {% if alert %} 
+    {% for message in alert%}
       <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
 <h3 class="title">Add Card</h3>
@@ -120,5 +120,10 @@
     </div>
   </form>
 </div>
-
 {% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}

@@ -51,37 +51,37 @@ def cards():
         user_name = session['userinfo'].get("username")
         user = mongo.db.users.find_one({"username": user_name})
         user_id = ObjectId(session['userinfo'].get("id"))
-        """ request number of cards to display per page from form """
+        """ Request number of cards to display per page from form """
         change_per_page = request.form.get('change_per_page')
-        """ if user dont pick any, take number from database """
+        """ If user dont pick any, take number from database """
         if change_per_page != None:
             mongo.db.users.update({'username': user_name},
             {'$set': {'user_per_page':change_per_page}},
             multi=False);
             return redirect(url_for('cards'))
-        """ prevent error if number is None and sert it to 20 """
+        """ Prevents error if number is None and sert it to 20 """
         if user['user_per_page'] == None:
             per_page = 20
         else:
             per_page = int(user['user_per_page'])
-        """ try to find cards and count if user dont have any gives 0 """
+        """ Try to find cards and count if user dont have any gives 0 """
         user_pp = user['user_per_page']
         try:
-            user_cards = mongo.db.cards.find({'user_id': user_id})
+            user_cards = mongo.db.cards.find({'user_id': user_id},
+                                            {'type': 'creature'})
             count_user_cards = user_cards.count()
         except:
             count_user_cards = 0
         card_output = []
         try:
-            cards = mongo.db.cards.find({'user_id': user_id}).skip((page - 1) * per_page).limit(per_page)
+            cards = mongo.db.cards.find({'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip((page - 1) * per_page).limit(per_page)
             for i in cards:
                 card_output.append(i)
         except: 
-            flash('you do not have any cards in your collection yet', 'no_cards')
-        pagination = Pagination(page = page,per_page = per_page ,total = user_cards.count(), 
+            flash('you do not have any cards in your collection yet', 'error')
+        pagination = Pagination(page = page,per_page = per_page ,total = count_user_cards, 
         search = search, record_name='card_output')
-        return render_template('cards.html', card_output = card_output, pagination = pagination, 
-        count_user_cards = count_user_cards, per_page = per_page)
+        return render_template('cards.html', card_output = card_output, pagination = pagination, per_page = per_page)
     else: 
         return redirect(url_for('register'))
 
@@ -127,7 +127,7 @@ def new_card():
                 'card_url': request.form.get('card_url'),
                 'user_id': user_id
             })
-            flash(f"Card {request.form.get('card_name')} added to your collection", "new_card")
+            flash(f"Card {request.form.get('card_name')} added to your collection", "alert")
             return redirect(url_for('new_card'))
     else: 
         return redirect(url_for('register'))
@@ -188,6 +188,8 @@ def remove_card(card_id):
     remove_from_deck = mongo.db.decks.update({'user_id': user_id},
     {'$pull': {'cards':card_id}},
     multi=True);
+    card = mongo.db.cards.find_one({'_id': ObjectId(card_id)})
+    flash(f"Card {card.get('card_name')} removed from your collection", "alert")
     mongo.db.cards.remove({'_id': ObjectId(card_id)})
     return redirect(url_for('cards'))
 
@@ -335,6 +337,8 @@ def new_deck():
 @app.route('/decks/remove/<deck_id>')
 def remove_deck(deck_id):
     """ Delete deck """
+    deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+    flash(f"Deck {deck.get('deck_name')} removed from your collection", "alert")
     mongo.db.decks.remove({'_id': ObjectId(deck_id)})
     return redirect(url_for('decks'))
     
@@ -363,7 +367,7 @@ def add_card_to_deck(deck_id, card_id):
         for i in range(0, int(cards_amount)):
             deck = mongo.db.decks.update({'_id': ObjectId(deck_id)},
             {'$push': {'cards':card_id}})
-        flash(f"Card {card_name} added to {deck_name} deck", "card_append")
+        flash(f"Card {card_name} added to {deck_name} deck", "alert")
         return redirect(url_for('deck_build', deck_id = deck_id))
     else: 
         return redirect(url_for('register'))
@@ -378,7 +382,7 @@ def remove_card_from_deck(deck_id, card_id):
         card_name = card.get('card_name')
         deck = mongo.db.decks.update({'_id': ObjectId(deck_id)},
             {'$pull': {'cards':card_id}})
-        flash(f"Card {card_name} removed from {deck_name} deck", "card_removed")
+        flash(f"Card {card_name} removed from {deck_name} deck", "alert")
         return redirect(url_for('deck_browse', deck_id = deck_id, card_id = card_id))
 
 @app.route('/register', methods = ['POST', 'GET'])

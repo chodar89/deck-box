@@ -482,10 +482,8 @@ nav .sidenav-trigger {
 
 .site-map {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     width: 100%;
-    padding-left: 20%;
-    padding-right: 20%;
     margin-bottom: 20px;
     letter-spacing: 2px;
 }

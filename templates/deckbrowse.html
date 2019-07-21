@@ -12,9 +12,9 @@
 
 {% block content %}
 <!--flash message with card name that has been removed by user-->
-{% with card_removed = get_flashed_messages(category_filter=["card_removed"]) %} 
-  {% if card_removed %} 
-    {% for message in card_removed %}
+{% with alert = get_flashed_messages(category_filter=["alert"]) %} 
+  {% if alert %} 
+    {% for message in alert %}
       <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
 <!--panel with deck statistics and charts-->
@@ -118,3 +118,9 @@
     {% endif %}
 </div>
 {% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}
