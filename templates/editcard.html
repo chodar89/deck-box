@@ -14,7 +14,7 @@
     <img src="{{card.card_url}}"></img>
   </div>
 <div class="row card-form">
-  <form class="col s12 center" action="{{url_for('update_card', card_id=card._id)}}" method="POST">
+  <form class="col s12 center" action="{{url_for('edit_card', card_id=card._id)}}" method="POST">
     <div class="row">
       <div class="input-field col s10 offset-s1">
         <input id="card_name" name="card_name" type="text" value="{{card.card_name}}" class="validate" required="" aria-required="true">
@@ -27,9 +27,9 @@
           {% for card_col in card_color_id %}
             {% for color in colors %}
                 {% if color._id == card_col %}
-                    <option value="{{color.color}}" selected >{{color.color}}</option>
+                    <option value="{{color._id}}" selected >{{color.color}}</option>
                 {% else %}
-                    <option value="{{color.color}}">{{color.color}}</option>
+                    <option value="{{color._id}}">{{color.color}}</option>
                 {% endif %}
             {% endfor %}
           {% endfor %}
@@ -47,9 +47,9 @@
            <option value="" disabled selected></option>
             {% for type in card_types %}
                 {% if type._id == card.type %}
-                    <option value="{{type.type}}" selected>{{type.type}}</option>
+                    <option value="{{type._id}}" selected>{{type.type}}</option>
                 {% else %}
-                    <option value="{{type.type}}">{{type.type}}</option>
+                    <option value="{{type._id}}">{{type.type}}</option>
                 {% endif %}
             {% endfor %}
           </select>
@@ -60,9 +60,9 @@
             <option value="" disabled selected></option>
             {% for rar in rarity %}
                 {% if rar._id == card.rarity %}
-                    <option value="{{rar.rarity}}" selected >{{rar.rarity}}</option>
+                    <option value="{{rar._id}}" selected >{{rar.rarity}}</option>
                 {% else %}
-                    <option value="{{rar.rarity}}">{{rar.rarity}}</option>
+                    <option value="{{rar._id}}">{{rar.rarity}}</option>
                 {% endif %}
             {% endfor %}
           </select>
@@ -73,9 +73,9 @@
             <option value="" disabled selected></option>
             {% for set in expansion %}
                 {% if set._id == card.set %}
-                <option value="{{set.set}}" selected >{{set.set}}</option>
+                <option value="{{set._id}}" selected >{{set.set}}</option>
                 {% else %}
-                <option value="{{set.set}}">{{set.set}}</option>
+                <option value="{{set._id}}">{{set.set}}</option>
                 {% endif %}
             {% endfor %}
           </select>

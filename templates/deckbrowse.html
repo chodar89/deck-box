@@ -24,15 +24,15 @@
     </div>
     <div class="row deck-colors">
         {% for color in color_name %}
-            {% if color == 'white' %}
+            {% if color == ['white'] %}
             <img src="../static/img/colors/plains.png"></img>
-            {% elif color == 'blue' %}
+            {% elif color == ['blue'] %}
             <img src="../static/img/colors/islands.png"></img>
-            {% elif color == 'black' %}
+            {% elif color == ['black'] %}
             <img src="../static/img/colors/swamp.png"></img>
-            {% elif color == 'red' %}
+            {% elif color == ['red'] %}
             <img src="../static/img/colors/mountain.png"></img>
-            {% elif color == 'green' %}
+            {% elif color == ['green'] %}
             <img src="../static/img/colors/forest.png"></img>
             {% endif %}
         {% endfor %}

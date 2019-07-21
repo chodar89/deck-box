@@ -54,7 +54,7 @@
             <li><a href="{{url_for('decks')}}"><i class="material-icons">home</i>My Decks</a></li>
             <li><a href="{{url_for ('cards', limit=20, offset=0)}}"><i class="material-icons">collections</i>My Cards</a></li>
             <li><a href="{{url_for ('new_card')}}"><i class="material-icons">add_circle</i>Add Card</a></li>
-            <li><a href="{{url_for ('deck_name')}}"><i class="material-icons">add_circle</i>Add Deck</a></li>
+            <li><a href="{{url_for ('new_deck')}}"><i class="material-icons">add_circle</i>Add Deck</a></li>
             <li>
                 <div class="divider"></div>
             </li>
@@ -87,7 +87,7 @@
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
                 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('deck_name')}}">Add Deck</a></span>
+                <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
             </div>
         </div>
         <div class="bottom-logo-box">
