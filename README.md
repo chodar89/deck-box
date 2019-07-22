@@ -4,7 +4,7 @@ This is my 3rd milestone project. Website is created for poeple that play and co
 Magic The Gathering cards. App allows users to hold their cards collection in the app and
 manage collection and decks.
 Database is NoSQL - MongoDB
-[Link to the app](http://deck-box.herokuapp.com/)
+**[DECK BOX]**(http://deck-box.herokuapp.com/)
 To check pre upload cards and pre-build deck.
 Login: testuser
 Password: testuser
@@ -77,13 +77,47 @@ Mockup
 ### App validate.
     - CSS - https://jigsaw.w3.org/css-validator/
     - Python - with pylint
-
+    - JavaScript - jshint.com
 ## Deployment
-
-
-
-
-
+    -App is currently hosted on [Heroku](http://deck-box.herokuapp.com/)
+### Steps to deploy app on Heroku platform
+    - Create an account on [heroku](https://id.heroku.com/login) site
+    - After login create a new app from the dashboard: 
+            New > Create new app
+    or create app from CLI manual to this is [here](https://devcenter.heroku.com/articles/creating-apps)
+    - create requirements.txt and Profile file from CLI
+        ```
+        $ pip3 freeze --local > requirements.txt
+        $ echo "web: python app.py" > Procfile
+        ```
+    - now we can push our code
+        ```
+        $ git push heroku master
+        ```
+    - Last thing set up config vars. Go to Heroku Dashboard > Your App > Settings > Reveal Config Vars
+        Config Vars that needs to provided:
+        1. debug
+        2. IP
+        3. key
+        4. MONGO_DBNAME
+        5. MONGO_URI
+        6. PORT
+        
+### Run app local
+    - ensure you are using Python 3
+    - once you download app and run on your local development environment, you
+    will need to install packs from requirements.txt file 
+    ```
+    $ pip3 install -r requirements.txt
+    ```
+    - than you will need to change some config vars that are sensitive and are not enclosed here
+    ```
+    app.config['MONGO_DBNAME']
+    app.config['MONGO_URI']
+    app.secret_key
+    debug
+    ```
+    - Secret_key choosen by you MONGO_URI is provided by MongoDB
 ## Credits
 
 ### Content
