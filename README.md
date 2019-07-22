@@ -1,3 +1,5 @@
+![Alt](/static/img/logoblack.png "Deck BOX")
+
 # DECK BOX
 
 This is my 3rd milestone project. Website is created for poeple that play and collect
@@ -15,12 +17,12 @@ Deck-Box, a place where users can create an account, upload MTG card collection 
 and manage cards. The application allows for easy management 
 and building of decks. No more taking all card out of box!
 
-Mockup
-(/static/img/mokup/)
-Hosted mokup files
-[Mockup1](https://i.ibb.co/NpDqHSb/mokup.jpg)
-[Mockup2](https://i.ibb.co/dcFCVGn/mokup2.jpg)
-[Mockup3](https://i.ibb.co/wKgz6xQ/mokup3.jpg)
+Mockup<br/>
+(/static/img/mokup/)<br/>
+Hosted mokup files<br/>
+[Mockup1](https://i.ibb.co/NpDqHSb/mokup.jpg)<br/>
+[Mockup2](https://i.ibb.co/dcFCVGn/mokup2.jpg)<br/>
+[Mockup3](https://i.ibb.co/wKgz6xQ/mokup3.jpg)<br/>
 
 ## Features
 
@@ -55,6 +57,7 @@ Hosted mokup files
 - MongoDB
 - Google Charts
 - AWS Cloud9
+- Photoshop
 
 ## Testing
 
@@ -74,7 +77,8 @@ Hosted mokup files
 ### Test app manual. 
 - Checked home page all links plus tried to change endpoints manual for redirection check
 - Registration page. Checked login system (upercase, lowercase should not be sensitive).<br/>
-  Registration form. Cheked the same usernames and emails, if exists fired alert. Checked username and password length. 
+  Registration form. Cheked the same usernames and emails, if exists fired alert.<br/>
+  Checked username and password length. 
 - Adding new decks and new cards.
 - Slide nav manu. Checked all links.
 - Eddit card forms. 
@@ -87,12 +91,12 @@ Hosted mokup files
 - JavaScript - jshint.com
 
 ## Deployment
--App is currently hosted on [Heroku](http://deck-box.herokuapp.com/)
+- App is currently hosted on [Heroku](http://deck-box.herokuapp.com/)
 
 ### Steps to deploy app on Heroku platform
 - Create an account on [heroku](https://id.heroku.com/login) site
 - After login create a new app from the dashboard:<br/>
-    New > Create new app
+    New > Create new app<br/>
 or create app from CLI manual to this is [here](https://devcenter.heroku.com/articles/creating-apps)
 - create requirements.txt and Profile file from CLI
 ```
@@ -129,42 +133,42 @@ debug
 - Secret_key choosen by you. MONGO_URI and MONGO_DBNAME is provided by MongoDB.
 - To run app with your own database. You will need to create an account with MongoDB and create your own 
 - Cluster. Than create some collections that must be pre set:
-1. card_types
-  -creature
-  -artifact
-  -land
-  -enchantment
-  -planeswalker
-  -instant
-  -sorcery
-2. colors
-  -blue
-  -white
-  -red
-  -black
-  -green
-  -colorless
-3. expansion_set
-  -all expansions that you want include
-4. rarity
-  -land
-  -common
-  -uncommon
-  -rare
-  -mythic rare
-  -timeshifted
-  -masterpiece
-5. cards
-6. decks
-7. rating
-  -1
-  -2
-  -3
-  -4
-  -5
-8. users
-
+  1. card_types
+     * creature
+     * artifact
+     * land
+     * enchantment
+     * planeswalker
+     * instant
+     * sorcery
+  2. colors
+     * blue
+     * white
+     * red
+     * black
+     * green
+     * colorless
+  3. expansion_set
+     * all expansions that you want include
+  4. rarity
+     * land
+     * common
+     * uncommon
+     * rare
+     * mythic rare
+     * timeshifted
+     * masterpiece
+  5. cards
+  6. decks
+  7. rating
+     * 1
+     * 2
+     * 3
+     * 4
+     * 5
+  8. users
 
 ## Credits
 - Most of the pictures were taken from Wizard website and imgbin.com
 - Parallax picture with cards is from Adobe Stock
+- Logo done by me in Photoshop
