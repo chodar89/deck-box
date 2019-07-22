@@ -22,7 +22,7 @@
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper">
-                    <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite" border="0"></a> 
+                    <a href="{{url_for ('index')}}" class="brand-logo center"><img class="logo" src="https://i.ibb.co/Qf4dm2c/logowhite.png" alt="logowhite"></a> 
                     {% block sidenav %}
                         
                     {% endblock %}
@@ -52,7 +52,7 @@
                 </div>
             </li>
             <li><a href="{{url_for('decks')}}"><i class="material-icons">home</i>My Decks</a></li>
-            <li><a href="{{url_for ('cards', limit=20, offset=0)}}"><i class="material-icons">collections</i>My Cards</a></li>
+            <li><a href="{{url_for ('my_cards', limit=20, offset=0)}}"><i class="material-icons">collections</i>My Cards</a></li>
             <li><a href="{{url_for ('new_card')}}"><i class="material-icons">add_circle</i>Add Card</a></li>
             <li><a href="{{url_for ('new_deck')}}"><i class="material-icons">add_circle</i>Add Deck</a></li>
             <li>
@@ -76,19 +76,16 @@
     </header>
 
     <main>
-        {% block content %} {% endblock %}
+        {% block content %}
+        
+        {% endblock %}
     </main>
 
     <footer class="page-footer">
         <div class="center">
             <div class="site-map">
                 {% block footer_links %}
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('index')}}">Home</a></span>
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('register')}}">Sign In</a></span>
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('decks')}}">My Decks</a></span>
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('cards', limit=20, offset=0)}}">My Cards</a></span>
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
-                <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+ 
                 {% endblock%}
             </div>
         </div>
@@ -110,34 +107,32 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js')}}"></script>
     
     <script>
-    
+
     // Variables from app.py
-    
-    let creatures = {{count_creatures}}
-    let planeswalkers = {{count_planeswalkers}}
-    let artifacts = {{count_artifacts}}
-    let sorceries = {{count_sorceries}}
-    let enchantments = {{count_enchantments}}
-    let instants = {{count_instants}}
-    let lands = {{count_lands}}
-    
-    let rarity_land = {{rarity_land}}
-    let rarity_common = {{rarity_common}}
-    let rarity_uncommon = {{rarity_uncommon}}
-    let rarity_rare = {{rarity_rare}}
-    let rarity_mythic = {{rarity_mythic}}
-    let rarity_timeshifted = {{rarity_timeshifted}}
-    let rarity_masterpiece = {{rarity_masterpiece}}
-    
+
+    let creatures = {{count_creatures}};
+    let planeswalkers = {{count_planeswalkers}};
+    let artifacts = {{count_artifacts}};
+    let sorceries = {{count_sorceries}};
+    let enchantments = {{count_enchantments}};
+    let instants = {{count_instants}};
+    let lands = {{count_lands}};
+
+    let rarity_land = {{rarity_land}};
+    let rarity_common = {{rarity_common}};
+    let rarity_uncommon = {{rarity_uncommon}};
+    let rarity_rare = {{rarity_rare}};
+    let rarity_mythic = {{rarity_mythic}};
+    let rarity_timeshifted = {{rarity_timeshifted}};
+    let rarity_masterpiece = {{rarity_masterpiece}};
+
     // Google charts
-    
+
     google.charts.load('current', {'packages':['corechart']});
-      
-    
+
     google.charts.setOnLoadCallback(cardType);
     google.charts.setOnLoadCallback(cardRarity);
 
-    
     // Draw 2 charts in deckbrowse.html 
     // 1st chart count from app.py each type of card
     function cardType() {
@@ -175,7 +170,6 @@
           ['Masterpiece', rarity_masterpiece]
         ]);
 
-
         var options = {title:'Cards Rarity',
                         pieHole:0.4,
                         width:350,
@@ -184,6 +178,7 @@
         var chart = new google.visualization.PieChart(document.getElementById('cardRarity'));
         chart.draw(data, options);
       }
+
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/script.js')}}"></script>
 </body>

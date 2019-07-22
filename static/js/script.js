@@ -5,7 +5,6 @@ $(document).ready(function() {
     $('select').formSelect();
 });
 
-
 $(document).ready(function() {
     
     $("#arrow-toggle-down").click(function(){
