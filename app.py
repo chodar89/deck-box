@@ -17,6 +17,7 @@ app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
 mongo = PyMongo(app)
 
+
 @app.context_processor
 def user_context():
     """ Launched username before render templates """
@@ -30,6 +31,7 @@ def user_context():
     else:
         return dict(user_name=None)
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -38,6 +40,7 @@ def index():
         return redirect(url_for('my_decks'))
     else:
         return render_template('index.html', sign_in='Sign In')
+
 
 @app.route('/cards', methods=["POST", "GET"])
 def my_cards():
@@ -89,6 +92,7 @@ def my_cards():
     else:
         return redirect(url_for('register'))
 
+
 @app.route('/cards/new_card', methods=['POST', 'GET'])
 def new_card():
     """
@@ -135,6 +139,7 @@ def new_card():
             return redirect(url_for('new_card'))
     else:
         return redirect(url_for('register'))
+
 
 @app.route('/cards/<card_id>/edit_card', methods=["POST", "GET"])
 def edit_card(card_id):
@@ -185,6 +190,7 @@ def edit_card(card_id):
     else:
         return redirect(url_for('register'))
 
+
 @app.route('/cards/<card_id>')
 def remove_card(card_id):
     """ Removes document, card that user picked """
@@ -197,6 +203,7 @@ def remove_card(card_id):
     mongo.db.cards.remove({'_id': ObjectId(card_id)})
     return redirect(url_for('my_cards'))
 
+
 @app.route('/decks')
 def my_decks():
     """ This is the home page after login, dispays all users decks """
@@ -206,6 +213,7 @@ def my_decks():
         return render_template('decks.html', decks=decks)
     else:
         return redirect(url_for('register'))
+
 
 @app.route('/decks/<deck_id>')
 def deck_browse(deck_id):
@@ -318,6 +326,7 @@ def deck_browse(deck_id):
     else:
         return redirect(url_for('register'))
 
+
 @app.route('/deck/new_deck', methods=['POST', 'GET'])
 def new_deck():
     """ If method is POST insert deck to database else render new deck form """
@@ -342,6 +351,7 @@ def new_deck():
     else:
         return redirect(url_for('register'))
 
+
 @app.route('/decks/remove/<deck_id>')
 def remove_deck(deck_id):
     """ Delete deck """
@@ -349,6 +359,7 @@ def remove_deck(deck_id):
     flash(f"Deck {deck.get('deck_name')} removed from your collection", "alert")
     mongo.db.decks.remove({'_id': ObjectId(deck_id)})
     return redirect(url_for('my_decks'))
+
 
 @app.route('/decks/deck_build/<deck_id>')
 def deck_build(deck_id):
@@ -360,6 +371,7 @@ def deck_build(deck_id):
         return render_template('deckbuild.html', deck=deck, cards=cards)
     else:
         return redirect(url_for('register'))
+
 
 @app.route('/decks/deck_build/<deck_id>/<card_id>', methods=['POST'])
 def add_card_to_deck(deck_id, card_id):
@@ -380,6 +392,7 @@ def add_card_to_deck(deck_id, card_id):
     else:
         return redirect(url_for('register'))
 
+
 @app.route('/decks/deck_build/<deck_id>/<card_id>')
 def remove_card_from_deck(deck_id, card_id):
     """ Remove card from deck """
@@ -392,6 +405,7 @@ def remove_card_from_deck(deck_id, card_id):
                           {'$pull': {'cards':card_id}})
     flash(f"Card {card_name} removed from {deck_name} deck", "alert")
     return redirect(url_for('deck_browse', deck_id=deck_id, card_id=card_id))
+
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -424,6 +438,7 @@ def register():
             else: flash('Username or email already exists', 'exists')
         return render_template('register.html')
 
+
 @app.route('/login', methods=['POST'])
 def login():
     """ Login form, encode and checks data in form with database that exists if not flash allert """
@@ -439,6 +454,7 @@ def login():
             return redirect(url_for('my_decks'))
     flash("Incorrect password or username", "error")
     return redirect(url_for('register'))
+
 
 @app.route('/logout')
 def logout():
