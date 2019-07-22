@@ -2,12 +2,12 @@
 
 This is my 3rd milestone project. Website is created for poeple that play and collect
 Magic The Gathering cards. App allows users to hold their cards collection in the app and
-manage collection and decks.
-Database is NoSQL - MongoDB
-**[DECK BOX](http://deck-box.herokuapp.com/)**
-To check pre upload cards and pre-build deck.
-Login: testuser
-Password: testuser
+manage collection and decks.<br/>
+Database is NoSQL - MongoDB<br/>
+**[DECK BOX](http://deck-box.herokuapp.com/)**<br/>
+To check pre upload cards and pre-build deck.<br/>
+Login: testuser<br/>
+Password: testuser<br/>
 
 ## UX
 
@@ -17,6 +17,10 @@ and building of decks. No more taking all card out of box!
 
 Mockup
 (/static/img/mokup/)
+Hosted mokup files
+[Mockup1](https://i.ibb.co/NpDqHSb/mokup.jpg)
+[Mockup2](https://i.ibb.co/dcFCVGn/mokup2.jpg)
+[Mockup3](https://i.ibb.co/wKgz6xQ/mokup3.jpg)
 
 ## Features
 
@@ -32,11 +36,13 @@ Mockup
 - Sort cards
 - Charts with deck statistics
 - Decks displays how many card we have and how many cards of each type is in the deck
-- Card pagination where user can pick how many card are displayed per page. App saves settings.
+- Card pagination where user can pick how many card are displayed per page. App saves settings
+- Encrypoted password
+- Usefull link in slide menu. To hosting service, shop and official wizard site
 
 ## Technologies Used
 
-- HTML 5
+- HTML
 - CSS
 - Flask
 - Python 3
@@ -67,7 +73,7 @@ Mockup
 
 ### Test app manual. 
 - Checked home page all links plus tried to change endpoints manual for redirection check
-- Registration page. Checked login system (upercase, lowercase should not be sensitive). 
+- Registration page. Checked login system (upercase, lowercase should not be sensitive).<br/>
   Registration form. Cheked the same usernames and emails, if exists fired alert. Checked username and password length. 
 - Adding new decks and new cards.
 - Slide nav manu. Checked all links.
@@ -85,7 +91,7 @@ Mockup
 
 ### Steps to deploy app on Heroku platform
 - Create an account on [heroku](https://id.heroku.com/login) site
-- After login create a new app from the dashboard: 
+- After login create a new app from the dashboard:<br/>
     New > Create new app
 or create app from CLI manual to this is [here](https://devcenter.heroku.com/articles/creating-apps)
 - create requirements.txt and Profile file from CLI
@@ -97,8 +103,8 @@ $ echo "web: python app.py" > Procfile
 ```
 $ git push heroku master
 ```
-- Last thing set up config vars. Go to Heroku Dashboard > Your App > Settings > Reveal Config Vars
-Config Vars that needs to provided:
+- Last thing set up config vars. Go to Heroku Dashboard > Your App > Settings > Reveal Config Vars<br/>
+- Config Vars that needs to provided:
 1. debug
 2. IP
 3. key
@@ -108,7 +114,7 @@ Config Vars that needs to provided:
 
 ### Run app local
 - ensure you are using Python 3
-- once you download app and run on your local development environment, you
+- once you download app and run on your local development environment, you<br/>
 will need to install packs from requirements.txt file 
 ```
 $ pip3 install -r requirements.txt
@@ -120,13 +126,45 @@ app.config['MONGO_URI']
 app.secret_key
 debug
 ```
-- Secret_key choosen by you MONGO_URI is provided by MongoDB
+- Secret_key choosen by you. MONGO_URI and MONGO_DBNAME is provided by MongoDB.
+- To run app with your own database. You will need to create an account with MongoDB and create your own 
+- Cluster. Than create some collections that must be pre set:
+1. card_types
+  -creature
+  -artifact
+  -land
+  -enchantment
+  -planeswalker
+  -instant
+  -sorcery
+2. colors
+  -blue
+  -white
+  -red
+  -black
+  -green
+  -colorless
+3. expansion_set
+  -all expansions that you want include
+4. rarity
+  -land
+  -common
+  -uncommon
+  -rare
+  -mythic rare
+  -timeshifted
+  -masterpiece
+5. cards
+6. decks
+7. rating
+  -1
+  -2
+  -3
+  -4
+  -5
+8. users
+
 
 ## Credits
-
-### Content
-
-### Media
-
-### Acknowledgements
-
+- Most of the pictures were taken from Wizard website and imgbin.com
+- Parallax picture with cards is from Adobe Stock
