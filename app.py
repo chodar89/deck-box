@@ -81,8 +81,8 @@ def my_cards():
             cards = mongo.db.cards.find(
                 {'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                     (page - 1) * per_page).limit(per_page)
-            for i in cards:
-                card_output.append(i)
+            for card in cards:
+                card_output.append(card)
         except:
             flash('you do not have any cards in your collection yet', 'error')
         pagination = Pagination(page=page, per_page=per_page, total=count_user_cards,
@@ -93,7 +93,7 @@ def my_cards():
         return redirect(url_for('register'))
 
 
-@app.route('/cards/new_card', methods=['POST', 'GET'])
+@app.route('/cards/new', methods=['POST', 'GET'])
 def new_card():
     """
     Render addcard page and take values from collection to form\
@@ -224,21 +224,7 @@ def deck_browse(deck_id):
     """
     if 'userinfo' in session:
         cards = []
-        count_lands = 0
-        count_creatures = 0
-        count_artifacts = 0
-        count_enchantments = 0
-        count_planeswalkers = 0
-        count_instants = 0
-        count_sorceries = 0
         color_name = []
-        rarity_land = 0
-        rarity_common = 0
-        rarity_uncommon = 0
-        rarity_rare = 0
-        rarity_mythic = 0
-        rarity_timeshifted = 0
-        rarity_masterpiece = 0
         types = list(mongo.db.card_types.find())
         def type_id(type_name):
             """ Comprehension function that returns id of each type card """
@@ -288,46 +274,64 @@ def deck_browse(deck_id):
                     each_card["amount"] = same_card_count
                     if each_card not in cards:
                         cards.append(each_card)
+            card_type_or_rarity = []
             for card in deck_cards:
                 card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                card_type = [card_information["type"]]
-                if card_type == land_type:
-                    count_lands += 1
-                elif card_type == creature_type:
-                    count_creatures += 1
-                elif card_type == artifact_type:
-                    count_artifacts += 1
-                elif card_type == enchantment_type:
-                    count_enchantments += 1
-                elif card_type == planeswalker_type:
-                    count_planeswalkers += 1
-                elif card_type == instant_type:
-                    count_instants += 1
-                elif card_type == sorcery_type:
-                    count_sorceries += 1
-            for card in deck_cards:
                 card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                card_rarity = [card_information["rarity"]]
-                if card_rarity == land:
-                    rarity_land += 1
-                elif card_rarity == common:
-                    rarity_common += 1
-                elif card_rarity == uncommon:
-                    rarity_uncommon += 1
-                elif card_rarity == rare:
-                    rarity_rare += 1
-                elif card_rarity == mythic:
-                    rarity_mythic += 1
-                elif card_rarity == timeshifted:
-                    rarity_timeshifted += 1
-                elif card_rarity == masterpiece:
-                    rarity_masterpiece += 1
-        return render_template('deckbrowse.html', **locals())
+                card_type_or_rarity.append([card_information["type"]])
+                card_type_or_rarity.append([card_information["rarity"]])
+            class lands_rarities:
+                count_lands = 0
+                count_creatures = 0
+                count_artifacts = 0
+                count_enchantments = 0
+                count_planeswalkers = 0
+                count_instants = 0
+                count_sorceries = 0
+                rarity_land = 0
+                rarity_common = 0
+                rarity_uncommon = 0
+                rarity_rare = 0
+                rarity_mythic = 0
+                rarity_timeshifted = 0
+                rarity_masterpiece = 0
+            def deck_cards_type_and_rarity(type_or_rarity):
+                for each in type_or_rarity:
+                    if each == land_type:
+                        lands_rarities.count_lands += 1
+                    elif each == creature_type:
+                        lands_rarities.count_creatures += 1
+                    elif each == artifact_type:
+                        lands_rarities.count_artifacts += 1
+                    elif each == enchantment_type:
+                        lands_rarities.count_enchantments += 1
+                    elif each == planeswalker_type:
+                        lands_rarities.count_planeswalkers += 1
+                    elif each == instant_type:
+                        lands_rarities.count_instants += 1
+                    elif each == sorcery_type:
+                        lands_rarities.count_sorceries += 1
+                    elif each == land:
+                        lands_rarities.rarity_land += 1
+                    elif each == common:
+                        lands_rarities.rarity_common += 1
+                    elif each == uncommon:
+                        lands_rarities.rarity_uncommon += 1
+                    elif each == rare:
+                        lands_rarities.rarity_rare += 1
+                    elif each == mythic:
+                        lands_rarities.rarity_mythic += 1
+                    elif each == timeshifted:
+                        lands_rarities.rarity_timeshifted += 1
+                    elif each == masterpiece:
+                        lands_rarities.rarity_masterpiece += 1
+            deck_cards_type_and_rarity(card_type_or_rarity)
+        return render_template('deckbrowse.html', **locals(), count_lands=lands_rarities.count_lands)
     else:
         return redirect(url_for('register'))
 
 
-@app.route('/deck/new_deck', methods=['POST', 'GET'])
+@app.route('/deck/new', methods=['POST', 'GET'])
 def new_deck():
     """ If method is POST insert deck to database else render new deck form """
     if 'userinfo' in session:
