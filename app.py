@@ -58,24 +58,24 @@ def my_cards():
         user_name = session['userinfo'].get("username")
         user = mongo.db.users.find_one({"username": user_name})
         user_id = ObjectId(session['userinfo'].get("id"))
-        change_per_page = request.form.get('change_per_page')
-        #  If user dont pick any, take number from database
-        if change_per_page != None:
+        if request.method == "POST":
+            # If method is POST take number of cards to display from form
+            change_per_page = request.form.get('change_per_page')
             mongo.db.users.update({'username': user_name},
                                   {'$set': {'user_per_page':change_per_page}},
                                   multi=False)
-            return redirect(url_for('cards'))
+            return redirect(url_for('my_cards'))
         if user['user_per_page'] is None:
-            #  Prevents error if number is None and sert it to 20
+            # Prevents error if number is None and set it to 20, 
+            # for user that created accounts before this feature
             per_page = 20
         else:
             per_page = int(user['user_per_page'])
-        try:
-            #  Try to find cards and count, if user dont have any gives 0
-            user_cards = mongo.db.cards.find({'user_id': user_id})
-            count_user_cards = user_cards.count()
-        except:
+        user_cards = mongo.db.cards.find({'user_id': user_id})
+        if user_cards is None:
             count_user_cards = 0
+        else:
+            count_user_cards = user_cards.count()
         card_output = []
         try:
             cards = mongo.db.cards.find(
@@ -425,9 +425,9 @@ def register():
             # database if not post form if yes flash allert
             if existing_user is None and existing_email is None:
                 if len(new_username) < 4:
-                    flash('Username to short', 'exists')
+                    flash('Username too short', 'exists')
                 elif len(new_password) < 6:
-                    flash('password to short', 'exists')
+                    flash('password too short', 'exists')
                 else:
                     hash_password = bcrypt.hashpw(
                         request.form['password'].encode('utf-8'), bcrypt.gensalt())
@@ -436,7 +436,8 @@ def register():
                                   'user_per_page': 10})
                     flash('Thank you for creating an account', 'exists')
                 return redirect(url_for('register'))
-            else: flash('Username or email already exists', 'exists')
+            else: 
+                flash('Username or email already exists', 'exists')
         return render_template('register.html')
 
 
@@ -445,13 +446,13 @@ def login():
     """ Login form, encode and checks data in form with database that exists if not flash allert """
     users = mongo.db.users
     log_username = request.form['log_username']
-    username = users.find_one({'username': log_username.lower()})
-    if username:
+    user = users.find_one({'username': log_username.lower()})
+    if user:
         if bcrypt.hashpw(request.form['log_password'].encode('utf-8'),
-                         username['password']) == username['password']:
-            session['userinfo'] = {'username': username.get('username'), 
-                                   'id': str(username.get('_id')),
-                                   'email': username.get('email'), 'avatar': username.get('avatar')}
+                         user['password']) == user['password']:
+            session['userinfo'] = {'username': user.get('username'), 
+                                   'id': str(user.get('_id')),
+                                   'email': user.get('email'), 'avatar': user.get('avatar')}
             flash(f"Welcome back {session['userinfo'].get('username')}", "welcome")
             return redirect(url_for('my_decks'))
     flash("Incorrect password or username", "error")
