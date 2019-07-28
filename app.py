@@ -141,7 +141,7 @@ def new_card():
         return redirect(url_for('register'))
 
 
-@app.route('/cards/<card_id>/edit_card', methods=["POST", "GET"])
+@app.route('/cards/<card_id>/edit', methods=["POST", "GET"])
 def edit_card(card_id):
     """
     If method is GET than render form and takes values for card
@@ -266,20 +266,17 @@ def deck_browse(deck_id):
             Loop that check if card is in deck, if it is
             don't append, add amount to card.
             """
+            card_type_and_rarity = []
             for card in deck_cards:
                 find_card = mongo.db.cards.find({'_id': ObjectId(card)})
                 same_card = np.array(deck_cards)
                 same_card_count = (same_card == card).sum()
                 for each_card in find_card:
                     each_card["amount"] = same_card_count
+                    card_type_and_rarity.append([each_card["type"]])
+                    card_type_and_rarity.append([each_card["rarity"]])
                     if each_card not in cards:
                         cards.append(each_card)
-            card_type_and_rarity = []
-            for card in deck_cards:
-                card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                card_type_and_rarity.append([card_information["type"]])
-                card_type_and_rarity.append([card_information["rarity"]])
             class lands_rarities:
                 count_lands = 0
                 count_creatures = 0
