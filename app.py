@@ -258,10 +258,8 @@ def deck_browse(deck_id):
     count_cards = len(deck_cards)
     #  Find each card by id and check what type card it is and append it to array
     if deck_cards != None:
-        """
-        Loop that check if card is in deck, if it is
-        don't append, add amount to card.
-        """
+        # Loop that check if card is in deck, if it is
+        # don't append, add amount to card.
         card_type_and_rarity = []
         for card in deck_cards:
             find_card = mongo.db.cards.find({'_id': ObjectId(card)})
@@ -273,7 +271,11 @@ def deck_browse(deck_id):
                 card_type_and_rarity.append([each_card["rarity"]])
                 if each_card not in cards:
                     cards.append(each_card)
-        class lands_rarities:
+        class LandsRarities:
+            """
+            Hold var for types and rarity count and pass
+            to javascript and html by jinja
+            """
             count_lands = 0
             count_creatures = 0
             count_artifacts = 0
@@ -289,37 +291,38 @@ def deck_browse(deck_id):
             rarity_timeshifted = 0
             rarity_masterpiece = 0
         def deck_cards_type_and_rarity(type_or_rarity):
+            """Check each card from deck and count its rarity and type"""
             for each in type_or_rarity:
                 if each == land_type:
-                    lands_rarities.count_lands += 1
+                    LandsRarities.count_lands += 1
                 elif each == creature_type:
-                    lands_rarities.count_creatures += 1
+                    LandsRarities.count_creatures += 1
                 elif each == artifact_type:
-                    lands_rarities.count_artifacts += 1
+                    LandsRarities.count_artifacts += 1
                 elif each == enchantment_type:
-                    lands_rarities.count_enchantments += 1
+                    LandsRarities.count_enchantments += 1
                 elif each == planeswalker_type:
-                    lands_rarities.count_planeswalkers += 1
+                    LandsRarities.count_planeswalkers += 1
                 elif each == instant_type:
-                    lands_rarities.count_instants += 1
+                    LandsRarities.count_instants += 1
                 elif each == sorcery_type:
-                    lands_rarities.count_sorceries += 1
+                    LandsRarities.count_sorceries += 1
                 elif each == land:
-                    lands_rarities.rarity_land += 1
+                    LandsRarities.rarity_land += 1
                 elif each == common:
-                    lands_rarities.rarity_common += 1
+                    LandsRarities.rarity_common += 1
                 elif each == uncommon:
-                    lands_rarities.rarity_uncommon += 1
+                    LandsRarities.rarity_uncommon += 1
                 elif each == rare:
-                    lands_rarities.rarity_rare += 1
+                    LandsRarities.rarity_rare += 1
                 elif each == mythic:
-                    lands_rarities.rarity_mythic += 1
+                    LandsRarities.rarity_mythic += 1
                 elif each == timeshifted:
-                    lands_rarities.rarity_timeshifted += 1
+                    LandsRarities.rarity_timeshifted += 1
                 elif each == masterpiece:
-                    lands_rarities.rarity_masterpiece += 1
+                    LandsRarities.rarity_masterpiece += 1
         deck_cards_type_and_rarity(card_type_and_rarity)
-    return render_template('deckbrowse.html', lands_rarities=lands_rarities, deck=deck,
+    return render_template('deckbrowse.html', LandsRarities=LandsRarities, deck=deck,
                            count_cards=count_cards, color_name=color_name, cards=cards)
 
 

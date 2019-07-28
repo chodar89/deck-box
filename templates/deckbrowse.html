@@ -42,13 +42,13 @@
         <i class="material-icons left">view_module</i>
     </div>
     <div class="row count-card-types">
-        <p class="count-cards-paragaph"> {{ lands_rarities.count_planeswalkers }}<span> Planeswalker |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ lands_rarities.count_creatures }}<span> Creature |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ lands_rarities.count_artifacts }}<span> Artifact |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ lands_rarities.count_sorceries }}<span> Sorcery |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ lands_rarities.count_enchantments }}<span> Enchantment |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ lands_rarities.count_instants }}<span> Instant |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ lands_rarities.count_lands }}<span> Land</span></p>
+        <p class="count-cards-paragaph"> {{ LandsRarities.count_planeswalkers }}<span> Planeswalker |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ LandsRarities.count_creatures }}<span> Creature |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ LandsRarities.count_artifacts }}<span> Artifact |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ LandsRarities.count_sorceries }}<span> Sorcery |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ LandsRarities.count_enchantments }}<span> Enchantment |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ LandsRarities.count_instants }}<span> Instant |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ LandsRarities.count_lands }}<span> Land</span></p>
     </div>
     <div class="row center">
         <button id="arrow-toggle-down">
@@ -130,21 +130,21 @@
 
 // Variables from app.py
   
-    let creatures = {{lands_rarities.count_creatures}};
-    let planeswalkers = {{lands_rarities.count_planeswalkers}};
-    let artifacts = {{lands_rarities.count_artifacts}};
-    let sorceries = {{lands_rarities.count_sorceries}};
-    let enchantments = {{lands_rarities.count_enchantments}};
-    let instants = {{lands_rarities.count_instants}};
-    let lands = {{lands_rarities.count_lands}};
+    let creatures = {{LandsRarities.count_creatures}};
+    let planeswalkers = {{LandsRarities.count_planeswalkers}};
+    let artifacts = {{LandsRarities.count_artifacts}};
+    let sorceries = {{LandsRarities.count_sorceries}};
+    let enchantments = {{LandsRarities.count_enchantments}};
+    let instants = {{LandsRarities.count_instants}};
+    let lands = {{LandsRarities.count_lands}};
     
-    let rarity_land = {{lands_rarities.rarity_land}};
-    let rarity_common = {{lands_rarities.rarity_common}};
-    let rarity_uncommon = {{lands_rarities.rarity_uncommon}};
-    let rarity_rare = {{lands_rarities.rarity_rare}};
-    let rarity_mythic = {{lands_rarities.rarity_mythic}};
-    let rarity_timeshifted = {{lands_rarities.rarity_timeshifted}};
-    let rarity_masterpiece = {{lands_rarities.rarity_masterpiece}};
+    let rarity_land = {{LandsRarities.rarity_land}};
+    let rarity_common = {{LandsRarities.rarity_common}};
+    let rarity_uncommon = {{LandsRarities.rarity_uncommon}};
+    let rarity_rare = {{LandsRarities.rarity_rare}};
+    let rarity_mythic = {{LandsRarities.rarity_mythic}};
+    let rarity_timeshifted = {{LandsRarities.rarity_timeshifted}};
+    let rarity_masterpiece = {{LandsRarities.rarity_masterpiece}};
     
     // Google charts
     
