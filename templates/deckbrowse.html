@@ -42,13 +42,13 @@
         <i class="material-icons left">view_module</i>
     </div>
     <div class="row count-card-types">
-        <p class="count-cards-paragaph"> {{ count_planeswalkers }}<span> Planeswalker |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ count_creatures }}<span> Creature |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ count_artifacts }}<span> Artifact |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ count_sorceries }}<span> Sorcery |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ count_enchantments }}<span> Enchantment |</span></p>
-        <p class="count-cards-pararaph">&nbsp; {{ count_instants }}<span> Instant |</span></p>
-        <p class="count-cards-paragaph">&nbsp; {{ count_lands }}<span> Land</span></p>
+        <p class="count-cards-paragaph"> {{ lands_rarities.count_planeswalkers }}<span> Planeswalker |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ lands_rarities.count_creatures }}<span> Creature |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ lands_rarities.count_artifacts }}<span> Artifact |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ lands_rarities.count_sorceries }}<span> Sorcery |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ lands_rarities.count_enchantments }}<span> Enchantment |</span></p>
+        <p class="count-cards-pararaph">&nbsp; {{ lands_rarities.count_instants }}<span> Instant |</span></p>
+        <p class="count-cards-paragaph">&nbsp; {{ lands_rarities.count_lands }}<span> Land</span></p>
     </div>
     <div class="row center">
         <button id="arrow-toggle-down">
@@ -123,4 +123,80 @@
     <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
     <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
     <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
-{% endblock%}
+{% endblock %}
+
+{% block charts %}
+<script>
+
+// Variables from app.py
+  
+    let creatures = {{lands_rarities.count_creatures}};
+    let planeswalkers = {{lands_rarities.count_planeswalkers}};
+    let artifacts = {{lands_rarities.count_artifacts}};
+    let sorceries = {{lands_rarities.count_sorceries}};
+    let enchantments = {{lands_rarities.count_enchantments}};
+    let instants = {{lands_rarities.count_instants}};
+    let lands = {{lands_rarities.count_lands}};
+    
+    let rarity_land = {{lands_rarities.rarity_land}};
+    let rarity_common = {{lands_rarities.rarity_common}};
+    let rarity_uncommon = {{lands_rarities.rarity_uncommon}};
+    let rarity_rare = {{lands_rarities.rarity_rare}};
+    let rarity_mythic = {{lands_rarities.rarity_mythic}};
+    let rarity_timeshifted = {{lands_rarities.rarity_timeshifted}};
+    let rarity_masterpiece = {{lands_rarities.rarity_masterpiece}};
+    
+    // Google charts
+    
+    google.charts.load('current', {'packages':['corechart']});
+    
+    google.charts.setOnLoadCallback(cardType);
+    google.charts.setOnLoadCallback(cardRarity);
+    
+    // Draw 2 charts in deckbrowse.html 
+    // 1st chart count from app.py each type of card
+    function cardType() {
+      var data = google.visualization.arrayToDataTable([
+          ['Type', 'Cards'],
+          ['Creature', creatures],
+          ['Planeswalker', planeswalkers],
+          ['Artifact',  artifacts],
+          ['Sorcery', sorceries],
+          ['Enchantment', enchantments],
+          ['Instant', instants],
+          ['Land', lands]
+        ]);
+    
+        var options = {title:'Types of Cards',
+                       pieHole:0.4,
+                       width:350,
+                       height:300};
+    
+        var chart = new google.visualization.PieChart(document.getElementById('cardType'));
+        chart.draw(data, options);
+      }
+    
+    // 2nd chart count rarity cards
+    function cardRarity() {
+    
+        var data = google.visualization.arrayToDataTable([
+          ['Type', 'Cards'],
+          ['Land', rarity_land],
+          ['Common', rarity_common],
+          ['Uncommon',  rarity_uncommon],
+          ['Rare', rarity_rare],
+          ['Mythic Rare', rarity_mythic],
+          ['Timeshifted', rarity_timeshifted],
+          ['Masterpiece', rarity_masterpiece]
+        ]);
+    
+        var options = {title:'Cards Rarity',
+                        pieHole:0.4,
+                        width:350,
+                        height:300};
+    
+        var chart = new google.visualization.PieChart(document.getElementById('cardRarity'));
+        chart.draw(data, options);
+    }
+</script>
+{% endblock %}

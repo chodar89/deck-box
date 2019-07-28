@@ -226,27 +226,27 @@ def deck_browse(deck_id):
         cards = []
         color_name = []
         types = list(mongo.db.card_types.find())
-        def type_id(type_name):
-            """ Comprehension function that returns id of each type card """
-            return [d['_id'] for d in types if d['type'] == type_name]
-        land_type = type_id('land')
-        creature_type = type_id('creature')
-        artifact_type = type_id('artifact')
-        enchantment_type = type_id('enchantment')
-        planeswalker_type = type_id('planeswalker')
-        instant_type = type_id('instant')
-        sorcery_type = type_id('sorcery')
+        def get_category_id(category_name, category):
+            """ Comprehension function that returns id of each type or rarity card """
+            if category == types:
+                return [d['_id'] for d in types if d['type'] == category_name]
+            elif category == rarity:
+                return [d['_id'] for d in rarity if d['rarity'] == category_name]
+        land_type = get_category_id('land', types)
+        creature_type = get_category_id('creature', types)
+        artifact_type = get_category_id('artifact', types)
+        enchantment_type = get_category_id('enchantment', types)
+        planeswalker_type = get_category_id('planeswalker', types)
+        instant_type = get_category_id('instant', types)
+        sorcery_type = get_category_id('sorcery', types)
         rarity = list(mongo.db.rarity.find())
-        def rarity_id(rarity_name):
-            """ Comprehension function that returns id of each rarity card """
-            return [d['_id'] for d in rarity if d['rarity'] == rarity_name]
-        land = rarity_id('land')
-        common = rarity_id('common')
-        uncommon = rarity_id('uncommon')
-        rare = rarity_id('rare')
-        mythic = rarity_id('mythic rare')
-        timeshifted = rarity_id('timeshifted')
-        masterpiece = rarity_id('masterpiece')
+        land = get_category_id('land', rarity)
+        common = get_category_id('common', rarity)
+        uncommon = get_category_id('uncommon', rarity)
+        rare = get_category_id('rare', rarity)
+        mythic = get_category_id('mythic rare', rarity)
+        timeshifted = get_category_id('timeshifted', rarity)
+        masterpiece = get_category_id('masterpiece', rarity)
         #  Check colors of deck that user browse
         colors = list(mongo.db.colors.find())
         deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
@@ -266,20 +266,20 @@ def deck_browse(deck_id):
             Loop that check if card is in deck, if it is
             don't append, add amount to card.
             """
-            for i in deck_cards:
-                find_card = mongo.db.cards.find({'_id': ObjectId(i)})
+            for card in deck_cards:
+                find_card = mongo.db.cards.find({'_id': ObjectId(card)})
                 same_card = np.array(deck_cards)
-                same_card_count = (same_card == i).sum()
+                same_card_count = (same_card == card).sum()
                 for each_card in find_card:
                     each_card["amount"] = same_card_count
                     if each_card not in cards:
                         cards.append(each_card)
-            card_type_or_rarity = []
+            card_type_and_rarity = []
             for card in deck_cards:
                 card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
                 card_information = mongo.db.cards.find_one({'_id': ObjectId(card)})
-                card_type_or_rarity.append([card_information["type"]])
-                card_type_or_rarity.append([card_information["rarity"]])
+                card_type_and_rarity.append([card_information["type"]])
+                card_type_and_rarity.append([card_information["rarity"]])
             class lands_rarities:
                 count_lands = 0
                 count_creatures = 0
@@ -325,8 +325,8 @@ def deck_browse(deck_id):
                         lands_rarities.rarity_timeshifted += 1
                     elif each == masterpiece:
                         lands_rarities.rarity_masterpiece += 1
-            deck_cards_type_and_rarity(card_type_or_rarity)
-        return render_template('deckbrowse.html', **locals(), count_lands=lands_rarities.count_lands)
+            deck_cards_type_and_rarity(card_type_and_rarity)
+        return render_template('deckbrowse.html', **locals())
     else:
         return redirect(url_for('register'))
 
@@ -338,8 +338,8 @@ def new_deck():
         if request.method == 'POST':
             colors_id = []
             colors_form = request.form.getlist('color')
-            for i in colors_form:
-                colors = ObjectId(i)
+            for color in colors_form:
+                colors = ObjectId(color)
                 colors_id.append(colors)
             decks = mongo.db.decks
             user_id = ObjectId(session['userinfo'].get("id"))
@@ -452,7 +452,8 @@ def login():
     if username:
         if bcrypt.hashpw(request.form['log_password'].encode('utf-8'),
                          username['password']) == username['password']:
-            session['userinfo'] = {'username': username.get('username'), 'id': str(username.get('_id')),
+            session['userinfo'] = {'username': username.get('username'), 
+                                   'id': str(username.get('_id')),
                                    'email': username.get('email'), 'avatar': username.get('avatar')}
             flash(f"Welcome back {session['userinfo'].get('username')}", "welcome")
             return redirect(url_for('my_decks'))
@@ -465,6 +466,7 @@ def logout():
     """ Simply logout session function """
     session.pop('userinfo')
     return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.secret_key = os.environ.get('key')

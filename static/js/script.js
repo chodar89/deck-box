@@ -6,7 +6,6 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    
     $("#arrow-toggle-down").click(function(){
         $("#chart-toggle").slideToggle("slow");
     });
