@@ -25,12 +25,9 @@ def before_request():
     to register page if URL is endpoint is diferent than,
     login, register or index
     """
-    if 'userinfo' not in session:
-        index_endpoint = request.endpoint != 'index'
-        register_endpoint = request.endpoint != 'register'
-        login_endpoint = request.endpoint != 'login'
-        if index_endpoint and register_endpoint and login_endpoint:
-            return redirect(url_for('register'))
+    if 'userinfo' not in session and request.endpoint not in (
+        'index', 'register', 'login', 'static'):
+        return redirect(url_for('register'))
 
 
 @app.context_processor
