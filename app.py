@@ -44,6 +44,16 @@ def user_context():
         return dict(user_name=None)
 
 
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error.html'), 404
+    
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html'), 500
+
+
 @app.route('/')
 @app.route('/index', endpoint='index')
 def index():
@@ -457,4 +467,4 @@ if __name__ == '__main__':
     app.secret_key = os.environ.get('key')
     app.run(host=os.environ.get("IP", "0.0.0.0"),
             port=int(os.environ.get("PORT", "5000")),
-            debug=os.environ.get('debug'))
+            debug=False)

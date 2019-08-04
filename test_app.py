@@ -1,7 +1,10 @@
-import pytest
 import os
-from app import app as create_app
+import pytest
+
 from flask import url_for
+
+from app import login, logout
+from app import app as create_app
 
 
 @pytest.fixture
@@ -18,5 +21,3 @@ def test_urls(client):
 def test_redirect_when_user_is_not_loged(client):
     assert client.get(url_for('my_cards')).status_code == 302
     assert client.get(url_for('new_card')).status_code == 302
-
-    
