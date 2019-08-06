@@ -85,6 +85,9 @@ Hosted mokup files<br/>
 - Delete cards from collection and decks.
 - Adding new cards to decks
 
+### Test with pytest-flask.
+- Test views HTML codes with pytest-flask.
+
 ### App validate.
 - CSS - https://jigsaw.w3.org/css-validator/
 - Python - with pylint
@@ -118,6 +121,7 @@ $ git push heroku master
 
 ### Run app local
 - ensure you are using Python 3
+- create [virtual enviroment](https://docs.python.org/3/tutorial/venv.html)
 - once you download app and run on your local development environment, you<br/>
 will need to install packs from requirements.txt file 
 ```

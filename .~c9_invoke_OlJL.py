@@ -26,7 +26,7 @@ def before_request():
     login, register or index
     """
     if 'userinfo' not in session and request.endpoint not in (
-            'index', 'register', 'login', 'static'):
+        'index', 'register', 'login', 'static'):
         return redirect(url_for('register'))
 
 
@@ -43,12 +43,17 @@ def user_context():
     elif 'userinfo' not in session:
         return dict(user_name=None)
 
+
 @app.errorhandler(404)
-@app.errorhandler(401)
-@app.errorhandler(500)
 def not_found_error(error):
-    """Render error page"""
-    return render_template('error.html')
+    """Render error page in a case of 404 error"""
+    return render_template('error.html'), 404
+    
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Render error page in a case of 500 error"""
+    return render_template('error.html'), 500
 
 
 @app.route('/')
@@ -416,8 +421,7 @@ def register():
             existing_user = users.find_one({'username' : new_username.lower()})
             existing_email = users.find_one({'email': new_email.lower()})
             # First checks if username and emial exists in
-            # database if not post form if yes find user in database hold in session
-            # and redirect user to my_decks page
+            # database if not post form if yes flash allert
             if existing_user is None and existing_email is None:
                 if len(new_username) < 4:
                     flash('Username too short', 'exists')
@@ -429,12 +433,8 @@ def register():
                     users.insert({'username':new_username.lower(), 'password' : hash_password,
                                   'email': new_email.lower(), 'avatar': request.form['avatar'],
                                   'user_per_page': 10})
-                    user = users.find_one({'username': new_username.lower()})
-                    session['userinfo'] = {'username': user.get('username'),
-                                           'id': str(user.get('_id')),
-                                           'email': user.get('email'), 'avatar': user.get('avatar')}
-                    flash('Thank you for creating an account', 'alert')
-                return redirect(url_for('my_decks'))
+                    flash('Thank you for creating an account', 'exists')
+                return redirect(url_for('register'))
             else:
                 flash('Username or email already exists', 'exists')
         return render_template('register.html')

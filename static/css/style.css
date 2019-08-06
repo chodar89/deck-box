@@ -45,6 +45,10 @@ main {
     background-color: #102540;
 }
 
+.error {
+    font-size: 3em;
+}
+
 /*-------------------------- Navigation Bar ---*/
 
 .logo {
