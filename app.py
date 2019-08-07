@@ -426,7 +426,7 @@ def register():
                 else:
                     hash_password = bcrypt.hashpw(
                         request.form['password'].encode('utf-8'), bcrypt.gensalt())
-                    users.insert({'username':new_username.lower(), 'password' : hash_password,
+                    users.insert_one({'username':new_username.lower(), 'password' : hash_password,
                                   'email': new_email.lower(), 'avatar': request.form['avatar'],
                                   'user_per_page': 10})
                     user = users.find_one({'username': new_username.lower()})
