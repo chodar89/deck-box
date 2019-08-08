@@ -29,16 +29,16 @@
     <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
         <div class="row">
             <div class="input-field col s10 offset-s1 m4 offset-m4 l2 offset-l5">
-            <select id="change_per_page" name="change_per_page">
-                <option value="{{per_page}}" selected disabled>{{per_page}}</option>
-                <option value="5" >5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-            </select>
-            <label>Cards per page</label>
-        </div>
+                <select id="change_per_page" name="change_per_page">
+                    <option value="{{per_page}}" selected disabled>{{per_page}}</option>
+                    <option value="5" >5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>Cards per page</label>
+            </div>
         </div>
         <div class="row">
             <button class="btn waves-effect waves-light btn-blue" type="submit">Save</button> 

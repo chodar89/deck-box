@@ -9,12 +9,10 @@ from app import login, logout, deck_browse
 from app import app as create_app
 
 
-
 @pytest.fixture
 def app():
     app = create_app
     return app
-
 
 
 def test_register_the_same_user_should_refuse(client):
@@ -107,17 +105,10 @@ def test_get_category_id_for_rarity_and_types():
     land_type = get_category_id('land', types)
     creature_type = get_category_id('creature', types)
     artifact_type = get_category_id('artifact', types)
-    enchantment_type = get_category_id('enchantment', types)
-    planeswalker_type = get_category_id('planeswalker', types)
-    instant_type = get_category_id('instant', types)
     sorcery_type = get_category_id('sorcery', types)
     land = get_category_id('land', rarity)
-    common = get_category_id('common', rarity)
-    uncommon = get_category_id('uncommon', rarity)
     rare = get_category_id('rare', rarity)
-    mythic = get_category_id('mythic rare', rarity)
     timeshifted = get_category_id('timeshifted', rarity)
-    masterpiece = get_category_id('masterpiece', rarity)
     assert land_type == ['1']
     assert creature_type == ['2']
     assert artifact_type == ['3']

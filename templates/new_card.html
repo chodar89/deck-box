@@ -27,11 +27,11 @@
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1 m5 offset-m1">
-        <select required id="color" name="color" multiple>
+        <select id="color" name="color" multiple required>
             {% for color in colors %}
                 <option value="{{color._id}}">{{color.color}}</option>
             {% endfor %}
-          </select>
+        </select>
         <label>Multiply color select</label>
       </div>
       <div class="input-field col s10 offset-s1 m5">
@@ -41,30 +41,30 @@
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1 m3 offset-m1">
-        <select id="type" name="type">
+        <select id="type" name="type" required>
            <option value="" disabled selected></option>
             {% for type in card_types %}
                 <option value="{{type._id}}">{{type.type}}</option>
             {% endfor %}
-          </select>
+        </select>
         <label>Select card type</label>
       </div>
       <div class="input-field col s10 offset-s1 m4">
-        <select required="" aria-required="" id="rarity" name="rarity">
+        <select id="rarity" name="rarity" required>
             <option value="" disabled selected></option>
             {% for rar in rarity %}
                 <option value="{{rar._id}}">{{rar.rarity}}</option>
             {% endfor %}
-          </select>
+        </select>
         <label>Select rarity</label>
       </div>
       <div class="input-field col s10 offset-s1 m3">
-        <select id="set" name="set">
+        <select id="set" name="set" required>
             <option value="" disabled selected></option>
             {% for set in expansion %}
                 <option value="{{set._id}}">{{set.set}}</option>
             {% endfor %}
-          </select>
+        </select>
         <label>Select expansion</label>
       </div>
     </div>
@@ -101,11 +101,11 @@
       </div>
       <div class="input-field col s10 offset-s1 m5">
         <select id="rating" name="rating">
-          <option value="" disabled selected></option>
+          <option value="" disabled selected required></option>
             {% for rate in rating %}
                 <option value="{{rate.rating}}">{{rate.rating}}</option>
             {% endfor %}
-          </select>
+         </select>
         <label>Card rating</label>
       </div>
     </div>

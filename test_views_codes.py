@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 @pytest.fixture
 def app():
     app = create_app

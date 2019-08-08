@@ -58,6 +58,9 @@ Hosted mokup files<br/>
 - Google Charts
 - AWS Cloud9
 - Photoshop
+- mongomock
+- pytest
+- pylint
 
 ## Testing
 
@@ -87,6 +90,7 @@ Hosted mokup files<br/>
 
 ### Test with pytest-flask.
 - Test views HTML codes with pytest-flask.
+- Test functions with pytest and mongomock
 
 ### App validate.
 - CSS - https://jigsaw.w3.org/css-validator/

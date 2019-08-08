@@ -22,7 +22,7 @@
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1 m5 offset-m1">
-        <select required  id="color" name="color" multiple>
+        <select required  id="color" name="color" multiple required>
           {% for card_col in card_color_id %}
             {% for color in colors %}
                 {% if color._id == card_col %}
@@ -42,7 +42,7 @@
     </div>
     <div class="row">
       <div class="input-field col s10 offset-s1 m3 offset-m1">
-        <select id="type" name="type">
+        <select id="type" name="type" required>
            <option value="" disabled selected></option>
             {% for type in card_types %}
                 {% if type._id == card.type %}
@@ -55,7 +55,7 @@
         <label>Select card type</label>
       </div>
       <div class="input-field col s10 offset-s1 m4">
-        <select id="rarity" name="rarity">
+        <select id="rarity" name="rarity" required>
             <option value="" disabled selected></option>
             {% for rar in rarity %}
                 {% if rar._id == card.rarity %}
@@ -68,7 +68,7 @@
         <label>Select rarity</label>
       </div>
       <div class="input-field col s10 offset-s1 m3">
-        <select id="set" name="set">
+        <select id="set" name="set" required>
             <option value="" disabled selected></option>
             {% for set in expansion %}
                 {% if set._id == card.set %}
@@ -114,7 +114,7 @@
       </div>
       <div class="input-field col s10 offset-s1 m5">
         <select id="rating" name="rating">
-          <option value="" disabled selected></option>
+          <option value="" disabled selected required></option>
             {% for rate in rating %}
                 {% if rate.rating == card.rating %}
                 <option  value="{{card.rating}}" selected >{{card.rating}}</option>

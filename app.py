@@ -89,20 +89,19 @@ def my_cards():
         per_page = 20
     else:
         per_page = int(user['user_per_page'])
-    user_cards = mongo.db.cards.find({'user_id': user_id})
-    if user_cards is None:
-        count_user_cards = 0
-    else:
-        count_user_cards = user_cards.count()
     card_output = []
     try:
         cards = mongo.db.cards.find(
-            {'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
+                {'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                 (page - 1) * per_page).limit(per_page)
         for card in cards:
             card_output.append(card)
     except:
         flash('you do not have any cards in your collection yet', 'error')
+    if cards is None:
+        count_user_cards = 0
+    else:
+        count_user_cards = cards.count()
     pagination = Pagination(page=page, per_page=per_page, total=count_user_cards,
                             search=search, record_name='card_output')
     return render_template('cards.html', card_output=card_output,
