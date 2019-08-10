@@ -1,20 +1,13 @@
-{% extends 'base.html' %} 
-
-{% block title %}
+{% extends 'base.html' %} {% block title %}
 <title>DECK-BOX {{user_name}}</title>
-{% endblock %}
-
-{% block sidenav %}
+{% endblock %} {% block sidenav %}
 <ul class="left">
-    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+  <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %} 
-{% block content %}
+{% endblock %} {% block content %}
 <!--flash message with card name that was added-->
-{% with alert = get_flashed_messages(category_filter=["alert"]) %} 
-  {% if alert %} 
-    {% for message in alert%}
-      <p class="{{category}} purple-alert">{{message}}</p>
+{% with alert = get_flashed_messages(category_filter=["alert"]) %} {% if alert %} {% for message in alert%}
+<p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
 <h3 class="title">Add Card</h3>
 <div class="row card-form">
@@ -28,15 +21,15 @@
     <div class="row">
       <div class="input-field col s10 offset-s1 m5 offset-m1">
         <select id="color" name="color" multiple required>
-            {% for color in colors %}
-                <option value="{{color._id}}">{{color.color}}</option>
-            {% endfor %}
-        </select>
+              {% for color in colors %}
+                  <option value="{{color._id}}">{{color.color}}</option>
+              {% endfor %}
+          </select>
         <label>Multiply color select</label>
       </div>
       <div class="input-field col s10 offset-s1 m5">
         <label for="mana_cost">Converted Mana Cost</label>
-        <input type="number" name="mana_cost" value="0" class="validate"  />
+        <input type="number" name="mana_cost" value="0" class="validate" />
       </div>
     </div>
     <div class="row">
@@ -120,10 +113,8 @@
     </div>
   </form>
 </div>
-{% endblock %}
-{% block footer_links %}
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
-{% endblock%}
+{% endblock %} {% block footer_links %}
+<span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> {% endblock%}

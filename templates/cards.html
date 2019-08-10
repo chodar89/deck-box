@@ -1,34 +1,71 @@
-{% extends 'base.html' %} 
-
-{% block title %}
+{% extends 'base.html' %} {% block title %}
 <title>DECK-BOX {{user_name}}</title>
 {% endblock %}
-
 {% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %} 
-{% block content %} 
+{% endblock %}
+{% block content %}
 <!--flash message no cards if user don't have any-->
 {% with error = get_flashed_messages(category_filter=["error"]) %}
-    {% if error %}
-        {% for message in error %}
-            <p class="{{category}} purple-alert">{{message}}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+{% if error %} 
+{% for message in error %}
+<p class="{{category}} purple-alert">{{message}}</p>
+{% endfor %} {% endif %} {% endwith %} 
 {% with alert = get_flashed_messages(category_filter=["alert"]) %}
-    {% if alert %}
-        {% for message in alert %}
-            <p class="{{category}} purple-alert">{{message}}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+{% if alert %}
+{% for message in alert %}
+<p class="{{category}} purple-alert">{{message}}</p>
+{% endfor %} {% endif %} {% endwith %} {{rate}}
+{{strength_from}}
 <div class="container">
     <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
         <div class="row">
-            <div class="input-field col s10 offset-s1 m4 offset-m4 l2 offset-l5">
+            <div class="input-field col s10 offset-s1 m2 offset-m3">
+                <select class="select_all" id="color" name="color" multiple required>
+                    {% for color in colors %}
+                        <option value="{{color._id}}">{{color.color}}</option>
+                    {% endfor %}
+                </select>
+                <label>Card color</label>
+            </div>
+            <div class="input-field col s10 offset-s1 m2">
+                <select class="select_all" id="type" name="type" multiple required>
+                        {% for type in card_types %}
+                            <option value="{{type._id}}">{{type.type}}</option>
+                        {% endfor %}
+                    </select>
+                <label>Card type</label>
+            </div>
+            <div class="input-field col s10 offset-s1 m2">
+                <select class="select_all" id="rarity" name="rarity" multiple required>
+                        {% for rarity in card_rarity %}
+                            <option value="{{rarity._id}}">{{rarity.rarity}}</option>
+                        {% endfor %}
+                    </select>
+                <label>Card rarity</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s10 offset-s1 m1 offset-m4 str-and-toug-range">
+                <select id="strength_from" name="strength_from" required>
+                        <option value="0" selected>0</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                <select id="strength_to" name="strength_to" required>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25" selected>25</option>
+                    </select>
+                <label>Strength</label>
+            </div>
+            <div class="input-field col s10 offset-s1 m4 l2 ">
                 <select id="change_per_page" name="change_per_page">
                     <option value="{{per_page}}" selected disabled>{{per_page}}</option>
                     <option value="5" >5</option>
@@ -39,9 +76,29 @@
                 </select>
                 <label>Cards per page</label>
             </div>
+            <div class="input-field col s10 offset-s1 m1 str-and-toug-range">
+                <select id="toughness_from" name="toughness_from" required>
+                        <option value="0" selected>0</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                <select id="toughness_to" name="toughness_to" required>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="25" selected>25</option>
+                    </select>
+                <label>Toughness</label>
+            </div>
         </div>
         <div class="row">
-            <button class="btn waves-effect waves-light btn-blue" type="submit">Save</button> 
+            <button class="btn waves-effect waves-light btn-blue" type="submit">Apply</button>
+            <a href="{{url_for('my_cards')}}" 
+            onclick="{% if 'filter' in session %}{{session.pop('filter')}}{%endif%}" 
+            class="btn waves-effect waves-light red">Reset</a>
         </div>
     </form>
 </div>
@@ -63,41 +120,35 @@
             <span class="fa fa-star"></span>
             <span class="fa fa-star"></span>
             <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span> 
-            {% elif card.rating == "2" %}
+            <span class="fa fa-star"></span> {% elif card.rating == "2" %}
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star"></span>
             <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span> 
-            {% elif card.rating == "3" %}
+            <span class="fa fa-star"></span> {% elif card.rating == "3" %}
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span> 
-            {% elif card.rating == "4" %}
+            <span class="fa fa-star"></span> {% elif card.rating == "4" %}
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span> 
-            {% elif card.rating == "5" %}
+            <span class="fa fa-star"></span> {% elif card.rating == "5" %}
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span> 
-            {% endif %}
+            <span class="fa fa-star checked"></span> {% endif %}
         </div>
     </div>
     {% endfor %}
 </div>
 <div class="center">{{ pagination.links }}</div>
-{% endblock %}
-{% block footer_links %}
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
-    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock %} {% block footer_links %}
+<span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> 
 {% endblock%}

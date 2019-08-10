@@ -25,6 +25,8 @@ def before_request():
     to register page if URL is endpoint is diferent than,
     login, register or index
     """
+    if 'filter' in session and request.endpoint not in 'my_cards':
+        session.pop('filter')
     if 'userinfo' not in session and request.endpoint not in (
             'index', 'register', 'login', 'static'):
         return redirect(url_for('register'))
@@ -61,13 +63,18 @@ def index():
         return render_template('index.html', sign_in='Sign In')
 
 
-@app.route('/cards', methods=["POST", "GET"])
+@app.route('/cards', endpoint='my_cards', methods=["POST", "GET"])
 def my_cards():
     """
     Shows collection of all user cards plus pagination,
     Request number of cards to display per page from form.
     If user dont pick any, take number from database
     """
+    colors = mongo.db.colors.find()
+    card_rarity = mongo.db.rarity.find()
+    expansion = mongo.db.expansion_set.find()
+    card_types = mongo.db.card_types.find()
+    rating = mongo.db.rating.find()
     search = False
     q = request.args.get('q')
     if q:
@@ -82,6 +89,15 @@ def my_cards():
         mongo.db.users.update({'username': user_name},
                               {'$set': {'user_per_page':change_per_page}},
                               multi=False)
+        session['filter'] = {
+            'color': request.form.getlist('color'),
+            'type': request.form.getlist('type'),
+            'rarity': request.form.getlist('rarity'),
+            'strength_from': request.form.get('strength_from'),
+            'strength_to': request.form.get('strength_to'),
+            'toughness_from': request.form.get('toughness_from'),
+            'toughness_to': request.form.get('toughness_to')
+        }
         return redirect(url_for('my_cards'))
     if user['user_per_page'] is None:
         # Prevents error if number is None and set it to 20,
@@ -90,22 +106,44 @@ def my_cards():
     else:
         per_page = int(user['user_per_page'])
     card_output = []
-    try:
-        cards = mongo.db.cards.find(
-                {'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
+    if 'filter' not in session:
+        cards = mongo.db.cards.find({
+                'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                 (page - 1) * per_page).limit(per_page)
-        for card in cards:
-            card_output.append(card)
-    except:
-        flash('you do not have any cards in your collection yet', 'error')
+    else:
+        def get_objectid_for_category(session_filter, container):
+            """Get _id for each category from session['filter'] and append ObjectId"""
+            for each in session_filter:
+                container.append(ObjectId(each))
+        types_filter = []
+        rarity_filter = []
+        strength_from = session['filter'].get('strength_from')
+        strength_to = session['filter'].get('strength_to')
+        toughness_from = session['filter'].get('toughness_from')
+        toughness_to = session['filter'].get('toughness_to')
+        color_filter = session['filter'].get('color')
+        get_objectid_for_category(session['filter'].get('type'), types_filter)
+        get_objectid_for_category(session['filter'].get('rarity'), rarity_filter)
+        cards = mongo.db.cards.find({
+            '$and': [{'user_id': user_id},
+                     {'color': {'$in': color_filter}},
+                     {'type': {'$in': types_filter}},
+                     {'rarity': {'$in': rarity_filter}},
+                     {'strength':{'$gte':strength_from, '$lte':strength_to}},
+                     {'strength':{'$gte':toughness_from, '$lte':toughness_to}}]}).sort('_id', pymongo.DESCENDING).skip(
+                (page - 1) * per_page).limit(per_page)
+    for card in cards:
+        card_output.append(card)
     if cards is None:
         count_user_cards = 0
+        flash('you do not have any cards in your collection yet', 'error')
     else:
         count_user_cards = cards.count()
     pagination = Pagination(page=page, per_page=per_page, total=count_user_cards,
                             search=search, record_name='card_output')
     return render_template('cards.html', card_output=card_output,
-                           pagination=pagination, per_page=per_page)
+                           pagination=pagination, per_page=per_page,
+                           colors=colors, card_types=card_types, card_rarity=card_rarity)
 
 
 @app.route('/cards/new', methods=['POST', 'GET'])
@@ -134,7 +172,7 @@ def new_card():
         user_id = ObjectId(session['userinfo'].get("id"))
         cards.insert_one({
             'card_name': request.form.get('card_name'),
-            'color': colors_id,
+            'color': colors_form,
             'rarity': ObjectId(rarity_form),
             'type': ObjectId(type_form),
             'set': ObjectId(expansion_form),
@@ -182,7 +220,7 @@ def edit_card(card_id):
         user_id = ObjectId(session['userinfo'].get("id"))
         cards.update({"_id": ObjectId(card_id)}, {
             'card_name': request.form.get('card_name'),
-            'color': colors_id,
+            'color': colors_form,
             'rarity': ObjectId(rarity_form),
             'type': ObjectId(type_form),
             'set': ObjectId(expansion_form),

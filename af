@@ -1,0 +1,69 @@
+[1mdiff --git a/templates/new_card.html b/templates/new_card.html[m
+[1mindex 918355e..c80eb76 100644[m
+[1m--- a/templates/new_card.html[m
+[1m+++ b/templates/new_card.html[m
+[36m@@ -1,20 +1,13 @@[m
+[31m-{% extends 'base.html' %} [m
+[31m-[m
+[31m-{% block title %}[m
+[32m+[m[32m{% extends 'base.html' %} {% block title %}[m
+ <title>DECK-BOX {{user_name}}</title>[m
+[31m-{% endblock %}[m
+[31m-[m
+[31m-{% block sidenav %}[m
+[32m+[m[32m{% endblock %} {% block sidenav %}[m
+ <ul class="left">[m
+[31m-    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>[m
+[32m+[m[32m  <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>[m
+ </ul>[m
+[31m-{% endblock %} [m
+[31m-{% block content %}[m
+[32m+[m[32m{% endblock %} {% block content %}[m
+ <!--flash message with card name that was added-->[m
+[31m-{% with alert = get_flashed_messages(category_filter=["alert"]) %} [m
+[31m-  {% if alert %} [m
+[31m-    {% for message in alert%}[m
+[31m-      <p class="{{category}} purple-alert">{{message}}</p>[m
+[32m+[m[32m{% with alert = get_flashed_messages(category_filter=["alert"]) %} {% if alert %} {% for message in alert%}[m
+[32m+[m[32m<p class="{{category}} purple-alert">{{message}}</p>[m
+ {% endfor %} {% endif %} {% endwith %}[m
+ <h3 class="title">Add Card</h3>[m
+ <div class="row card-form">[m
+[36m@@ -28,15 +21,15 @@[m
+     <div class="row">[m
+       <div class="input-field col s10 offset-s1 m5 offset-m1">[m
+         <select id="color" name="color" multiple required>[m
+[31m-            {% for color in colors %}[m
+[31m-                <option value="{{color._id}}">{{color.color}}</option>[m
+[31m-            {% endfor %}[m
+[31m-        </select>[m
+[32m+[m[32m              {% for color in colors %}[m
+[32m+[m[32m                  <option value="{{color._id}}">{{color.color}}</option>[m
+[32m+[m[32m              {% endfor %}[m
+[32m+[m[32m          </select>[m
+         <label>Multiply color select</label>[m
+       </div>[m
+       <div class="input-field col s10 offset-s1 m5">[m
+         <label for="mana_cost">Converted Mana Cost</label>[m
+[31m-        <input type="number" name="mana_cost" value="0" class="validate"  />[m
+[32m+[m[32m        <input type="number" name="mana_cost" value="0" class="validate" />[m
+       </div>[m
+     </div>[m
+     <div class="row">[m
+[36m@@ -120,10 +113,8 @@[m
+     </div>[m
+   </form>[m
+ </div>[m
+[31m-{% endblock %}[m
+[31m-{% block footer_links %}[m
+[31m-    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>[m
+[31m-    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>[m
+[31m-    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>[m
+[31m-    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>[m
+[31m-{% endblock%}[m
+\ No newline at end of file[m
+[32m+[m[32m{% endblock %} {% block footer_links %}[m
+[32m+[m[32m<span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>[m
+[32m+[m[32m<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>[m
+[32m+[m[32m<span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>[m
+[32m+[m[32m<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> {% endblock%}[m

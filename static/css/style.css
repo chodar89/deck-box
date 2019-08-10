@@ -212,7 +212,8 @@ nav .sidenav-trigger {
     margin-top: 30px;
 }
 
-.card-per-page>div>button {
+.card-per-page>div>button,
+.card-per-page>div>a {
     margin-top: -20px;
 }
 
@@ -282,6 +283,15 @@ nav .sidenav-trigger {
 
 .blank-deck {
     margin: 60px 30px 30px;
+}
+
+.str-and-toug-range {
+    display: flex;
+    padding: 0px !important; 
+}
+
+.str-and-toug-range>div {
+    margin: 0px 1px;
 }
 
 .card-name,
