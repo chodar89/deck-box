@@ -10,6 +10,11 @@
 <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
 <h3 class="title">Add Card</h3>
+<div class="center">
+    <a href="{{url_for('my_cards')}}" class="btn waves-effect waves-light btn-blue">my cards
+        <i class="material-icons right">replay</i>
+    </a>
+</div>
 <div class="row card-form">
   <form class="col s12 center" action="{{url_for('new_card')}}" method="POST">
     <div class="row">

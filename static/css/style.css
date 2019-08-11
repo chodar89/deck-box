@@ -225,24 +225,6 @@ nav .sidenav-trigger {
     font-style: italic;
     margin-bottom: 30px;
 }
-#arrow-toggle-down>i {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    margin-top: -15px;
-    color: #6d6d6d;
-    transition: background-color 0.5s ease-in-out;
-}
-
-#arrow-toggle-down>i:hover {
-    cursor: pointer;
-    color: #000;
-}
-
-#arrow-toggle-down>p {
-    margin: 0px;
-    font-weight: 700;
-    font-style: italic;
-}
 
 #cardType {
     justify-content: flex-end;
@@ -285,9 +267,20 @@ nav .sidenav-trigger {
     margin: 60px 30px 30px;
 }
 
+.delete-edit-deck {
+    margin-bottom: 30px;
+}
+
 .search,
-.search-arrow {
+.search-arrow,
+.arrow-charts {
     font-size: 2em;
+    color: #102540;
+    cursor: pointer;
+}
+
+.charts {
+    font-size: 2.5em;
     color: #102540;
     cursor: pointer;
 }
@@ -295,6 +288,11 @@ nav .sidenav-trigger {
 .search-arrow {
     position: absolute;
     margin: -30px -10px;
+}
+
+.arrow-charts {
+    position: absolute;
+    margin: 18px -27px;
 }
 
 .card-name,
@@ -443,10 +441,19 @@ nav .sidenav-trigger {
 
 /*-------------------------- Buttons ---*/
 
+.per-page {
+    display: flex;
+    justify-content: center;
+}
+
+.per-page>div,
+.per-page-btn {
+    width: 100px;
+}
+
 .per-page-btn {
     margin: 8px 0px 0px 10px;
     padding-left: 16px;
-    width: 100px;
 }
 
 .btn-blue {

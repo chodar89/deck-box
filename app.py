@@ -70,21 +70,10 @@ def my_cards():
     Request number of cards to display per page from form.
     If user dont pick any, take number from database
     """
-    colors = mongo.db.colors.find()
-    card_rarity = mongo.db.rarity.find()
-    expansion = mongo.db.expansion_set.find()
-    card_types = mongo.db.card_types.find()
-    rating = mongo.db.rating.find()
-    search = False
-    q = request.args.get('q')
-    if q:
-        search = True
-    page = request.args.get(get_page_parameter(), type=int, default=1)
     user_name = session['userinfo'].get("username")
-    user = mongo.db.users.find_one({"username": user_name})
-    user_id = ObjectId(session['userinfo'].get("id"))
     if request.method == "POST":
         # If method is POST take number of cards to display from form
+        # Or filter settings
         if request.form.get('change_per_page') is not None:
             change_per_page = request.form.get('change_per_page')
             mongo.db.users.update({'username': user_name},
@@ -101,6 +90,16 @@ def my_cards():
                 'descending_ascending': request.form.get('descending_ascending')
             }
             return redirect(url_for('my_cards'))
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    colors = mongo.db.colors.find()
+    card_rarity = mongo.db.rarity.find()
+    card_types = mongo.db.card_types.find()
+    user = mongo.db.users.find_one({"username": user_name})
+    user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
     card_output = []
     if 'filter' not in session:
@@ -404,6 +403,7 @@ def deck_build(deck_id):
     user_name = session['userinfo'].get("username")
     if request.method == "POST":
         # If method is POST take number of cards to display from form
+        # Or filter settings
         if request.form.get('change_per_page') is not None:
             change_per_page = request.form.get('change_per_page')
             mongo.db.users.update({'username': user_name},

@@ -12,27 +12,22 @@
 {% for message in alert %}
 <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %}
-<div class="row">
-    <p class="deck-title-name">{{ deck.deck_name }}</p>
-</div>
-<div class="center">
-    <a href="{{url_for('deck_browse', deck_id=deck._id)}}" class="btn waves-effect waves-light btn-blue">go back
-        <i class="material-icons right">replay</i>
-    </a>
-</div>
-<div class="container">
+<div class="card-panel hoverable">
+    <div class="row">
+        <p class="deck-title-name">search</p>
+    </div>
     <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
         <div class="row">
-            <div class="input-field col s10 offset-s1 m2 offset-m5" style="display: flex;">
+            <p>Cards per page</p>
+            <div class="input-field per-page" style="display: flex;">
                 <select id="change_per_page" name="change_per_page">
-                    <option value="" selected disabled>{{per_page}}</option>
+                    <option value="{{per_page}}" selected disabled>{{per_page}}</option>
                     <option value="5" >5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
                 </select>
-                <label>Cards per page</label>
                 <button class="per-page-btn btn waves-effect waves-light btn-blue" style="margin: 8px 0px 0px 10px;padding-left: 10px;" type="submit">Set</button>
             </div>
         </div>
@@ -94,6 +89,14 @@
         </form>
     </section>
 </div>
+<div class="row">
+    <p class="deck-title-name">{{ deck.deck_name }}</p>
+</div>
+<div class="center">
+    <a href="{{url_for('deck_browse', deck_id=deck._id)}}" class="btn waves-effect waves-light btn-blue">go back
+        <i class="material-icons right">replay</i>
+    </a>
+</div>
 <div class="cards-layout">
     <!--loop all user cards and diplay with option to add 1 to 4 cards-->
     {% for card in cards %}
@@ -113,7 +116,6 @@
                 <button id="add_button" type="submit"><i class="fas fa-plus fa-2x"></i></button>
             </div>
             <div class="row">
-
             </div>
         </form>
         <div class="row">

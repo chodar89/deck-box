@@ -3,8 +3,8 @@ $(document).ready(function() {
     $(".dropdown-trigger").dropdown();
     $('.parallax').parallax();
     $('select').formSelect();
-    $("#arrow-toggle-down").click(function() {
-        $("#chart-toggle,#filter").slideToggle("slow");
+    $("#toggle-charts-btn,#arrow-toggle-charts").click(function() {
+        $("#chart-toggle").slideToggle("slow");
     });
     $("#toggle-filter,#toggle-filter-arrow").click(function() {
         $("#filter").slideToggle("slow");

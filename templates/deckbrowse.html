@@ -50,17 +50,17 @@
         <p class="count-cards-pararaph">&nbsp; {{ LandsRarities.count_instants }}<span> Instant |</span></p>
         <p class="count-cards-paragaph">&nbsp; {{ LandsRarities.count_lands }}<span> Land</span></p>
     </div>
+    <div class="row center delete-edit-deck">
+        <a href="{{url_for('deck_build', deck_id=deck._id)}}"><i class="far fa-edit fa-3x"></i></a>
+        <a href="{{url_for('remove_deck', deck_id=deck._id)}}"><i class="far fa-trash-alt fa-3x"></i></a>
+    </div>
     <div class="row center">
-            <p>Click for charts</p>
-            <i id="arrow-toggle-down" class="fas fa-sort-down"></i>
+        <i id="toggle-charts-btn" class="charts fas fa-chart-line"></i>
+        <i id="arrow-toggle-charts" class="arrow-charts fas fa-sort-down"></i>
     </div>
     <div id="chart-toggle" class="row">
         <div class="col s6" id="cardType" style="width: 50%; height: 100%;"></div>
         <div class="col s6" id="cardRarity" style="width: 50%; height: 100%;"></div>
-    </div>
-    <div class="row center deck-browse-btn">
-        <a href="{{url_for('deck_build', deck_id=deck._id)}}"><i class="far fa-edit fa-3x"></i></a>
-        <a href="{{url_for('remove_deck', deck_id=deck._id)}}"><i class="far fa-trash-alt fa-3x"></i></a>
     </div>
 </div> 
 <!--loop and display cards-->
