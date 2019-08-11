@@ -25,8 +25,12 @@ def before_request():
     to register page if URL is endpoint is diferent than,
     login, register or index
     """
-    if 'filter' in session and request.endpoint not in ('my_cards', 'deck_build'):
-        session.pop('filter')
+    if request.endpoint not in ('my_cards', 'deck_build'):
+        session['userinfo']["color"] = None
+        session['userinfo']["type"] = None
+        session['userinfo']["rarity"] = None
+        session['userinfo']["sort_by"] = None
+        session['userinfo']["descending_ascending"] = None
     if 'userinfo' not in session and request.endpoint not in (
             'index', 'register', 'login', 'static'):
         return redirect(url_for('register'))
@@ -79,16 +83,13 @@ def my_cards():
             mongo.db.users.update({'username': user_name},
                               {'$set': {'user_per_page':change_per_page}},
                               multi=False)
-        if request.form.get('color') is None:
             return redirect(url_for('my_cards'))
-        else:
-            session['filter'] = {
-                'color': request.form.getlist('color'),
-                'type': request.form.getlist('type'),
-                'rarity': request.form.getlist('rarity'),
-                'sort_by': request.form.get('sort_by'),
-                'descending_ascending': request.form.get('descending_ascending')
-            }
+        if request.form.getlist('color') is not None:
+            session['userinfo']["color"] = request.form.getlist('color')
+            session['userinfo']["type"] = request.form.getlist('type')
+            session['userinfo']["rarity"] = request.form.getlist('rarity')
+            session['userinfo']["sort_by"] = request.form.get('sort_by')
+            session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
             return redirect(url_for('my_cards'))
     search = False
     q = request.args.get('q')
@@ -102,8 +103,8 @@ def my_cards():
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
     card_output = []
-    if 'filter' not in session:
-        cards = mongo.db.cards.find({
+    if session['userinfo']['color'] is None:
+            cards = mongo.db.cards.find({
                 'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                 (page - 1) * per_page).limit(per_page)
     else:
@@ -114,15 +115,15 @@ def my_cards():
         types_filter = []
         rarity_filter = []
         color_filter = []
-        sort_by = session['filter'].get('sort_by')
-        descending_ascending = session['filter'].get('descending_ascending')
+        sort_by = session['userinfo'].get('sort_by')
+        descending_ascending = session['userinfo'].get('descending_ascending')
         if descending_ascending == 'descending':
             pymongo_sort = pymongo.DESCENDING
         else:
             pymongo_sort = pymongo.ASCENDING
-        get_objectid_for_category(session['filter'].get('color'), color_filter)
-        get_objectid_for_category(session['filter'].get('type'), types_filter)
-        get_objectid_for_category(session['filter'].get('rarity'), rarity_filter)
+        get_objectid_for_category(session['userinfo'].get('color'), color_filter)
+        get_objectid_for_category(session['userinfo'].get('type'), types_filter)
+        get_objectid_for_category(session['userinfo'].get('rarity'), rarity_filter)
         cards = mongo.db.cards.find({
             '$and': [{'user_id': user_id},
                      {'color': {'$in': color_filter}},
@@ -409,16 +410,13 @@ def deck_build(deck_id):
             mongo.db.users.update({'username': user_name},
                               {'$set': {'user_per_page':change_per_page}},
                               multi=False)
-        if request.form.get('color') is None:
             return redirect(url_for('my_cards'))
-        else:
-            session['filter'] = {
-                'color': request.form.getlist('color'),
-                'type': request.form.getlist('type'),
-                'rarity': request.form.getlist('rarity'),
-                'sort_by': request.form.get('sort_by'),
-                'descending_ascending': request.form.get('descending_ascending')
-            }
+        if request.form.getlist('color') is not None:
+            session['userinfo']["color"] = request.form.getlist('color')
+            session['userinfo']["type"] = request.form.getlist('type')
+            session['userinfo']["rarity"] = request.form.getlist('rarity')
+            session['userinfo']["sort_by"] = request.form.get('sort_by')
+            session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
             return redirect(url_for('my_cards'))
     search = False
     q = request.args.get('q')
@@ -432,13 +430,13 @@ def deck_build(deck_id):
     user = mongo.db.users.find_one({"username": user_name})
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
-    if 'filter' not in session:
-        cards = mongo.db.cards.find({
+    if session['userinfo']['color'] is None:
+            cards = mongo.db.cards.find({
                 'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                 (page - 1) * per_page).limit(per_page)
     else:
         def get_objectid_for_category(session_filter, container):
-            """Get _id for each category from session['filter'] and append ObjectId"""
+            """Get _id for each category from session and append ObjectId"""
             for each in session_filter:
                 container.append(ObjectId(each))
         types_filter = []
@@ -450,9 +448,9 @@ def deck_build(deck_id):
             pymongo_sort = pymongo.DESCENDING
         else:
             pymongo_sort = pymongo.ASCENDING
-        get_objectid_for_category(session['filter'].get('color'), color_filter)
-        get_objectid_for_category(session['filter'].get('type'), types_filter)
-        get_objectid_for_category(session['filter'].get('rarity'), rarity_filter)
+        get_objectid_for_category(session['userinfo'].get('color'), color_filter)
+        get_objectid_for_category(session['userinfo'].get('type'), types_filter)
+        get_objectid_for_category(session['userinfo'].get('rarity'), rarity_filter)
         cards = mongo.db.cards.find({
             '$and': [{'user_id': user_id},
                      {'color': {'$in': color_filter}},
@@ -533,7 +531,13 @@ def register():
                     user = users.find_one({'username': new_username.lower()})
                     session['userinfo'] = {'username': user.get('username'),
                                            'id': str(user.get('_id')),
-                                           'email': user.get('email'), 'avatar': user.get('avatar')}
+                                           'email': user.get('email'), 
+                                           'avatar': user.get('avatar'),
+                                           'color': None,
+                                           'type': None,
+                                           'rarity': None,
+                                           'sort_by': None,
+                                           'descending_ascending': None}
                     flash('Thank you for creating an account', 'alert')
                 return redirect(url_for('my_decks'))
             else:
@@ -552,7 +556,13 @@ def login():
                          user['password']) == user['password']:
             session['userinfo'] = {'username': user.get('username'),
                                    'id': str(user.get('_id')),
-                                   'email': user.get('email'), 'avatar': user.get('avatar')}
+                                   'email': user.get('email'), 
+                                   'avatar': user.get('avatar'),
+                                   'color': None,
+                                   'type': None,
+                                   'rarity': None,
+                                   'sort_by': None,
+                                   'descending_ascending': None}
             flash(f"Welcome back {session['userinfo'].get('username')}", "welcome")
             return redirect(url_for('my_decks'))
     flash("Incorrect password or username", "error")

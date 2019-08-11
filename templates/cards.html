@@ -16,16 +16,17 @@
 {% for message in alert %}
 <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %} {{rate}} 
+{{check}}
 <div class="card-panel hoverable">
     <div class="row">
         <p class="deck-title-name">search</p>
     </div>
     <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
         <div class="row">
-            <p>Cards per page</p>
+            <p style="font-style:italic;">Cards per page</p>
             <div class="input-field center per-page" style="display: flex;">
-                <select id="change_per_page" name="change_per_page">
-                    <option value="{{per_page}}" selected disabled>{{per_page}}</option>
+                <select id="change_per_page" name="change_per_page" required>
+                    <option value="" selected disabled>{{per_page}}</option>
                     <option value="5" >5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -45,10 +46,10 @@
             <div class="row">
                 <div class="input-field col s10 offset-s1 m2 offset-m3">
                     <select class="select_all" id="color" name="color" multiple required>
-                    {% for color in colors %}
-                        <option value="{{color._id}}">{{color.color}}</option>
-                    {% endfor %}
-                </select>
+                        {% for color in colors %}
+                            <option value="{{color._id}}">{{color.color}}</option>
+                        {% endfor %}
+                    </select>
                     <label>Card color</label>
                 </div>
                 <div class="input-field col s10 offset-s1 m2">

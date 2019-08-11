@@ -18,10 +18,10 @@
     </div>
     <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
         <div class="row">
-            <p>Cards per page</p>
-            <div class="input-field per-page" style="display: flex;">
-                <select id="change_per_page" name="change_per_page">
-                    <option value="{{per_page}}" selected disabled>{{per_page}}</option>
+            <p style="font-style:italic;">Cards per page</p>
+            <div class="input-field center per-page" style="display: flex;">
+                <select id="change_per_page" name="change_per_page" required>
+                    <option value="" selected disabled>{{per_page}}</option>
                     <option value="5" >5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
