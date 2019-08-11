@@ -21,11 +21,9 @@ mongo = PyMongo(app)
 @app.before_request
 def before_request():
     """
-    Check if user is not in session, and redirect user
-    to register page if URL is endpoint is diferent than,
-    login, register or index
+    Check where user 
     """
-    if request.endpoint not in ('my_cards', 'deck_build'):
+    if 'username' in session and request.endpoint not in ('my_cards', 'deck_build'):
         session['userinfo']["color"] = None
         session['userinfo']["type"] = None
         session['userinfo']["rarity"] = None
@@ -75,22 +73,6 @@ def my_cards():
     If user dont pick any, take number from database
     """
     user_name = session['userinfo'].get("username")
-    if request.method == "POST":
-        # If method is POST take number of cards to display from form
-        # Or filter settings
-        if request.form.get('change_per_page') is not None:
-            change_per_page = request.form.get('change_per_page')
-            mongo.db.users.update({'username': user_name},
-                              {'$set': {'user_per_page':change_per_page}},
-                              multi=False)
-            return redirect(url_for('my_cards'))
-        if request.form.getlist('color') is not None:
-            session['userinfo']["color"] = request.form.getlist('color')
-            session['userinfo']["type"] = request.form.getlist('type')
-            session['userinfo']["rarity"] = request.form.getlist('rarity')
-            session['userinfo']["sort_by"] = request.form.get('sort_by')
-            session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
-            return redirect(url_for('my_cards'))
     search = False
     q = request.args.get('q')
     if q:
@@ -103,13 +85,29 @@ def my_cards():
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
     card_output = []
+    if request.method == "POST":
+        # If method is POST take number of cards to display from form
+        # Or filter settings
+        if request.form.get('change_per_page') is not None:
+            change_per_page = request.form.get('change_per_page')
+            mongo.db.users.update({'username': user_name},
+                                  {'$set': {'user_per_page':change_per_page}},
+                                  multi=False)
+            return redirect(url_for('my_cards'))
+        if request.form.getlist('color') is not None:
+            session['userinfo']["color"] = request.form.getlist('color')
+            session['userinfo']["type"] = request.form.getlist('type')
+            session['userinfo']["rarity"] = request.form.getlist('rarity')
+            session['userinfo']["sort_by"] = request.form.get('sort_by')
+            session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
+            return redirect(url_for('my_cards'))
     if session['userinfo']['color'] is None:
-            cards = mongo.db.cards.find({
-                'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
+        cards = mongo.db.cards.find({
+            'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                 (page - 1) * per_page).limit(per_page)
     else:
         def get_objectid_for_category(session_filter, container):
-            """Get _id for each category from session['filter'] and append ObjectId"""
+            """Get _id for each category from session and append ObjectId"""
             for each in session_filter:
                 container.append(ObjectId(each))
         types_filter = []
@@ -129,8 +127,8 @@ def my_cards():
                      {'color': {'$in': color_filter}},
                      {'type': {'$in': types_filter}},
                      {'rarity': {'$in': rarity_filter}},
-                     ]}).sort(sort_by, pymongo_sort).skip(
-                (page - 1) * per_page).limit(per_page)
+                    ]}).sort(sort_by, pymongo_sort).skip(
+                        (page - 1) * per_page).limit(per_page)
     for card in cards:
         card_output.append(card)
     if cards is None:
@@ -408,8 +406,8 @@ def deck_build(deck_id):
         if request.form.get('change_per_page') is not None:
             change_per_page = request.form.get('change_per_page')
             mongo.db.users.update({'username': user_name},
-                              {'$set': {'user_per_page':change_per_page}},
-                              multi=False)
+                                  {'$set': {'user_per_page':change_per_page}},
+                                  multi=False)
             return redirect(url_for('my_cards'))
         if request.form.getlist('color') is not None:
             session['userinfo']["color"] = request.form.getlist('color')
@@ -431,8 +429,8 @@ def deck_build(deck_id):
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
     if session['userinfo']['color'] is None:
-            cards = mongo.db.cards.find({
-                'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
+        cards = mongo.db.cards.find({
+            'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
                 (page - 1) * per_page).limit(per_page)
     else:
         def get_objectid_for_category(session_filter, container):
@@ -442,8 +440,8 @@ def deck_build(deck_id):
         types_filter = []
         rarity_filter = []
         color_filter = []
-        sort_by = session['filter'].get('sort_by')
-        descending_ascending = session['filter'].get('descending_ascending')
+        sort_by = session['userinfo'].get('sort_by')
+        descending_ascending = session['userinfo'].get('descending_ascending')
         if descending_ascending == 'descending':
             pymongo_sort = pymongo.DESCENDING
         else:
@@ -456,8 +454,8 @@ def deck_build(deck_id):
                      {'color': {'$in': color_filter}},
                      {'type': {'$in': types_filter}},
                      {'rarity': {'$in': rarity_filter}},
-                     ]}).sort(sort_by, pymongo_sort).skip(
-                (page - 1) * per_page).limit(per_page)
+                    ]}).sort(sort_by, pymongo_sort).skip(
+                        (page - 1) * per_page).limit(per_page)
     if cards is None:
         count_user_cards = 0
         flash('you do not have any cards in your collection yet', 'error')
@@ -526,12 +524,12 @@ def register():
                     hash_password = bcrypt.hashpw(
                         request.form['password'].encode('utf-8'), bcrypt.gensalt())
                     users.insert_one({'username':new_username.lower(), 'password' : hash_password,
-                                  'email': new_email.lower(), 'avatar': request.form['avatar'],
-                                  'user_per_page': 10})
+                                      'email': new_email.lower(), 'avatar': request.form['avatar'],
+                                      'user_per_page': 10})
                     user = users.find_one({'username': new_username.lower()})
                     session['userinfo'] = {'username': user.get('username'),
                                            'id': str(user.get('_id')),
-                                           'email': user.get('email'), 
+                                           'email': user.get('email'),
                                            'avatar': user.get('avatar'),
                                            'color': None,
                                            'type': None,
@@ -556,7 +554,7 @@ def login():
                          user['password']) == user['password']:
             session['userinfo'] = {'username': user.get('username'),
                                    'id': str(user.get('_id')),
-                                   'email': user.get('email'), 
+                                   'email': user.get('email'),
                                    'avatar': user.get('avatar'),
                                    'color': None,
                                    'type': None,
