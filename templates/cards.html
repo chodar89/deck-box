@@ -1,15 +1,13 @@
 {% extends 'base.html' %} {% block title %}
 <title>DECK-BOX {{user_name}}</title>
-{% endblock %}
-{% block sidenav %}
+{% endblock %} {% block sidenav %}
 <ul class="left">
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
 </ul>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <!--flash message no cards if user don't have any-->
 {% with error = get_flashed_messages(category_filter=["error"]) %}
-{% if error %} 
+{% if error %}
 {% for message in error %}
 <p class="{{category}} purple-alert">{{message}}</p>
 {% endfor %} {% endif %} {% endwith %} 
@@ -17,55 +15,11 @@
 {% if alert %}
 {% for message in alert %}
 <p class="{{category}} purple-alert">{{message}}</p>
-{% endfor %} {% endif %} {% endwith %} {{rate}}
-{{strength_from}}
+{% endfor %} {% endif %} {% endwith %} {{rate}} 
 <div class="container">
     <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
         <div class="row">
-            <div class="input-field col s10 offset-s1 m2 offset-m3">
-                <select class="select_all" id="color" name="color" multiple required>
-                    {% for color in colors %}
-                        <option value="{{color._id}}">{{color.color}}</option>
-                    {% endfor %}
-                </select>
-                <label>Card color</label>
-            </div>
-            <div class="input-field col s10 offset-s1 m2">
-                <select class="select_all" id="type" name="type" multiple required>
-                        {% for type in card_types %}
-                            <option value="{{type._id}}">{{type.type}}</option>
-                        {% endfor %}
-                    </select>
-                <label>Card type</label>
-            </div>
-            <div class="input-field col s10 offset-s1 m2">
-                <select class="select_all" id="rarity" name="rarity" multiple required>
-                        {% for rarity in card_rarity %}
-                            <option value="{{rarity._id}}">{{rarity.rarity}}</option>
-                        {% endfor %}
-                    </select>
-                <label>Card rarity</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s10 offset-s1 m1 offset-m4 str-and-toug-range">
-                <select id="strength_from" name="strength_from" required>
-                        <option value="0" selected>0</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                    </select>
-                <select id="strength_to" name="strength_to" required>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25" selected>25</option>
-                    </select>
-                <label>Strength</label>
-            </div>
-            <div class="input-field col s10 offset-s1 m4 l2 ">
+            <div class="input-field col s10 offset-s1 m2 offset-m5" style="display: flex;">
                 <select id="change_per_page" name="change_per_page">
                     <option value="{{per_page}}" selected disabled>{{per_page}}</option>
                     <option value="5" >5</option>
@@ -75,32 +29,66 @@
                     <option value="100">100</option>
                 </select>
                 <label>Cards per page</label>
+                <button class="per-page-btn btn waves-effect waves-light btn-blue" style="margin: 8px 0px 0px 10px;padding-left: 10px;" type="submit">Set</button>
             </div>
-            <div class="input-field col s10 offset-s1 m1 str-and-toug-range">
-                <select id="toughness_from" name="toughness_from" required>
-                        <option value="0" selected>0</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                    </select>
-                <select id="toughness_to" name="toughness_to" required>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25" selected>25</option>
-                    </select>
-                <label>Toughness</label>
-            </div>
-        </div>
-        <div class="row">
-            <button class="btn waves-effect waves-light btn-blue" type="submit">Apply</button>
-            <a href="{{url_for('my_cards')}}" 
-            onclick="{% if 'filter' in session %}{{session.pop('filter')}}{%endif%}" 
-            class="btn waves-effect waves-light red">Reset</a>
         </div>
     </form>
+    <section>
+        <div class="center">
+            <p><i id="toggle-filter" class="search fas fa-search"></i></p>
+            <p><i id="toggle-filter-arrow" class="search-arrow fas fa-sort-down"></i></p>
+        </div>
+        <form id="filter" class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
+            <div class="row">
+                <div class="input-field col s10 offset-s1 m2 offset-m3">
+                    <select class="select_all" id="color" name="color" multiple required>
+                    {% for color in colors %}
+                        <option value="{{color._id}}">{{color.color}}</option>
+                    {% endfor %}
+                </select>
+                    <label>Card color</label>
+                </div>
+                <div class="input-field col s10 offset-s1 m2">
+                    <select class="select_all" id="type" name="type" multiple required>
+                        {% for type in card_types %}
+                            <option value="{{type._id}}">{{type.type}}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Card type</label>
+                </div>
+                <div class="input-field col s10 offset-s1 m2">
+                    <select class="select_all" id="rarity" name="rarity" multiple required>
+                        {% for rarity in card_rarity %}
+                            <option value="{{rarity._id}}">{{rarity.rarity}}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Card rarity</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s10 offset-s1 m3 offset-m3">
+                    <select id="sort_by" name="sort_by" required>
+                    <option value="_id" selected>New cards</option>
+                    <option value="toughness">Toughness</option>
+                    <option value="strength">Strength</option>
+                    <option value="mana_cost">Mana Cost</option>
+                </select>
+                    <label>Sort by:</label>
+                </div>
+                <div class="input-field col s10 offset-s1 m3">
+                    <select id="descending_ascending" name="descending_ascending" required>
+                    <option value='descending' selected>Descending</option>
+                    <option value='ascending'>Ascending</option>
+                </select>
+                    <label>Desc/Asce</label>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light btn-blue" type="submit">Apply</button>
+                <a href="{{url_for('my_cards')}}" onclick="{% if 'filter' in session %}{{session.pop('filter')}}{%endif%}" class="btn waves-effect waves-light red">Reset</a>
+            </div>
+        </form>
+    </section>
 </div>
 <!--diplay user cards with pagination-->
 <div class="cards-layout">
@@ -146,7 +134,8 @@
     {% endfor %}
 </div>
 <div class="center">{{ pagination.links }}</div>
-{% endblock %} {% block footer_links %}
+{% endblock %}
+{% block footer_links %}
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>

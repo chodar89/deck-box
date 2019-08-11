@@ -4,9 +4,12 @@ $(document).ready(function() {
     $('.parallax').parallax();
     $('select').formSelect();
     $("#arrow-toggle-down").click(function() {
-        $("#chart-toggle").slideToggle("slow");
+        $("#chart-toggle,#filter").slideToggle("slow");
     });
-    $("#chart-toggle").hide();
+    $("#toggle-filter,#toggle-filter-arrow").click(function() {
+        $("#filter").slideToggle("slow");
+    });
+    $("#chart-toggle,#filter").hide();
     // Fix materialize bug. It doesn't display required validation form
     $('select[required]').css({
         display: 'inline',

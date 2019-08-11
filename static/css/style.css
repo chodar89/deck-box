@@ -285,13 +285,16 @@ nav .sidenav-trigger {
     margin: 60px 30px 30px;
 }
 
-.str-and-toug-range {
-    display: flex;
-    padding: 0px !important; 
+.search,
+.search-arrow {
+    font-size: 2em;
+    color: #102540;
+    cursor: pointer;
 }
 
-.str-and-toug-range>div {
-    margin: 0px 1px;
+.search-arrow {
+    position: absolute;
+    margin: -30px -10px;
 }
 
 .card-name,
@@ -439,6 +442,12 @@ nav .sidenav-trigger {
 }
 
 /*-------------------------- Buttons ---*/
+
+.per-page-btn {
+    margin: 8px 0px 0px 10px;
+    padding-left: 16px;
+    width: 100px;
+}
 
 .btn-blue {
     background-color: #5c7fa5;
