@@ -21,7 +21,8 @@ mongo = PyMongo(app)
 @app.before_request
 def before_request():
     """
-    Check where user 
+    Check enpoints, if user not in session redirect to register page.
+    If in session restart filter setting when user change page
     """
     if 'username' in session and request.endpoint not in ('my_cards', 'deck_build'):
         session['userinfo']["color"] = None
@@ -73,6 +74,22 @@ def my_cards():
     If user dont pick any, take number from database
     """
     user_name = session['userinfo'].get("username")
+    if request.method == "POST":
+        # If method is POST take number of cards to display from form
+        # Or filter settings
+        if request.form.get('change_per_page') is not None:
+            change_per_page = request.form.get('change_per_page')
+            mongo.db.users.update({'username': user_name},
+                                  {'$set': {'user_per_page':change_per_page}},
+                                  multi=False)
+        if request.form.getlist('color') is not None:
+            session['userinfo']["color"] = request.form.getlist('color')
+            session['userinfo']["type"] = request.form.getlist('type')
+            session['userinfo']["rarity"] = request.form.getlist('rarity')
+            session['userinfo']["sort_by"] = request.form.get('sort_by')
+            session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
+            session.modified = True
+        return redirect(url_for('my_cards'))
     search = False
     q = request.args.get('q')
     if q:
@@ -85,22 +102,6 @@ def my_cards():
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
     card_output = []
-    if request.method == "POST":
-        # If method is POST take number of cards to display from form
-        # Or filter settings
-        if request.form.get('change_per_page') is not None:
-            change_per_page = request.form.get('change_per_page')
-            mongo.db.users.update({'username': user_name},
-                                  {'$set': {'user_per_page':change_per_page}},
-                                  multi=False)
-            return redirect(url_for('my_cards'))
-        if request.form.getlist('color') is not None:
-            session['userinfo']["color"] = request.form.getlist('color')
-            session['userinfo']["type"] = request.form.getlist('type')
-            session['userinfo']["rarity"] = request.form.getlist('rarity')
-            session['userinfo']["sort_by"] = request.form.get('sort_by')
-            session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
-            return redirect(url_for('my_cards'))
     if session['userinfo']['color'] is None:
         cards = mongo.db.cards.find({
             'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
@@ -387,6 +388,28 @@ def new_deck():
         return render_template('new_deck.html', colors=colors, sign_out='Sign Out')
 
 
+@app.route('/deck/edit/<deck_id>', methods=['POST', 'GET'])
+def edit_deck(deck_id):
+    """ If method is POST insert deck to database else render new deck form """
+    deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
+    decks = mongo.db.decks
+    deck_id = deck['_id']
+    if request.method == 'POST':
+        colors_id = []
+        colors_form = request.form.getlist('color')
+        for color in colors_form:
+            colors = ObjectId(color)
+            colors_id.append(colors)
+        decks.update({'_id':  ObjectId(deck_id)},
+                      {'$set': {'deck_name': request.form.get('deck_name'),
+                                'color': colors_id}})
+        return redirect(url_for('deck_browse', deck_id=deck_id))
+    if request.method == 'GET':
+        deck_name = deck['deck_name']
+        colors = mongo.db.colors.find()
+        return render_template('editdeck.html', deck=deck, deck_name=deck_name, colors=colors, sign_out='Sign Out')
+
+
 @app.route('/decks/remove/<deck_id>')
 def remove_deck(deck_id):
     """ Delete deck """
@@ -408,14 +431,14 @@ def deck_build(deck_id):
             mongo.db.users.update({'username': user_name},
                                   {'$set': {'user_per_page':change_per_page}},
                                   multi=False)
-            return redirect(url_for('my_cards'))
         if request.form.getlist('color') is not None:
             session['userinfo']["color"] = request.form.getlist('color')
             session['userinfo']["type"] = request.form.getlist('type')
             session['userinfo']["rarity"] = request.form.getlist('rarity')
             session['userinfo']["sort_by"] = request.form.get('sort_by')
             session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
-            return redirect(url_for('my_cards'))
+            session.modified = True
+        return redirect(url_for('my_cards'))
     search = False
     q = request.args.get('q')
     if q:

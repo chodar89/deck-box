@@ -20,7 +20,7 @@
 <!--panel with deck statistics and charts-->
 <div class="card-panel hoverable">
     <div class="row">
-        <p class="deck-title-name">{{ deck.deck_name }}</p>
+        <p class="deck-title-name">{{ deck.deck_name }}<a class="edit-deck-pen" href="{{url_for('edit_deck', deck_id=deck._id)}}"><i class="fas fa-pen"></i></a></p>
     </div>
     <div class="row deck-colors">
         {% for color in color_name %}

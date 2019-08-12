@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>DECK-BOX {{user_name}}</title>
+{% endblock %}
+
+{% block sidenav %}
+<ul class="left">
+    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+</ul>
+{% endblock %} 
+{% block content %}
+<h3 class="title">New Deck</h3>
+<div class="center">
+    <a href="{{url_for('deck_browse', deck_id=deck._id)}}" class="btn waves-effect waves-light btn-blue">go back
+        <i class="material-icons right">replay</i>
+    </a>
+</div>
+<div class="row card-form">
+  <form class="col s12 center" action="{{url_for('edit_deck', deck_id=deck._id)}}" method="POST">
+    <div class="row">
+      <div class="input-field col s10 offset-s1">
+        <input value="{{deck_name}}" id="deck_name" name="deck_name" type="text" class="validate" required="" aria-required="true">
+        <label for="deck_name">Deck Name</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s10 offset-s1">
+        <select required id="color" name="color" multiple>
+            {% for color in colors %}
+                <option value="{{color._id}}">{{color.color}}</option>
+            {% endfor %}
+          </select>
+        <label>Multiply color select</label>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn waves-effect waves-light btn-blue" type="submit">Save</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block footer_links %}
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
+    <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}
