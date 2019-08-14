@@ -16,7 +16,7 @@
     <div class="row">
         <p class="deck-title-name">search</p>
     </div>
-    <form class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
+    <form class="center card-per-page" action="{{url_for('deck_build', deck_id=deck._id)}}" method="POST">
         <div class="row">
             <p style="font-style:italic;">Cards per page</p>
             <div class="input-field center per-page" style="display: flex;">
@@ -37,7 +37,7 @@
             <p><i id="toggle-filter" class="search fas fa-search"></i></p>
             <p><i id="toggle-filter-arrow" class="search-arrow fas fa-sort-down"></i></p>
         </div>
-        <form id="filter" class="center card-per-page" action="{{url_for('my_cards')}}" method="POST">
+        <form id="filter" class="center card-per-page" action="{{url_for('deck_build', deck_id=deck._id)}}" method="POST">
             <div class="row">
                 <div class="input-field col s10 offset-s1 m2 offset-m3">
                     <select class="select_all" id="color" name="color" multiple required>
@@ -84,7 +84,7 @@
             </div>
             <div class="row">
                 <button class="btn waves-effect waves-light btn-blue" type="submit">Apply</button>
-                <a href="{{url_for('my_cards')}}" onclick="{% if 'filter' in session %}{{session.pop('filter')}}{%endif%}" class="btn waves-effect waves-light red">Reset</a>
+                <a href="{{url_for('deck_build', deck_id=deck._id)}}" onclick="{% if 'filter' in session %}{{session.pop('filter')}}{%endif%}" class="btn waves-effect waves-light red">Reset</a>
             </div>
         </form>
     </section>
@@ -152,6 +152,6 @@
 <div class="center">{{ pagination.links }}</div>
 {% endblock %} {% block footer_links %}
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
-<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards')}}">My Cards</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> {% endblock%}

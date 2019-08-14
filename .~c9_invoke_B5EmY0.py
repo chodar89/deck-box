@@ -22,13 +22,11 @@ mongo = PyMongo(app)
 def before_request():
     """
     Check enpoints, if user not in session redirect to register page.
-    If endpoint != to my_cards or deck_build set filter to False, so search filter will restart
+    If endpoint != to my_cards or deck_build set filter to False
     """
-    if 'filter_my_cards' in session and request.endpoint not in ('my_cards', 'static'):
-        session['filter_my_cards'] = False
-    if 'filter_deck_build' in session and request.endpoint not in (
-            'add_card_to_deck', 'deck_build', 'static'):
-        session['filter_deck_build'] = False
+    if request.endpoint not in ('my_cards', 'deck_build'):
+        session['filter'] = False
+        session.modified = True
     if 'userinfo' not in session and request.endpoint not in (
             'index', 'register', 'login', 'static'):
         return redirect(url_for('register'))
@@ -65,7 +63,7 @@ def index():
         return render_template('index.html', sign_in='Sign In')
 
 
-@app.route('/cards', methods=["POST", "GET"], endpoint='my_cards')
+@app.route('/cards', endpoint='my_cards', methods=["POST", "GET"])
 def my_cards():
     """
     Shows collection of all user cards plus pagination,
@@ -88,7 +86,7 @@ def my_cards():
             session['userinfo']["rarity"] = request.form.getlist('rarity')
             session['userinfo']["sort_by"] = request.form.get('sort_by')
             session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
-            session['filter_my_cards'] = True
+            session['filter'] = True
             session.modified = True
             return redirect(url_for('my_cards'))
     search = False
@@ -103,7 +101,11 @@ def my_cards():
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
     card_output = []
-    if 'filter_my_cards' in session and session['filter_my_cards'] == True:
+    if session['filter'] == False:
+        cards = mongo.db.cards.find({
+            'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
+                (page - 1) * per_page).limit(per_page)
+    else:
         def get_objectid_for_category(session_filter, container):
             """Get _id for each category from session and append ObjectId"""
             for each in session_filter:
@@ -127,11 +129,6 @@ def my_cards():
                      {'rarity': {'$in': rarity_filter}},
                     ]}).sort(sort_by, pymongo_sort).skip(
                         (page - 1) * per_page).limit(per_page)
-        session['filter_my_cards'] = True
-    else:
-        cards = mongo.db.cards.find({
-            'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
-                (page - 1) * per_page).limit(per_page)
     for card in cards:
         card_output.append(card)
     if cards is None:
@@ -139,11 +136,12 @@ def my_cards():
         flash('you do not have any cards in your collection yet', 'error')
     else:
         count_user_cards = cards.count()
+    test= session['filter'] 
     pagination = Pagination(page=page, per_page=per_page, total=count_user_cards,
                             search=search, record_name='card_output')
     return render_template('cards.html', card_output=card_output,
                            pagination=pagination, per_page=per_page,
-                           colors=colors, card_types=card_types, card_rarity=card_rarity)
+                           colors=colors, card_types=card_types, card_rarity=card_rarity,test=test)
 
 
 @app.route('/cards/new', methods=['POST', 'GET'])
@@ -249,7 +247,7 @@ def remove_card(card_id):
     return redirect(url_for('my_cards'))
 
 
-@app.route('/decks', endpoint='my_decks')
+@app.route('/decks')
 def my_decks():
     """ This is the home page after login, dispays all users decks """
     user_id = ObjectId(session['userinfo'].get("id"))
@@ -404,7 +402,7 @@ def edit_deck(deck_id):
             colors_id.append(colors)
         decks.update({'_id':  ObjectId(deck_id)},
                      {'$set': {'deck_name': request.form.get('deck_name'),
-                               'color': colors_id}})
+                                'color': colors_id}})
         return redirect(url_for('deck_browse', deck_id=deck_id))
     if request.method == 'GET':
         deck_name = deck['deck_name']
@@ -426,26 +424,23 @@ def remove_deck(deck_id):
 def deck_build(deck_id):
     """ Redirect page where user can add cards to specific deck """
     user_name = session['userinfo'].get("username")
-    deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
     if request.method == "POST":
         # If method is POST take number of cards to display from form
         # Or filter settings
-        deck_id = deck_id
         if request.form.get('change_per_page') is not None:
             change_per_page = request.form.get('change_per_page')
             mongo.db.users.update({'username': user_name},
                                   {'$set': {'user_per_page':change_per_page}},
                                   multi=False)
-            return redirect(url_for('deck_build', deck_id=deck_id))
         if request.form.getlist('color') is not None:
             session['userinfo']["color"] = request.form.getlist('color')
             session['userinfo']["type"] = request.form.getlist('type')
             session['userinfo']["rarity"] = request.form.getlist('rarity')
             session['userinfo']["sort_by"] = request.form.get('sort_by')
             session['userinfo']["descending_ascending"] = request.form.get('descending_ascending')
-            session['filter_deck_build'] = True
+            session['filter'] = True
             session.modified = True
-            return redirect(url_for('deck_build', deck_id=deck_id))
+        return redirect(url_for('my_cards'))
     search = False
     q = request.args.get('q')
     if q:
@@ -454,10 +449,15 @@ def deck_build(deck_id):
     card_rarity = mongo.db.rarity.find()
     card_types = mongo.db.card_types.find()
     page = request.args.get(get_page_parameter(), type=int, default=1)
+    deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})
     user = mongo.db.users.find_one({"username": user_name})
     user_id = ObjectId(session['userinfo'].get("id"))
     per_page = int(user.get('user_per_page'))
-    if 'filter_deck_build' in session and session['filter_deck_build'] == True:
+    if session['filter'] == False:
+        cards = mongo.db.cards.find({
+            'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
+                (page - 1) * per_page).limit(per_page)
+    else:
         def get_objectid_for_category(session_filter, container):
             """Get _id for each category from session and append ObjectId"""
             for each in session_filter:
@@ -481,11 +481,6 @@ def deck_build(deck_id):
                      {'rarity': {'$in': rarity_filter}},
                     ]}).sort(sort_by, pymongo_sort).skip(
                         (page - 1) * per_page).limit(per_page)
-        session['filter_deck_build'] = True
-    else:
-        cards = mongo.db.cards.find({
-            'user_id': user_id}).sort('_id', pymongo.DESCENDING).skip(
-                (page - 1) * per_page).limit(per_page)
     if cards is None:
         count_user_cards = 0
         flash('you do not have any cards in your collection yet', 'error')
@@ -498,7 +493,7 @@ def deck_build(deck_id):
                            card_rarity=card_rarity)
 
 
-@app.route('/decks/deck_build/<deck_id>/<card_id>', methods=['POST'], endpoint='add_card_to_deck')
+@app.route('/decks/deck_build/<deck_id>/<card_id>', methods=['POST'])
 def add_card_to_deck(deck_id, card_id):
     """ Add card to deck """
     current_deck = mongo.db.decks.find_one({'_id': ObjectId(deck_id)})

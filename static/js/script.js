@@ -10,6 +10,9 @@ $(document).ready(function() {
         $("#filter").slideToggle("slow");
     });
     $("#chart-toggle,#filter").hide();
+    $('#reset-btn').click(function(){
+        $('#reset').val('True');
+    });
     // Fix materialize bug. It doesn't display required validation form
     $('select[required]').css({
         display: 'inline',

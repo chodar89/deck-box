@@ -7,7 +7,7 @@ Magic The Gathering cards. App allows users to hold their cards collection in th
 manage collection and decks.<br/>
 Database is NoSQL - MongoDB<br/>
 **[DECK BOX](http://deck-box.herokuapp.com/)**<br/>
-To check pre upload cards and pre-build deck.<br/>
+To check app performance with pre upload cards and pre-build deck.<br/>
 Login: testuser<br/>
 Password: testuser<br/>
 
@@ -35,7 +35,7 @@ Hosted mokup files<br/>
 - Browse collection. Assigned for each user
 - Build decks from cards that user holds in his collection
 - Delete and edit decks and cards
-- Sort cards
+- Sort and filter cards
 - Charts with deck statistics
 - Decks displays how many card we have and how many cards of each type is in the deck
 - Card pagination where user can pick how many card are displayed per page. App saves settings

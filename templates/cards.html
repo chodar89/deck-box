@@ -15,8 +15,7 @@
 {% if alert %}
 {% for message in alert %}
 <p class="{{category}} purple-alert">{{message}}</p>
-{% endfor %} {% endif %} {% endwith %} {{rate}} 
-{{check}}
+{% endfor %} {% endif %} {% endwith %}
 <div class="card-panel hoverable">
     <div class="row">
         <p class="deck-title-name">search</p>
@@ -89,7 +88,7 @@
             </div>
             <div class="row">
                 <button class="btn waves-effect waves-light btn-blue" type="submit">Apply</button>
-                <a href="{{url_for('my_cards')}}" onclick="{% if 'filter' in session %}{{session.pop('filter')}}{%endif%}" class="btn waves-effect waves-light red">Reset</a>
+                <a href="{{url_for('my_cards')}}" onclick="" class="btn waves-effect waves-light red">Reset</a>
             </div>
         </form>
     </section>
@@ -141,7 +140,7 @@
 {% endblock %}
 {% block footer_links %}
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
-<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards', limit=20, offset=0)}}">My Cards</a></span>
+<span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards')}}">My Cards</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> 
 {% endblock%}
