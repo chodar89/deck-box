@@ -99,7 +99,7 @@
     <div class="center col s10 offset-s1 m5 offset-m1">
         <p class="card-name">{{ card.card_name }}</p>
         <div class="row card-size">
-            <img src="{{card.card_url}}"></img>
+            <img src="{{card.card_url}}" onerror="this.onerror=null;this.src='/static/img/cards/blank_card.png';"></img>
         </div>
         <div class="row">
             <a href="{{url_for('edit_card', card_id=card._id)}}"><i class="far fa-edit fa-2x"></i></a>

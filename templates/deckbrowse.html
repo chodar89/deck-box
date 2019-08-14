@@ -70,7 +70,7 @@
         <div class="center col s10 offset-s1 m5 offset-m1">
             <p class="card-name">{{ card.card_name }}</p>
             <div class="row card-size">
-                <img src="{{card.card_url}}"></img>
+                <img src="{{card.card_url}}" onerror="this.onerror=null;this.src='/static/img/cards/blank_card.png';"></img>
             </div>
             <div class="row card-amount">
                 {{ card.amount }}

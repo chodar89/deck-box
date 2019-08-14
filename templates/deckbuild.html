@@ -103,7 +103,7 @@
     <div class="center col s10 offset-s1 m5 offset-m1">
         <p class="card-name">{{ card.card_name }}</p>
         <div class="row card-size">
-            <img src="{{card.card_url}}"></img>
+            <img src="{{card.card_url}}" onerror="this.onerror=null;this.src='/static/img/cards/blank_card.png';"></img>
         </div>
         <form action="{{url_for('add_card_to_deck', deck_id=deck._id, card_id=card._id)}}" method="POST">
             <div class="input-field one-four-cards col s2">
@@ -154,4 +154,5 @@
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards')}}">My Cards</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
-<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> {% endblock%}
+<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}

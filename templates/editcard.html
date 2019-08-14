@@ -10,7 +10,7 @@
 {% endblock %} {% block content %}
 <h3 class="title">Edit Card</h3>
   <div class="row card-size">
-    <img src="{{card.card_url}}"></img>
+    <img src="{{card.card_url}}" onerror="this.onerror=null;this.src='/static/img/cards/blank_card.png';"></img>
   </div>
 <div class="row card-form">
   <form class="col s12 center" action="{{url_for('edit_card', card_id=card._id)}}" method="POST">
