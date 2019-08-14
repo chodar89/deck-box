@@ -76,20 +76,16 @@
         <input type="range" id="toughness" name="toughness" min="0" max="25" />
       </p>
     </div>
-    <div class="row">
-      <div class="row">
+    <div class="row ruling-row">
         <div class="input-field col s10 offset-s1">
           <textarea id="ruling" name="ruling" class="materialize-textarea"></textarea>
           <label for="ruling">Ruling</label>
         </div>
-      </div>
     </div>
     <div class="row">
-      <div class="row">
-        <div class="input-field col s10 offset-s1">
-          <textarea id="flavor_text" name="flavor_text" class="materialize-textarea"></textarea>
-          <label for="flavor_text">Flavor Text</label>
-        </div>
+      <div class="input-field col s10 offset-s1">
+        <textarea id="flavor_text" name="flavor_text" class="materialize-textarea"></textarea>
+        <label for="flavor_text">Flavor Text</label>
       </div>
     </div>
     <div class="row">
@@ -122,4 +118,5 @@
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_decks')}}">My Decks</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('my_cards')}}">My Cards</a></span>
 <span><a class="grey-text text-lighten-3" href="{{ url_for('new_card')}}">Add Card</a></span>
-<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span> {% endblock%}
+<span><a class="grey-text text-lighten-3" href="{{ url_for('new_deck')}}">Add Deck</a></span>
+{% endblock%}

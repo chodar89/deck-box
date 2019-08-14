@@ -133,7 +133,7 @@ nav .sidenav-trigger {
 .index-cards {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
     margin: 55px;
     width: 95%;
     margin-left: auto;
@@ -175,6 +175,10 @@ nav .sidenav-trigger {
     justify-content: center;
     margin-top: 40px;
     margin-bottom: 30px;
+}
+
+.ruling-row {
+    margin-right: 0px!important;
 }
 
 /*-------------------------- Decks / Cards ---*/
@@ -491,7 +495,7 @@ nav .sidenav-trigger {
     height: 4rem;
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     background-color: #fafafa;
     padding: 10px 20%;
 }
@@ -525,7 +529,7 @@ nav .sidenav-trigger {
 
 .site-map {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     width: 100%;
     margin-bottom: 20px;
     letter-spacing: 2px;

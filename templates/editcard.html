@@ -1,5 +1,4 @@
 {% extends 'base.html' %} 
-
 {% block title %}
 <title>DECK-BOX {{user_name}}</title>
 {% endblock %}
@@ -91,20 +90,16 @@
         <input type="range" id="toughness" name="toughness" min="0" max="25" value="{{card.toughness}}" />
       </p>
     </div>
-    <div class="row">
-      <div class="row">
-        <div class="input-field col s10 offset-s1">
-          <textarea id="ruling" name="ruling"  class="materialize-textarea">{{card.ruling}}</textarea>
-          <label for="ruling">Ruling</label>
-        </div>
+    <div class="row ruling-row">
+      <div class="input-field col s10 offset-s1">
+        <textarea id="ruling" name="ruling"  class="materialize-textarea">{{card.ruling}}</textarea>
+        <label for="ruling">Ruling</label>
       </div>
     </div>
     <div class="row">
-      <div class="row">
-        <div class="input-field col s10 offset-s1">
-          <textarea id="flavor_text" name="flavor_text" class="materialize-textarea">{{card.flavor_text}}</textarea>
-          <label for="flavor_text">Flavor Text</label>
-        </div>
+      <div class="input-field col s10 offset-s1">
+        <textarea id="flavor_text" name="flavor_text" class="materialize-textarea">{{card.flavor_text}}</textarea>
+        <label for="flavor_text">Flavor Text</label>
       </div>
     </div>
     <div class="row">
