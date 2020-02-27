@@ -2,7 +2,7 @@
 
 # DECK BOX
 
-This is my 3rd milestone project. Website is created for poeple that play and collect
+Website is created for poeple that play and collect
 Magic The Gathering cards. App allows users to hold their cards collection in the app and
 manage collection and decks.<br/>
 Database is NoSQL - MongoDB<br/>
